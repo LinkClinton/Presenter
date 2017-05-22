@@ -35,6 +35,21 @@ namespace Presenter
 
         public static implicit operator SharpDX.Direct3D11.PixelShader(PixelShader shader)
             => shader.shader;
+    }
 
+    public static partial class Manager
+    {
+        private static PixelShader pixelshader;
+
+        public static PixelShader PixelShader
+        {
+            get => pixelshader;
+            set
+            {
+                pixelshader = value;
+
+                ID3D11DeviceContext.PixelShader.SetShader(pixelshader, null, 0);
+            }
+        }
     }
 }

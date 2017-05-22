@@ -7,22 +7,34 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    class IndexBuffer<T> : Buffer where T : struct
+    public class IndexBuffer<T> : Buffer where T : struct
     {
-        private int indexCount;
-
         public IndexBuffer(T[] indices)
         {
             buffer = new SharpDX.Direct3D11.Buffer(Manager.ID3D11Device,
                size = Marshal.SizeOf<T>() * indices.Length, SharpDX.Direct3D11.ResourceUsage.Default,
-               SharpDX.Direct3D11.BindFlags.ConstantBuffer, SharpDX.Direct3D11.CpuAccessFlags.None,
+               SharpDX.Direct3D11.BindFlags.IndexBuffer, SharpDX.Direct3D11.CpuAccessFlags.None,
                SharpDX.Direct3D11.ResourceOptionFlags.None, 0);
 
             Update(indices);
 
-            indexCount = indices.Length;
+            count = indices.Length;
         }
+    }
 
-        public int IndexCount => indexCount;
+    public static partial class Manager
+    {
+        private static Buffer indexbuffer;
+
+        public static Buffer IndexBuffer
+        {
+            get => indexbuffer;
+            set
+            {
+                indexbuffer = value;
+
+                ID3D11DeviceContext.InputAssembler.SetIndexBuffer(indexbuffer, SharpDX.DXGI.Format.R32_UInt, 0);
+            }
+        }
     }
 }

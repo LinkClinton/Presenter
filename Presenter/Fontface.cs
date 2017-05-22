@@ -19,7 +19,7 @@ namespace Presenter
 
             fontface = new SharpDX.DirectWrite.TextFormat(Manager.IDWriteFactory,
                 fontname, (SharpDX.DirectWrite.FontWeight)(weight = fontweight),
-                SharpDX.DirectWrite.FontStyle.Normal, fontsize * Manager.Scale);
+                SharpDX.DirectWrite.FontStyle.Normal, fontsize);
         }
 
         public int Size => size;

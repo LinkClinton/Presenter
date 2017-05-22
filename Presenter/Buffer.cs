@@ -12,6 +12,8 @@ namespace Presenter
 
         protected int size;
 
+        protected int count;
+
         public void Update<T>(ref T data) where T : struct
         {
             Manager.ID3D11DeviceContext.UpdateSubresource(ref data, buffer);
@@ -26,5 +28,7 @@ namespace Presenter
             => buffer.buffer;
 
         public int Size => size;
+
+        public int Count => count;
     }
 }

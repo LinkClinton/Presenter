@@ -7,10 +7,8 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    class VertexBuffer<T> : Buffer where T : struct
+    public class VertexBuffer<T> : Buffer where T : struct
     {
-        private int vertexCount;
-
         public VertexBuffer(T[] vertices)
         {
             buffer = new SharpDX.Direct3D11.Buffer(Manager.ID3D11Device,
@@ -20,9 +18,24 @@ namespace Presenter
 
             Update(vertices);
 
-            vertexCount = vertices.Length;
+            count = vertices.Length;
         }
+    }
 
-        public int VertexCount => vertexCount;
+    public static partial class Manager 
+    {
+        private static Buffer vertexbuffer;
+
+        public static Buffer VertexBuffer
+        {
+            get => vertexbuffer;
+            set
+            {
+                vertexbuffer = value;
+
+                ID3D11DeviceContext.InputAssembler.SetVertexBuffers(0,
+                    new SharpDX.Direct3D11.VertexBufferBinding(vertexbuffer, vertexbuffer.Size / vertexbuffer.Count, 0));
+            }
+        }
     }
 }

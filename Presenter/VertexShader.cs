@@ -37,4 +37,20 @@ namespace Presenter
         public static implicit operator SharpDX.Direct3D11.VertexShader(VertexShader shader) 
             => shader.shader;
     }
+
+    public static partial class Manager
+    {
+        private static VertexShader vertexshader;
+
+        public static VertexShader VertexShader
+        {
+            get => vertexshader;
+            set
+            {
+                vertexshader = value;
+
+                ID3D11DeviceContext.VertexShader.SetShader(vertexshader, null, 0);
+            }
+        }
+    }
 }

@@ -6,6 +6,19 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
+    public enum CullMode
+    {
+        CullNone = 1,
+        CullFront = 2,
+        CullBack = 3
+    }
+
+    public enum FillMode
+    {
+        Wireframe = 2,
+        Solid = 3
+    }
+
     public static partial class Manager
     {
 
@@ -21,7 +34,7 @@ namespace Presenter
         private static SharpDX.Direct3D11.DeviceContext context3d;
 
         private static int msaa4xQuality;
-        
+
         static Manager()
         {
             ID3D11Device = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware,
@@ -81,14 +94,14 @@ namespace Presenter
         {
             ID2D1DeviceContext.DrawLine(new SharpDX.Mathematics.Interop.RawVector2(start.x, start.y),
                 new SharpDX.Mathematics.Interop.RawVector2(end.x, end.y), brush,
-                width * Scale);
+                width);
         }
 
         public static void PutObject((float left, float top, float right, float bottom) rect,
             Brush brush, float width = 1.0f)
         {
             ID2D1DeviceContext.DrawRectangle(new SharpDX.Mathematics.Interop.RawRectangleF(rect.left, rect.top,
-                rect.right, rect.bottom), brush, width * Scale);
+                rect.right, rect.bottom), brush, width);
         }
 
         public static void PutObject((float x, float y) center, float radiusx, float radiusy,
@@ -96,7 +109,7 @@ namespace Presenter
         {
             ID2D1DeviceContext.DrawEllipse(new SharpDX.Direct2D1.Ellipse(
                 new SharpDX.Mathematics.Interop.RawVector2(center.x, center.y), radiusx, radiusy),
-                brush, width * Scale);
+                brush, width);
         }
 
         public static void PutObject(string text, (float x, float y) pos,
@@ -107,6 +120,8 @@ namespace Presenter
 
             ID2D1DeviceContext.DrawTextLayout(new SharpDX.Mathematics.Interop.RawVector2(pos.x, pos.y),
                 layout, brush);
+
+            layout.Dispose();
         }
 
         public static void PutObject((float left, float top, float right, float bottom) rect,
@@ -129,6 +144,22 @@ namespace Presenter
             ID2D1DeviceContext.FillEllipse(new SharpDX.Direct2D1.Ellipse(
                 new SharpDX.Mathematics.Interop.RawVector2(center.x, center.y), radiusx, radiusy),
                 brush);
+        }
+
+        public static void DrawObject(int vertexCount, int startLocation = 0,
+            PrimitiveType type = PrimitiveType.TriangleList)
+        {
+            ID3D11DeviceContext.InputAssembler.PrimitiveTopology = (SharpDX.Direct3D.PrimitiveTopology)type;
+
+            ID3D11DeviceContext.Draw(vertexCount, startLocation);
+        }
+
+        public static void DrawObjectIndexed(int indexCount, int startLocation = 0,
+            int baseVertexLocation = 0, PrimitiveType type = PrimitiveType.TriangleList)
+        {
+            ID3D11DeviceContext.InputAssembler.PrimitiveTopology = (SharpDX.Direct3D.PrimitiveTopology)type;
+
+            ID3D11DeviceContext.DrawIndexed(indexCount, startLocation, baseVertexLocation);
         }
 
         internal static SharpDX.Direct2D1.Device ID2D1Device
@@ -179,7 +210,33 @@ namespace Presenter
             get => msaa4xQuality;
         }
 
-        internal static float Scale => (DpiX + DpiY) / 192;
+        public static CullMode CullMode
+        {
+            get => (CullMode)ID3D11DeviceContext.Rasterizer.State.Description.CullMode;
+            set
+            {
+                SharpDX.Direct3D11.RasterizerStateDescription desc = ID3D11DeviceContext.Rasterizer.State.Description;
+
+                desc.CullMode = (SharpDX.Direct3D11.CullMode)value;
+
+                ID3D11DeviceContext.Rasterizer.State = new SharpDX.Direct3D11.RasterizerState(ID3D11Device, desc);
+            }
+        }
+
+        public static FillMode FillMode
+        {
+            get => (FillMode)ID3D11DeviceContext.Rasterizer.State.Description.FillMode;
+            set
+            {
+                SharpDX.Direct3D11.RasterizerStateDescription desc = ID3D11DeviceContext.Rasterizer.State.Description;
+
+                desc.FillMode = (SharpDX.Direct3D11.FillMode)value;
+
+                ID3D11DeviceContext.Rasterizer.State = new SharpDX.Direct3D11.RasterizerState(ID3D11Device, desc);
+            }
+        }
+        
+        public static float AppScale => (DpiX + DpiY) / 192;
 
         public static float DpiX => d2d1factory.DesktopDpi.Width;
         public static float DpiY => d2d1factory.DesktopDpi.Height;

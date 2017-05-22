@@ -11,6 +11,6 @@ namespace Presenter
         protected SharpDX.D3DCompiler.ShaderBytecode bytecode;
 
 
-        public byte[] ShaderByteCode => bytecode;
+        public byte[] ByteCode => bytecode;
     }
 }
