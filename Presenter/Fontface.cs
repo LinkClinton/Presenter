@@ -10,10 +10,10 @@ namespace Presenter
     {
         private SharpDX.DirectWrite.TextFormat fontface;
 
-        private int size;
+        private float size;
         private int weight;
 
-        public Fontface(string fontname, int fontsize, int fontweight = 400)
+        public Fontface(string fontname, float fontsize, int fontweight = 400)
         {
             size = fontsize;
 
@@ -22,7 +22,7 @@ namespace Presenter
                 SharpDX.DirectWrite.FontStyle.Normal, fontsize);
         }
 
-        public int Size => size;
+        public float Size => size;
 
         public int Weight => weight;
 
@@ -31,4 +31,28 @@ namespace Presenter
 
         ~Fontface() => fontface.Dispose();
     }
+
+    public class FontfaceIndexer
+    {
+        private Dictionary<(string name, float size, int weight), Fontface> fontfaceindexer 
+            = new Dictionary<(string name, float size, int weight), Fontface>();
+
+        public Fontface this[(string name, float size, int weight) index]
+        {
+            get
+            {
+                if (fontfaceindexer.ContainsKey(index) is false)
+                    fontfaceindexer.Add(index, new Fontface(index.name, index.size, index.weight));
+                return fontfaceindexer[index];
+            }
+        }
+    }
+
+    public static partial class Manager
+    {
+        private static FontfaceIndexer fontface = new FontfaceIndexer();
+
+        public static FontfaceIndexer Fontface => fontface;
+    }
+
 }

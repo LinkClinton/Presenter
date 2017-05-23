@@ -21,4 +21,27 @@ namespace Presenter
         ~Brush() => brush.Dispose();
     }
 
+    public class BrushIndexer
+    {
+        private Dictionary<(float red, float green, float blue, float alpha), Brush> brushindexer 
+            = new Dictionary<(float red, float green, float blue, float alpha), Brush>();
+
+        public Brush this[(float red, float green, float blue, float alpha) index]
+        {
+            get
+            {
+                if (brushindexer.ContainsKey(index) is false)
+                    brushindexer.Add(index, new Brush(index));
+                return brushindexer[index];
+            }
+        }
+    }
+
+    public static partial class Manager
+    {
+        private static BrushIndexer brush = new BrushIndexer();
+
+        public static BrushIndexer Brush => brush;
+    }
+
 }
