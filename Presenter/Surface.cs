@@ -87,7 +87,7 @@ namespace Presenter
                         AlphaMode = SharpDX.Direct2D1.AlphaMode.Premultiplied
                     }
                 });
-
+            
         }
 
         internal SharpDX.DXGI.SwapChain IDXGISwapChain => swapchain;

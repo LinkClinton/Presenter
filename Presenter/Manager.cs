@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Presenter
 {
@@ -34,6 +35,7 @@ namespace Presenter
         private static SharpDX.Direct3D11.DeviceContext context3d;
 
         private static int msaa4xQuality;
+        private static Matrix3x2 transform = Matrix3x2.Identity;
 
         static Manager()
         {
@@ -89,7 +91,7 @@ namespace Presenter
             Surface.IDXGISwapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
         }
 
-        public static void PutObject((float x, float y) start, (float x, float y) end,
+        public static void PutLine((float x, float y) start, (float x, float y) end,
             Brush brush, float width = 1.0f)
         {
             ID2D1DeviceContext.DrawLine(new SharpDX.Mathematics.Interop.RawVector2(start.x, start.y),
@@ -97,14 +99,14 @@ namespace Presenter
                 width);
         }
 
-        public static void PutObject((float left, float top, float right, float bottom) rect,
+        public static void PutRectangle((float left, float top, float right, float bottom) rect,
             Brush brush, float width = 1.0f)
         {
             ID2D1DeviceContext.DrawRectangle(new SharpDX.Mathematics.Interop.RawRectangleF(rect.left, rect.top,
                 rect.right, rect.bottom), brush, width);
         }
 
-        public static void PutObject((float x, float y) center, float radiusx, float radiusy,
+        public static void PutEllipse((float x, float y) center, float radiusx, float radiusy,
             Brush brush, float width = 1.0f)
         {
             ID2D1DeviceContext.DrawEllipse(new SharpDX.Direct2D1.Ellipse(
@@ -112,7 +114,7 @@ namespace Presenter
                 brush, width);
         }
 
-        public static void PutObject(string text, (float x, float y) pos,
+        public static void PutText(string text, (float x, float y) pos,
             Brush brush, Fontface fontface)
         {
             SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(
@@ -124,21 +126,28 @@ namespace Presenter
             layout.Dispose();
         }
 
-        public static void PutObject((float left, float top, float right, float bottom) rect,
+        public static void PutText(string text, (float left, float top, float right, float bottom) rect,
+            Brush brush, Fontface fontface)
+        {
+            ID2D1DeviceContext.DrawText(text, fontface, new SharpDX.Mathematics.Interop.
+                RawRectangleF(rect.left, rect.top, rect.right, rect.bottom), brush);
+        }
+
+        public static void PutBitmap((float left, float top, float right, float bottom) rect,
             Bitmap bitmap)
         {
             ID2D1DeviceContext.DrawBitmap(bitmap, new SharpDX.Mathematics.Interop.RawRectangleF(
                 rect.left, rect.top, rect.right, rect.bottom), 1f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
         }
 
-        public static void FillObject((float left, float top, float right, float bottom) rect,
+        public static void FillRectangle((float left, float top, float right, float bottom) rect,
             Brush brush)
         {
             ID2D1DeviceContext.FillRectangle(new SharpDX.Mathematics.Interop.RawRectangleF(rect.left, rect.top,
              rect.right, rect.bottom), brush);
         }
 
-        public static void FillObject((float x, float y) center, float radiusx, float radiusy,
+        public static void FillEllipse((float x, float y) center, float radiusx, float radiusy,
             Brush brush)
         {
             ID2D1DeviceContext.FillEllipse(new SharpDX.Direct2D1.Ellipse(
@@ -236,6 +245,25 @@ namespace Presenter
             }
         }
         
+        public static Matrix3x2 Transform
+        {
+            set
+            {
+                transform = value;
+
+                ID2D1DeviceContext.Transform = new SharpDX.Mathematics.Interop.RawMatrix3x2()
+                {
+                    M11 = transform.M11,
+                    M12 = transform.M12,
+                    M21 = transform.M21,
+                    M22 = transform.M22,
+                    M31 = transform.M31,
+                    M32 = transform.M32
+                };
+            }
+            get => transform;
+        }
+
         public static float AppScale => (DpiX + DpiY) / 192;
 
         public static float DpiX => d2d1factory.DesktopDpi.Width;
