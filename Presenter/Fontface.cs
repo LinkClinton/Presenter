@@ -46,6 +46,9 @@ namespace Presenter
                 return fontfaceindexer[index];
             }
         }
+
+        public void Destory((string name, float size, int weight) index)
+            => fontfaceindexer.Remove(index);
     }
 
     public static partial class Manager

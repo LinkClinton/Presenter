@@ -17,7 +17,7 @@ namespace Presenter
 
         private IntPtr surfaceHandle;
 
-        public Surface(IntPtr handle, bool windowed)
+        public Surface(IntPtr handle, bool windowed = true)
         {
             surfaceHandle = handle;
 

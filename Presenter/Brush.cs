@@ -35,6 +35,9 @@ namespace Presenter
                 return brushindexer[index];
             }
         }
+
+        public void Destory((float red, float green, float blue, float alpha) index)
+            => brushindexer.Remove(index);
     }
 
     public static partial class Manager

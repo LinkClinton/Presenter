@@ -31,4 +31,30 @@ namespace Presenter
 
         ~Bitmap() => bitmap.Dispose();
     }
+
+    public class BitmapIndexer
+    {
+        private Dictionary<string, Bitmap> bitmapindexer = new Dictionary<string, Bitmap>();
+
+        public Bitmap this[string index]
+        {
+            get
+            {
+                if (bitmapindexer.ContainsKey(index) is false)
+                    bitmapindexer.Add(index, new Bitmap(index));
+                return bitmapindexer[index];
+            }
+        }
+
+        public void Destory(string index)
+            => bitmapindexer.Remove(index);
+    }
+
+    public static partial class Manager
+    {
+        private static BitmapIndexer bitmap = new BitmapIndexer();
+
+        public static BitmapIndexer Bitmap => bitmap;
+    }
+
 }
