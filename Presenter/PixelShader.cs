@@ -10,6 +10,8 @@ namespace Presenter
     {
         private SharpDX.Direct3D11.PixelShader shader;
 
+        private static PixelShaderConstantBufferIndexer constantBuffer = new PixelShaderConstantBufferIndexer();
+
         public PixelShader(string shaderfile, string entrypoint, bool isCompiled = false)
         {
             bytecode = new SharpDX.D3DCompiler.ShaderBytecode(
@@ -20,7 +22,7 @@ namespace Presenter
                 shader = new SharpDX.Direct3D11.PixelShader(Manager.ID3D11Device, bytecode);
                 return;
             }
-
+            
 #if DEBUG
             SharpDX.D3DCompiler.CompilationResult result = SharpDX.D3DCompiler.ShaderBytecode.Compile(bytecode, entrypoint, "ps_5_0",
                  SharpDX.D3DCompiler.ShaderFlags.Debug | SharpDX.D3DCompiler.ShaderFlags.SkipOptimization);
@@ -35,6 +37,11 @@ namespace Presenter
 
         public static implicit operator SharpDX.Direct3D11.PixelShader(PixelShader shader)
             => shader.shader;
+
+        public static PixelShaderConstantBufferIndexer ConstantBuffer
+            => constantBuffer;
+
+        ~PixelShader() => shader.Dispose();
     }
 
     public static partial class Manager

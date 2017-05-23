@@ -17,5 +17,8 @@ namespace Presenter
         }
 
         public static implicit operator SharpDX.Direct2D1.Brush(Brush brush) => brush.brush;
+
+        ~Brush() => brush.Dispose();
     }
+
 }

@@ -10,6 +10,8 @@ namespace Presenter
     {
         private SharpDX.Direct3D11.VertexShader shader;
 
+        private static VertexShaderConstantBufferIndexer constantBuffer = new VertexShaderConstantBufferIndexer();
+
         public VertexShader(string shaderfile, string entrypoint, bool isCompiled = false)
         {
             bytecode = new SharpDX.D3DCompiler.ShaderBytecode(
@@ -36,6 +38,11 @@ namespace Presenter
 
         public static implicit operator SharpDX.Direct3D11.VertexShader(VertexShader shader) 
             => shader.shader;
+
+        public static VertexShaderConstantBufferIndexer ConstantBuffer
+            => constantBuffer;
+
+        ~VertexShader() => shader.Dispose();
     }
 
     public static partial class Manager

@@ -12,5 +12,7 @@ namespace Presenter
 
 
         public byte[] ByteCode => bytecode;
+
+        ~Shader() => bytecode.Dispose();   
     }
 }

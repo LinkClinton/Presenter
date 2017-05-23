@@ -98,6 +98,14 @@ namespace Presenter
         internal SharpDX.Direct2D1.Bitmap1 Target => surfaceTarget;
 
         internal IntPtr Handle => surfaceHandle;
+
+        ~Surface()
+        {
+            swapchain.Dispose();
+            surfaceRTV.Dispose();
+            surfaceDSV.Dispose();
+            surfaceTarget.Dispose();
+        }
     }
 
     public static partial class Manager

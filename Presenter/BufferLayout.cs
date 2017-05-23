@@ -86,6 +86,8 @@ namespace Presenter
 
         public static implicit operator SharpDX.Direct3D11.InputLayout(BufferLayout layout) 
             => layout.layout;
+
+        ~BufferLayout() => layout.Dispose();
     }
 
     public static partial class Manager

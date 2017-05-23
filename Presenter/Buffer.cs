@@ -30,5 +30,7 @@ namespace Presenter
         public int Size => size;
 
         public int Count => count;
+
+        ~Buffer() => buffer.Dispose();
     }
 }

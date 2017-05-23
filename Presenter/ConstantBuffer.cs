@@ -35,6 +35,24 @@ namespace Presenter
         }
     }
 
+    public class VertexShaderConstantBufferIndexer
+    {
+        public Buffer this[int index]
+        {
+            get => Manager.ConstantBuffer[(Manager.VertexShader, index)];
+            set => Manager.ConstantBuffer[(Manager.VertexShader, index)] = value;
+        }
+    }
+
+    public class PixelShaderConstantBufferIndexer
+    {
+        public Buffer this[int index]
+        {
+            get => Manager.ConstantBuffer[(Manager.PixelShader, index)];
+            set => Manager.ConstantBuffer[(Manager.PixelShader, index)] = value;
+        }
+    }
+
     public class ConstantBufferIndexer
     {
         private Dictionary<int, Buffer> vsshaderbuffer = new Dictionary<int, Buffer>();
