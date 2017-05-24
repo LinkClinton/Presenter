@@ -79,7 +79,7 @@ Present Object to Window.
     public struct Element
     {
         public ElementSize Size; // bytes
-        public string Tag; //Tag : POSITION,COLOR,NORMAL,TEXCOOD...
+        public string Tag; //Tag : POSITION,COLOR,NORMAL,TEXCOORD...
     }
 
     Element[] elements = new Element[2];

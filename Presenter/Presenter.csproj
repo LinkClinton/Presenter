@@ -65,6 +65,8 @@
     <Compile Include="BufferLayout.cs" />
     <Compile Include="ConstantBuffer.cs" />
     <Compile Include="Fontface.cs" />
+    <Compile Include="Helper\WICHelper.cs" />
+    <Compile Include="Helper\WICIndexer.cs" />
     <Compile Include="IndexBuffer.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="PixelShader.cs" />
