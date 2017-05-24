@@ -69,8 +69,11 @@
     <Compile Include="Manager.cs" />
     <Compile Include="PixelShader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.cs" />
+    <Compile Include="ShaderResource.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="Surface.cs" />
+    <Compile Include="Texture.cs" />
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="VertexShader.cs" />
   </ItemGroup>
