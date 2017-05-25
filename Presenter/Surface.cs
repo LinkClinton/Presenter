@@ -17,6 +17,8 @@ namespace Presenter
 
         private IntPtr surfaceHandle;
 
+        private Brush background = Brush.Context[(1, 1, 1, 1)];
+
         public Surface(IntPtr handle, bool windowed = true)
         {
             surfaceHandle = handle;
@@ -98,6 +100,12 @@ namespace Presenter
         internal SharpDX.Direct2D1.Bitmap1 Target => surfaceTarget;
 
         internal IntPtr Handle => surfaceHandle;
+
+        public Brush BackGround
+        {
+            set => background = value;
+            get => background;
+        }
 
         ~Surface()
         {

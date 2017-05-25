@@ -39,6 +39,13 @@ Present Object to Window.
     ```C#
     Surface surface = new Surface(Hwnd, Windowed);
     ```
+- BackGround 
+    ```C#
+    Surface surface.BackGround = Brush.Context[(color)];
+
+    //you can use Context to get 2D resource.
+    //or Surface surface.BackGround = Manager.Brush[(color)];
+    ```
 
 ### Buffer
 

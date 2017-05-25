@@ -22,7 +22,6 @@ namespace Presenter
 
     public static partial class Manager
     {
-
         private static SharpDX.Direct2D1.Device device2d;
         private static SharpDX.Direct2D1.Factory1 d2d1factory;
         private static SharpDX.Direct2D1.DeviceContext context2d;
@@ -78,7 +77,8 @@ namespace Presenter
             ID2D1DeviceContext.BeginDraw();
 
             ID3D11DeviceContext.ClearRenderTargetView(Surface.ID3D11RenderTargetView,
-                new SharpDX.Mathematics.Interop.RawColor4(1, 1, 1, 1));
+                new SharpDX.Mathematics.Interop.RawColor4(Surface.BackGround.Red,
+                Surface.BackGround.Green, Surface.BackGround.Blue, Surface.BackGround.Alpha));
 
             ID3D11DeviceContext.ClearDepthStencilView(Surface.ID3D11DepthStencilView,
                 SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);

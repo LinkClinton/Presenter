@@ -28,7 +28,7 @@ namespace Presenter
             SharpDX.D3DCompiler.CompilationResult result = SharpDX.D3DCompiler.ShaderBytecode.Compile(bytecode, entrypoint, "ps_5_0",
                  SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel2);
 #endif
-            if (result.HasErrors is true) throw new Exception(result.Message);
+            if (result.Message != null) throw new Exception(result.Message);
 
             shader = new SharpDX.Direct3D11.PixelShader(Manager.ID3D11Device, bytecode = result.Bytecode);
         }

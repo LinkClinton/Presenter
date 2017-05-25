@@ -10,6 +10,22 @@ namespace Presenter
     {
         protected SharpDX.Direct3D11.ShaderResourceView resourceview;
 
+        public override void Update<T>(ref T data)
+        {
+            base.Update(ref data);
+
+            resourceview?.Dispose();
+            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Manager.ID3D11Device, resource);
+        }
+
+        public override void Update<T>(T[] data)
+        {
+            base.Update(data);
+
+            resourceview?.Dispose();
+            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Manager.ID3D11Device, resource);
+        }
+
         internal SharpDX.Direct3D11.ShaderResourceView ID3D11ShaderResourceView => resourceview;
 
         ~ShaderResource() => resourceview?.Dispose();
