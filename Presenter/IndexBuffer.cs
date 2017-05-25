@@ -33,7 +33,7 @@ namespace Presenter
             {
                 indexbuffer = value;
 
-                ID3D11DeviceContext.InputAssembler.SetIndexBuffer(indexbuffer, SharpDX.DXGI.Format.R32_UInt, 0);
+                ID3D11DeviceContext.InputAssembler.SetIndexBuffer(indexbuffer.ID3D11Buffer, SharpDX.DXGI.Format.R32_UInt, 0);
             }
         }
     }

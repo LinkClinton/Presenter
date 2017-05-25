@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class PixelShader : Shader
+    public partial class PixelShader : Shader
     {
         private SharpDX.Direct3D11.PixelShader shader;
-
-        private static PixelShaderConstantBufferIndexer constantBuffer = new PixelShaderConstantBufferIndexer();
 
         public PixelShader(string shaderfile, string entrypoint, bool isCompiled = false)
         {
@@ -35,11 +33,7 @@ namespace Presenter
             shader = new SharpDX.Direct3D11.PixelShader(Manager.ID3D11Device, bytecode = result.Bytecode);
         }
 
-        public static implicit operator SharpDX.Direct3D11.PixelShader(PixelShader shader)
-            => shader.shader;
-
-        public static PixelShaderConstantBufferIndexer ConstantBuffer
-            => constantBuffer;
+        internal SharpDX.Direct3D11.PixelShader ID3D11PixelShader => shader;
 
         ~PixelShader() => shader?.Dispose();
     }
@@ -55,7 +49,7 @@ namespace Presenter
             {
                 pixelshader = value;
 
-                ID3D11DeviceContext.PixelShader.SetShader(pixelshader, null, 0);
+                ID3D11DeviceContext.PixelShader.SetShader(pixelshader.ID3D11PixelShader, null, 0);
             }
         }
     }

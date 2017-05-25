@@ -84,8 +84,7 @@ namespace Presenter
             layout = new SharpDX.Direct3D11.InputLayout(Manager.ID3D11Device, Manager.VertexShader.ByteCode, desc);
         }
 
-        public static implicit operator SharpDX.Direct3D11.InputLayout(BufferLayout layout) 
-            => layout.layout;
+        internal SharpDX.Direct3D11.InputLayout ID3D11InputLayout => layout;
 
         ~BufferLayout() => layout?.Dispose();
     }
@@ -101,7 +100,7 @@ namespace Presenter
             {
                 bufferlayout = value;
 
-                ID3D11DeviceContext.InputAssembler.InputLayout = bufferlayout;
+                ID3D11DeviceContext.InputAssembler.InputLayout = bufferlayout.ID3D11InputLayout;
             }
         }
     }

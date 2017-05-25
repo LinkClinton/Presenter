@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Bitmap
+    public partial class Bitmap
     {
         private SharpDX.Direct2D1.Bitmap bitmap;
 
@@ -21,40 +21,21 @@ namespace Presenter
                  SharpDX.WIC.BitmapDitherType.None, null, 0, SharpDX.WIC.BitmapPaletteType.MedianCut);
             
             bitmap = SharpDX.Direct2D1.Bitmap.FromWicBitmap(Manager.ID2D1DeviceContext, converter);
+
+            converter?.Dispose();
+            decoder?.Dispose();
         }
 
         public float Width => bitmap.Size.Width;
         public float Height => bitmap.Size.Height;
 
 
-        public static implicit operator SharpDX.Direct2D1.Bitmap(Bitmap bitmap) => bitmap.bitmap;
+        internal SharpDX.Direct2D1.Bitmap ID2D1Bitmap => bitmap;
 
         ~Bitmap() => bitmap?.Dispose();
     }
 
-    public class BitmapIndexer
-    {
-        private Dictionary<string, Bitmap> bitmapindexer = new Dictionary<string, Bitmap>();
 
-        public Bitmap this[string index]
-        {
-            get
-            {
-                if (bitmapindexer.ContainsKey(index) is false)
-                    bitmapindexer.Add(index, new Bitmap(index));
-                return bitmapindexer[index];
-            }
-        }
 
-        public void Destory(string index)
-            => bitmapindexer.Remove(index);
-    }
-
-    public static partial class Manager
-    {
-        private static BitmapIndexer bitmap = new BitmapIndexer();
-
-        public static BitmapIndexer Bitmap => bitmap;
-    }
 
 }

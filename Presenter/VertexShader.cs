@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class VertexShader : Shader
+    public partial class VertexShader : Shader
     {
         private SharpDX.Direct3D11.VertexShader shader;
-
-        private static VertexShaderConstantBufferIndexer constantBuffer = new VertexShaderConstantBufferIndexer();
 
         public VertexShader(string shaderfile, string entrypoint, bool isCompiled = false)
         {
@@ -35,12 +33,7 @@ namespace Presenter
             shader = new SharpDX.Direct3D11.VertexShader(Manager.ID3D11Device, bytecode = result.Bytecode);
         }
 
-
-        public static implicit operator SharpDX.Direct3D11.VertexShader(VertexShader shader) 
-            => shader.shader;
-
-        public static VertexShaderConstantBufferIndexer ConstantBuffer
-            => constantBuffer;
+        internal SharpDX.Direct3D11.VertexShader ID3D11VertexShader => shader;
 
         ~VertexShader() => shader?.Dispose();
     }
@@ -56,7 +49,7 @@ namespace Presenter
             {
                 vertexshader = value;
 
-                ID3D11DeviceContext.VertexShader.SetShader(vertexshader, null, 0);
+                ID3D11DeviceContext.VertexShader.SetShader(vertexshader.ID3D11VertexShader, null, 0);
             }
         }
     }

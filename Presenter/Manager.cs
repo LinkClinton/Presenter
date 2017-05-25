@@ -95,7 +95,7 @@ namespace Presenter
             Brush brush, float width = 1.0f)
         {
             ID2D1DeviceContext.DrawLine(new SharpDX.Mathematics.Interop.RawVector2(start.x, start.y),
-                new SharpDX.Mathematics.Interop.RawVector2(end.x, end.y), brush,
+                new SharpDX.Mathematics.Interop.RawVector2(end.x, end.y), brush.ID2D1Brush,
                 width);
         }
 
@@ -103,7 +103,7 @@ namespace Presenter
             Brush brush, float width = 1.0f)
         {
             ID2D1DeviceContext.DrawRectangle(new SharpDX.Mathematics.Interop.RawRectangleF(rect.left, rect.top,
-                rect.right, rect.bottom), brush, width);
+                rect.right, rect.bottom), brush.ID2D1Brush, width);
         }
 
         public static void PutEllipse((float x, float y) center, float radiusx, float radiusy,
@@ -111,17 +111,17 @@ namespace Presenter
         {
             ID2D1DeviceContext.DrawEllipse(new SharpDX.Direct2D1.Ellipse(
                 new SharpDX.Mathematics.Interop.RawVector2(center.x, center.y), radiusx, radiusy),
-                brush, width);
+                brush.ID2D1Brush, width);
         }
 
         public static void PutText(string text, (float x, float y) pos,
             Brush brush, Fontface fontface)
         {
             SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(
-                IDWriteFactory, text, fontface, float.MaxValue, float.MaxValue);
+                IDWriteFactory, text, fontface.IDWriteTextFormat, float.MaxValue, float.MaxValue);
 
             ID2D1DeviceContext.DrawTextLayout(new SharpDX.Mathematics.Interop.RawVector2(pos.x, pos.y),
-                layout, brush);
+                layout, brush.ID2D1Brush);
 
             layout.Dispose();
         }
@@ -129,14 +129,14 @@ namespace Presenter
         public static void PutText(string text, (float left, float top, float right, float bottom) rect,
             Brush brush, Fontface fontface)
         {
-            ID2D1DeviceContext.DrawText(text, fontface, new SharpDX.Mathematics.Interop.
-                RawRectangleF(rect.left, rect.top, rect.right, rect.bottom), brush);
+            ID2D1DeviceContext.DrawText(text, fontface.IDWriteTextFormat, new SharpDX.Mathematics.Interop.
+                RawRectangleF(rect.left, rect.top, rect.right, rect.bottom), brush.ID2D1Brush);
         }
 
         public static void PutBitmap((float left, float top, float right, float bottom) rect,
             Bitmap bitmap)
         {
-            ID2D1DeviceContext.DrawBitmap(bitmap, new SharpDX.Mathematics.Interop.RawRectangleF(
+            ID2D1DeviceContext.DrawBitmap(bitmap.ID2D1Bitmap, new SharpDX.Mathematics.Interop.RawRectangleF(
                 rect.left, rect.top, rect.right, rect.bottom), 1f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
         }
 
@@ -144,7 +144,7 @@ namespace Presenter
             Brush brush)
         {
             ID2D1DeviceContext.FillRectangle(new SharpDX.Mathematics.Interop.RawRectangleF(rect.left, rect.top,
-             rect.right, rect.bottom), brush);
+             rect.right, rect.bottom), brush.ID2D1Brush);
         }
 
         public static void FillEllipse((float x, float y) center, float radiusx, float radiusy,
@@ -152,7 +152,7 @@ namespace Presenter
         {
             ID2D1DeviceContext.FillEllipse(new SharpDX.Direct2D1.Ellipse(
                 new SharpDX.Mathematics.Interop.RawVector2(center.x, center.y), radiusx, radiusy),
-                brush);
+                brush.ID2D1Brush);
         }
 
         public static void DrawObject(int vertexCount, int startLocation = 0,

@@ -10,10 +10,9 @@ namespace Presenter
     {
         protected int count;
 
-        public static implicit operator SharpDX.Direct3D11.Buffer(Buffer buffer)
-            => buffer.resource as SharpDX.Direct3D11.Buffer;
-
         public int Count => count;
+
+        internal SharpDX.Direct3D11.Buffer ID3D11Buffer => resource as SharpDX.Direct3D11.Buffer;
 
         ~Buffer() => (resource as SharpDX.Direct3D11.Buffer)?.Dispose();
     }

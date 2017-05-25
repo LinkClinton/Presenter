@@ -68,6 +68,11 @@
     <Compile Include="Helper\WICHelper.cs" />
     <Compile Include="Helper\WICIndexer.cs" />
     <Compile Include="IndexBuffer.cs" />
+    <Compile Include="Indexer\BitmapIndexer.cs" />
+    <Compile Include="Indexer\BrushIndexer.cs" />
+    <Compile Include="Indexer\ConstantBufferIndexer.cs" />
+    <Compile Include="Indexer\FontfaceIndexer.cs" />
+    <Compile Include="Indexer\ShaderResourceIndexer.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="PixelShader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

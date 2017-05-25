@@ -56,13 +56,16 @@ namespace Presenter
                 resource);
 
             size = imagesize;
+
+            converter?.Dispose();
+            frame?.Dispose();
+            decoder?.Dispose();
         }
 
         public int Width => width;
         public int Height => height;
 
-        public static implicit operator SharpDX.Direct3D11.Texture2D(Texture texture)
-            => (texture.resource as SharpDX.Direct3D11.Texture2D);
+        internal SharpDX.Direct3D11.Texture2D ID3D11Texture2D => resource as SharpDX.Direct3D11.Texture2D;
 
         ~Texture() => (resource as SharpDX.Direct3D11.Texture2D)?.Dispose();
     }

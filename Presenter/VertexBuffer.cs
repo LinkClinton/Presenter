@@ -34,7 +34,7 @@ namespace Presenter
                 vertexbuffer = value;
 
                 ID3D11DeviceContext.InputAssembler.SetVertexBuffers(0,
-                    new SharpDX.Direct3D11.VertexBufferBinding(vertexbuffer, vertexbuffer.Size / vertexbuffer.Count, 0));
+                    new SharpDX.Direct3D11.VertexBufferBinding(vertexbuffer.ID3D11Buffer, vertexbuffer.Size / vertexbuffer.Count, 0));
             }
         }
     }
