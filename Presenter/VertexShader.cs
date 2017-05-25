@@ -42,7 +42,7 @@ namespace Presenter
         public static VertexShaderConstantBufferIndexer ConstantBuffer
             => constantBuffer;
 
-        ~VertexShader() => shader.Dispose();
+        ~VertexShader() => shader?.Dispose();
     }
 
     public static partial class Manager

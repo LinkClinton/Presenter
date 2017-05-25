@@ -101,10 +101,10 @@ namespace Presenter
 
         ~Surface()
         {
-            swapchain.Dispose();
-            surfaceRTV.Dispose();
-            surfaceDSV.Dispose();
-            surfaceTarget.Dispose();
+            swapchain?.Dispose();
+            surfaceRTV?.Dispose();
+            surfaceDSV?.Dispose();
+            surfaceTarget?.Dispose();
         }
     }
 

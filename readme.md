@@ -92,6 +92,27 @@ Present Object to Window.
     Manager.BufferLayout = new BufferLayout(...);
     ```
 
+### ShaderResource
+
+- Set 
+    ```C#
+    Manager.ShaderResource[(Shader,WhichID)] = new ShaderResource();
+    ```
+- Texture
+    ```
+    Texture texture = new Texture(filename);
+
+    Simple Texture Loader.
+        Format : DXGI_R8G8B8A8_UNORM
+        CpuAccessFlags: None
+        MipLevels : 1
+        Support: WIC Supported.
+    ```
+
+## Sample
+
+Look At [**Mico**](https://github.com/LinkClinton/Mico/tree/master/Sample)
+
 ## Request
 
 - **.NET 4.7**

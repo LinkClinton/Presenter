@@ -41,7 +41,7 @@ namespace Presenter
         public static PixelShaderConstantBufferIndexer ConstantBuffer
             => constantBuffer;
 
-        ~PixelShader() => shader.Dispose();
+        ~PixelShader() => shader?.Dispose();
     }
 
     public static partial class Manager

@@ -29,7 +29,7 @@ namespace Presenter
         public static implicit operator SharpDX.DirectWrite.TextFormat(Fontface fontface) 
             => fontface.fontface;
 
-        ~Fontface() => fontface.Dispose();
+        ~Fontface() => fontface?.Dispose();
     }
 
     public class FontfaceIndexer

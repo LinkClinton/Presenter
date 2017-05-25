@@ -29,7 +29,7 @@ namespace Presenter
 
         public static implicit operator SharpDX.Direct2D1.Bitmap(Bitmap bitmap) => bitmap.bitmap;
 
-        ~Bitmap() => bitmap.Dispose();
+        ~Bitmap() => bitmap?.Dispose();
     }
 
     public class BitmapIndexer
