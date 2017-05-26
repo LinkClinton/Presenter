@@ -13,7 +13,5 @@ namespace Presenter
         public int Count => count;
 
         internal SharpDX.Direct3D11.Buffer ID3D11Buffer => resource as SharpDX.Direct3D11.Buffer;
-
-        ~Buffer() => (resource as SharpDX.Direct3D11.Buffer)?.Dispose();
     }
 }

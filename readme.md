@@ -46,6 +46,11 @@ Present Object to Window.
     //you can use Context to get 2D resource.
     //or Surface surface.BackGround = Manager.Brush[(color)];
     ```
+- Reset  
+    On Windows size changed, you can reset the surface.
+    ```C#
+    Surface surface.Reset(new_width, new_height, windowed = true);
+    ```
 
 ### Buffer
 

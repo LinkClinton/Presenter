@@ -35,7 +35,7 @@ namespace Presenter
 
         internal SharpDX.Direct3D11.VertexShader ID3D11VertexShader => shader;
 
-        ~VertexShader() => shader?.Dispose();
+        ~VertexShader() => SharpDX.Utilities.Dispose(ref shader);
     }
 
     public static partial class Manager

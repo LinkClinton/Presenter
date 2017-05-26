@@ -28,7 +28,7 @@ namespace Presenter
 
         internal SharpDX.Direct3D11.ShaderResourceView ID3D11ShaderResourceView => resourceview;
 
-        ~ShaderResource() => resourceview?.Dispose();
+        ~ShaderResource() => SharpDX.Utilities.Dispose(ref resourceview);
     }
 
 

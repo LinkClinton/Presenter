@@ -244,7 +244,7 @@ namespace Presenter
                 ID3D11DeviceContext.Rasterizer.State = new SharpDX.Direct3D11.RasterizerState(ID3D11Device, desc);
             }
         }
-        
+
         public static Matrix3x2 Transform
         {
             set

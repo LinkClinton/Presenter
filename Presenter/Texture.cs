@@ -57,17 +57,15 @@ namespace Presenter
 
             size = imagesize;
 
-            converter?.Dispose();
-            frame?.Dispose();
-            decoder?.Dispose();
+            SharpDX.Utilities.Dispose(ref converter);
+            SharpDX.Utilities.Dispose(ref frame);
+            SharpDX.Utilities.Dispose(ref decoder);
         }
 
         public int Width => width;
         public int Height => height;
 
         internal SharpDX.Direct3D11.Texture2D ID3D11Texture2D => resource as SharpDX.Direct3D11.Texture2D;
-
-        ~Texture() => (resource as SharpDX.Direct3D11.Texture2D)?.Dispose();
     }
 
 

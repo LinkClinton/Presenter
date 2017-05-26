@@ -32,7 +32,7 @@ namespace Presenter
 
         internal SharpDX.Direct2D1.Bitmap ID2D1Bitmap => bitmap;
 
-        ~Bitmap() => bitmap?.Dispose();
+        ~Bitmap() => SharpDX.Utilities.Dispose(ref bitmap);
     }
 
 

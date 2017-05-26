@@ -25,5 +25,7 @@ namespace Presenter
         public int Size => size;
 
         internal SharpDX.Direct3D11.Resource ID3D11Resource => resource;
+
+        ~Resource() => SharpDX.Utilities.Dispose(ref resource);
     }
 }

@@ -86,7 +86,7 @@ namespace Presenter
 
         internal SharpDX.Direct3D11.InputLayout ID3D11InputLayout => layout;
 
-        ~BufferLayout() => layout?.Dispose();
+        ~BufferLayout() => SharpDX.Utilities.Dispose(ref layout);
     }
 
     public static partial class Manager

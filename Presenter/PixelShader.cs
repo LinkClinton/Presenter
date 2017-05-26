@@ -35,7 +35,7 @@ namespace Presenter
 
         internal SharpDX.Direct3D11.PixelShader ID3D11PixelShader => shader;
 
-        ~PixelShader() => shader?.Dispose();
+        ~PixelShader() => SharpDX.Utilities.Dispose(ref shader);
     }
 
     public static partial class Manager

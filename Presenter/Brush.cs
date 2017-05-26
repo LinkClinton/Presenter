@@ -27,7 +27,7 @@ namespace Presenter
 
         internal SharpDX.Direct2D1.Brush ID2D1Brush => brush;
 
-        ~Brush() => brush?.Dispose();
+        ~Brush() => SharpDX.Utilities.Dispose(ref brush);
     }
 
 

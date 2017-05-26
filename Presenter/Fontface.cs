@@ -28,7 +28,7 @@ namespace Presenter
 
         internal SharpDX.DirectWrite.TextFormat IDWriteTextFormat => fontface;
 
-        ~Fontface() => fontface?.Dispose();
+        ~Fontface() => SharpDX.Utilities.Dispose(ref fontface);
     }
 
    
