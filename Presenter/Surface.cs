@@ -224,17 +224,10 @@ namespace Presenter
             {
                 surface = value;
 
-                APILibrary.Win32.Rect rect = new APILibrary.Win32.Rect();
-
-                APILibrary.Win32.Internal.GetClientRect(surface.Handle, ref rect);
-
-                int width = rect.right - rect.left;
-                int height = rect.bottom - rect.top;
-
                 ID3D11DeviceContext.Rasterizer.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
                 {
-                    Width = width,
-                    Height = height,
+                    Width = surface.Width,
+                    Height = surface.Height,
                     MinDepth = 0f,
                     MaxDepth = 1f,
                     X = 0,
