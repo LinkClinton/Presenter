@@ -35,6 +35,15 @@ namespace Presenter
         ~Bitmap() => SharpDX.Utilities.Dispose(ref bitmap);
     }
 
+    public static partial class Manager
+    {
+        public static void PutBitmap((float left, float top, float right, float bottom) rect,
+          Bitmap bitmap)
+        {
+            ID2D1DeviceContext.DrawBitmap(bitmap.ID2D1Bitmap, new SharpDX.Mathematics.Interop.RawRectangleF(
+                rect.left, rect.top, rect.right, rect.bottom), 1f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+        }
+    }
 
 
 
