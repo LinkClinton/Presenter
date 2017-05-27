@@ -101,10 +101,6 @@
     <Compile Include="Resource\ShaderResource\Texture.cs" />
     <Compile Include="Resource\BufferResource\VertexBuffer.cs" />
     <Compile Include="Shader\VertexShader.cs" />
-    <Compile Include="Window\GenericWindow.cs" />
-    <Compile Include="Window\GenericWindow.Event.cs" />
-    <Compile Include="Window\GenericWindow.Static.cs" />
-    <Compile Include="Window\Interface\IGenericWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

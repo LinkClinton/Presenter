@@ -14,7 +14,7 @@ namespace Presenter
         {
             base.Update(ref data);
 
-            resourceview?.Dispose();
+            SharpDX.Utilities.Dispose(ref resourceview);
             resourceview = new SharpDX.Direct3D11.ShaderResourceView(Manager.ID3D11Device, resource);
         }
 
@@ -22,7 +22,7 @@ namespace Presenter
         {
             base.Update(data);
 
-            resourceview?.Dispose();
+            SharpDX.Utilities.Dispose(ref resourceview);
             resourceview = new SharpDX.Direct3D11.ShaderResourceView(Manager.ID3D11Device, resource);
         }
 

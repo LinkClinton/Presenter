@@ -17,13 +17,16 @@ namespace Presenter
 
             SharpDX.WIC.FormatConverter converter = new SharpDX.WIC.FormatConverter(Manager.ImagingFactory);
 
-            converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA,
+            SharpDX.WIC.BitmapFrameDecode frame = decoder.GetFrame(0);
+
+            converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA,
                  SharpDX.WIC.BitmapDitherType.None, null, 0, SharpDX.WIC.BitmapPaletteType.MedianCut);
             
             bitmap = SharpDX.Direct2D1.Bitmap.FromWicBitmap(Manager.ID2D1DeviceContext, converter);
 
-            converter?.Dispose();
-            decoder?.Dispose();
+            SharpDX.Utilities.Dispose(ref frame);
+            SharpDX.Utilities.Dispose(ref converter);
+            SharpDX.Utilities.Dispose(ref decoder);
         }
 
         public float Width => bitmap.Size.Width;
