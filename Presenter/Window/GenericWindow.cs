@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class GenericWindow
+    public partial class GenericWindow : IGenericWindow
     {
         private IntPtr handle;
 
@@ -69,6 +69,8 @@ namespace Presenter
 
             posx = realRect.left;
             posy = realRect.top;
-        }
+        } 
+
+
     }
 }

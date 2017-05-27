@@ -17,9 +17,15 @@ namespace Presenter
             APILibrary.Win32.WinMsg type = (APILibrary.Win32.WinMsg)message;
             switch (type)
             {
+                case APILibrary.Win32.WinMsg.WM_DESTROY:
+                    APILibrary.Win32.Internal.UnRegisterAppinfo(tag, appinfo.hInstance);
+                    APILibrary.Win32.Internal.PostQuitMessage(0);
+                    break;
                 default:
                     return APILibrary.Win32.Internal.DefWindowProc(Hwnd, message, wParam, lParam);
             }
+
+            return IntPtr.Zero;
         }
     }
 }

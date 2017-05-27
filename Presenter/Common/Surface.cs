@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Surface
+    public class Surface : ISurface
     {
         private SharpDX.DXGI.SwapChain swapchain;
 

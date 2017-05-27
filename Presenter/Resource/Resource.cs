@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Resource
+    public class Resource : IResource
     {
         protected int size;
 
