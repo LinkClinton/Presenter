@@ -8,5 +8,11 @@ namespace Presenter
 {
     interface ISurface
     {
+        void Reset(int new_width, int new_height, bool windowed = true);
+
+        Brush BackGround { get; set; }
+
+        float Width { get; }
+        float Height { get; }
     }
 }

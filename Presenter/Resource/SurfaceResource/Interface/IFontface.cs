@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IResource
+    interface IFontface
     {
-        void Update<T>(ref T data) where T : struct;
-
-        void Update<T>(T[] data) where T : struct;
-
-        int Size { get; }
+        float Size { get; }
+        int Weight { get; }
     }
 }

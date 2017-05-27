@@ -63,7 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Interface\ISurface.cs" />
+    <Compile Include="Resource\BufferResource\Interface\IBuffer.cs" />
+    <Compile Include="Resource\BufferResource\Interface\IBufferLayout.cs" />
+    <Compile Include="Resource\BufferResource\Interface\IConstantBuffer.cs" />
+    <Compile Include="Resource\BufferResource\Interface\IIndexBuffer.cs" />
+    <Compile Include="Resource\BufferResource\Interface\IVertexBuffer.cs" />
     <Compile Include="Resource\Interface\IResource.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\IShaderResource.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\ITexture.cs" />
     <Compile Include="Resource\SurfaceResource\Bitmap.cs" />
     <Compile Include="Resource\SurfaceResource\Brush.cs" />
     <Compile Include="Resource\BufferResource\Buffer.cs" />
@@ -79,7 +86,12 @@
     <Compile Include="Private\Indexer\FontfaceIndexer.cs" />
     <Compile Include="Private\Indexer\ShaderResourceIndexer.cs" />
     <Compile Include="Common\Manager.cs" />
+    <Compile Include="Resource\SurfaceResource\Interface\IBitmap.cs" />
+    <Compile Include="Resource\SurfaceResource\Interface\IBrush.cs" />
+    <Compile Include="Resource\SurfaceResource\Interface\IFontface.cs" />
+    <Compile Include="Shader\Interface\IPixelShader.cs" />
     <Compile Include="Shader\Interface\IShader.cs" />
+    <Compile Include="Shader\Interface\IVertexShader.cs" />
     <Compile Include="Shader\PixelShader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\Resource.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class Brush
+    public partial class Brush : IBrush
     {
         private SharpDX.Direct2D1.Brush brush;
 

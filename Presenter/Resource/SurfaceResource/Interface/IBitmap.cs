@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IResource
+    interface IBitmap
     {
-        void Update<T>(ref T data) where T : struct;
-
-        void Update<T>(T[] data) where T : struct;
-
-        int Size { get; }
+        float Width { get; }
+        float Height { get; }
     }
 }

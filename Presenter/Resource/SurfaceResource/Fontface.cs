@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class Fontface
+    public partial class Fontface : IFontface
     {
         private SharpDX.DirectWrite.TextFormat fontface;
 
@@ -16,7 +16,7 @@ namespace Presenter
         public Fontface(string fontname, float fontsize, int fontweight = 400)
         {
             size = fontsize;
-
+            
             fontface = new SharpDX.DirectWrite.TextFormat(Manager.IDWriteFactory,
                 fontname, (SharpDX.DirectWrite.FontWeight)(weight = fontweight),
                 SharpDX.DirectWrite.FontStyle.Normal, fontsize);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class Bitmap
+    public partial class Bitmap : IBitmap
     {
         private SharpDX.Direct2D1.Bitmap bitmap;
 

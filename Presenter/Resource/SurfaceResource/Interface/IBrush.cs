@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IResource
+    interface IBrush
     {
-        void Update<T>(ref T data) where T : struct;
-
-        void Update<T>(T[] data) where T : struct;
-
-        int Size { get; }
+        float Red { get; }
+        float Green { get; }
+        float Blue { get; }
+        float Alpha { get; }
     }
 }

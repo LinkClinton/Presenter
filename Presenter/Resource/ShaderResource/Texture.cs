@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Texture : ShaderResource
+    public class Texture : ShaderResource, ITexture
     {
         int width;
         int height;

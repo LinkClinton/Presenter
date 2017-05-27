@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IResource
+    interface ITexture : IShaderResource
     {
-        void Update<T>(ref T data) where T : struct;
 
-        void Update<T>(T[] data) where T : struct;
 
-        int Size { get; }
+        int Width { get; }
+        int Height { get; }
     }
 }

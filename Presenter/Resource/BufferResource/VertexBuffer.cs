@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    public class VertexBuffer<T> : Buffer where T : struct
+    public class VertexBuffer<T> : Buffer, IVertexBuffer where T : struct
     {
         public VertexBuffer(T[] vertices)
         {

@@ -17,7 +17,7 @@ namespace Presenter
         TriangleStrip,
     };
 
-    public class BufferLayout
+    public class BufferLayout : IBufferLayout
     {
         public enum ElementSize
         {

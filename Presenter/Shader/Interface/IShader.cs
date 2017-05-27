@@ -8,6 +8,6 @@ namespace Presenter
 {
     interface IShader
     {
-
+        byte[] ByteCode { get; }
     }
 }

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    public class IndexBuffer<T> : Buffer where T : struct
+    public class IndexBuffer<T> : Buffer, IIndexBuffer where T : struct
     {
         public IndexBuffer(T[] indices)
         {

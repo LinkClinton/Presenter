@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    public class ConstantBuffer<T> : Buffer where T : struct
+    public class ConstantBuffer<T> : Buffer, IConstantBuffer where T : struct
     {
         public ConstantBuffer(int datasize, int data_count = 1)
         {

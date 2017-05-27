@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class VertexShader : Shader
+    public partial class VertexShader : Shader, IVertexShader
     {
         private SharpDX.Direct3D11.VertexShader shader;
 

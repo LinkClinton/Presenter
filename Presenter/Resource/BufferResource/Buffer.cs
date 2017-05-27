@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public abstract class Buffer : Resource
+    public abstract class Buffer : Resource, IBuffer
     {
         protected int count;
 

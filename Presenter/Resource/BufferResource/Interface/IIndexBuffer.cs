@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IResource
+    interface IIndexBuffer : IBuffer
     {
-        void Update<T>(ref T data) where T : struct;
-
-        void Update<T>(T[] data) where T : struct;
-
-        int Size { get; }
     }
 }

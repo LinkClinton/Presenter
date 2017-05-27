@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class PixelShader : Shader
+    public partial class PixelShader : Shader, IPixelShader
     {
         private SharpDX.Direct3D11.PixelShader shader;
 
