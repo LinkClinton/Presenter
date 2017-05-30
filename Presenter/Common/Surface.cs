@@ -23,7 +23,8 @@ namespace Presenter
 
         private IntPtr surfaceHandle;
 
-        private Brush background = Brush.Context[(1, 1, 1, 1)];
+        private (float red, float green, float blue, float alpha) backGround
+            = (1, 1, 1, 1);
 
         public Surface(IntPtr handle, bool windowed = true)
         {
@@ -193,14 +194,16 @@ namespace Presenter
 
         internal IntPtr Handle => surfaceHandle;
 
-        public Brush BackGround
-        {
-            set => background = value;
-            get => background;
-        }
+       
 
-        public float Width => width;
-        public float Height => height;
+        public int Width => width;
+        public int Height => height;
+
+        public (float red, float green, float blue, float alpha) BackGround
+        {
+            get => backGround;
+            set => backGround = value;
+        }
 
         ~Surface()
         {

@@ -6,21 +6,15 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class VertexShader : Shader, IVertexShader
+    public class VertexShader : Shader, IVertexShader
     {
-        private SharpDX.Direct3D11.VertexShader shader;
-
         public VertexShader(string shaderfile, string entrypoint, bool isCompiled = false)
         {
             bytecode = new SharpDX.D3DCompiler.ShaderBytecode(
                 new System.IO.FileStream(shaderfile, System.IO.FileMode.Open));
 
-            if (isCompiled is true)
-            {
-                shader = new SharpDX.Direct3D11.VertexShader(Manager.ID3D11Device, bytecode);
-                return;
-            }
-            
+            if (isCompiled is true) return;
+
 #if DEBUG
             SharpDX.D3DCompiler.CompilationResult result = SharpDX.D3DCompiler.ShaderBytecode.Compile(bytecode, entrypoint, "vs_5_0",
                  SharpDX.D3DCompiler.ShaderFlags.Debug | SharpDX.D3DCompiler.ShaderFlags.SkipOptimization);
@@ -30,27 +24,7 @@ namespace Presenter
 #endif
             if (result.HasErrors is true) throw new Exception(result.Message);
 
-            shader = new SharpDX.Direct3D11.VertexShader(Manager.ID3D11Device, bytecode = result.Bytecode);
-        }
-
-        internal SharpDX.Direct3D11.VertexShader ID3D11VertexShader => shader;
-
-        ~VertexShader() => SharpDX.Utilities.Dispose(ref shader);
-    }
-
-    public static partial class Manager
-    {
-        private static VertexShader vertexshader;
-
-        public static VertexShader VertexShader
-        {
-            get => vertexshader;
-            set
-            {
-                vertexshader = value;
-
-                ID3D11DeviceContext.VertexShader.SetShader(vertexshader.ID3D11VertexShader, null, 0);
-            }
+            bytecode = result.Bytecode;
         }
     }
 }

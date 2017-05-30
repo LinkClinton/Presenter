@@ -10,7 +10,6 @@ namespace Presenter
     {
         void Reset(int new_width, int new_height, bool windowed = true);
 
-
         (float red, float green, float blue, float alpha) BackGround { get; set; }
 
         int Width { get; }

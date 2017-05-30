@@ -33,17 +33,14 @@ namespace Presenter
         private static SharpDX.Direct3D11.Device device3d;
         private static SharpDX.Direct3D11.DeviceContext context3d;
 
-        private static int msaa4xQuality;
         private static Matrix3x2 transform = Matrix3x2.Identity;
 
         static Manager()
         {
             ID3D11Device = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware,
                  SharpDX.Direct3D11.DeviceCreationFlags.BgraSupport);
-
+            
             ID3D11DeviceContext = ID3D11Device.ImmediateContext; 
-
-            Msaa4xQuality = ID3D11Device.CheckMultisampleQualityLevels(SharpDX.DXGI.Format.R8G8B8A8_UNorm, 4);
 
             ID2D1Factory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded);
 
@@ -77,8 +74,8 @@ namespace Presenter
             ID2D1DeviceContext.BeginDraw();
 
             ID3D11DeviceContext.ClearRenderTargetView(Surface.ID3D11RenderTargetView,
-                new SharpDX.Mathematics.Interop.RawColor4(Surface.BackGround.Red,
-                Surface.BackGround.Green, Surface.BackGround.Blue, Surface.BackGround.Alpha));
+                new SharpDX.Mathematics.Interop.RawColor4(Surface.BackGround.red,
+                Surface.BackGround.green, Surface.BackGround.blue, Surface.BackGround.alpha));
 
             ID3D11DeviceContext.ClearDepthStencilView(Surface.ID3D11DepthStencilView,
                 SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);
@@ -131,12 +128,6 @@ namespace Presenter
         {
             private set => context3d = value;
             get => context3d;
-        }
-
-        public static int Msaa4xQuality
-        {
-            private set => msaa4xQuality = value;
-            get => msaa4xQuality;
         }
 
         public static CullMode CullMode
