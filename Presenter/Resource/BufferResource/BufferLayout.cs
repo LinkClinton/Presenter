@@ -36,10 +36,10 @@ namespace Presenter
 
         private SharpDX.Direct3D11.InputLayout layout;
 
-        public BufferLayout(Element[] elements)
+        public BufferLayout(Element[] elements, Shader vertexShader = null)
         {
 #if DEBUG
-            if (Manager.VertexShader is null) throw new Exception("Vertex Shader is null");
+            if (Manager.VertexShader is null && vertexShader is null) throw new Exception("Vertex Shader is null");
 #endif
 
             SharpDX.Direct3D11.InputElement[] desc = new SharpDX.Direct3D11.InputElement[elements.Length];
@@ -81,7 +81,9 @@ namespace Presenter
 
             }
 
-            layout = new SharpDX.Direct3D11.InputLayout(Manager.ID3D11Device, Manager.VertexShader.ByteCode, desc);
+            if (vertexShader is null)
+                layout = new SharpDX.Direct3D11.InputLayout(Manager.ID3D11Device, Manager.VertexShader.ByteCode, desc);
+            else layout = new SharpDX.Direct3D11.InputLayout(Manager.ID3D11Device, vertexShader.ByteCode, desc);
         }
 
         internal SharpDX.Direct3D11.InputLayout ID3D11InputLayout => layout;

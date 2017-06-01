@@ -8,41 +8,74 @@ namespace Presenter
 {
     public class ObjectPasser
     {
-        private Buffer vertexBuffer;
-        private Buffer indexBuffer;
-        private Shader vertexShader;
-        private Shader pixelShader;
-        private BufferLayout bufferLayout;
-        
+        private Buffer passVertexBuffer;
+        private Buffer passIndexBuffer;
+        private Shader passVertexShader;
+        private Shader passPixelShader;
+        private BufferLayout PassbufferLayout;
 
-        public Buffer VertexBuffer
+        private PrimitiveType passPrimitiveType = PrimitiveType.TriangleList;
+        private int passBaseIndexLocation = 0;
+        private int passBaseVertexLocation = 0;
+        private int passIndexCount = 0;
+
+        public ObjectPasser(Buffer vertexBuffer,
+            Buffer indexBuffer, Shader vertexShader,
+            Shader pixelShader, BufferLayout.Element[] inputElement)
         {
-            set => vertexBuffer = value;
-            get => vertexBuffer;
+            passVertexBuffer = vertexBuffer;
+            passIndexBuffer = indexBuffer;
+            passVertexShader = vertexShader;
+            passPixelShader = pixelShader;
+
+            PassbufferLayout = new BufferLayout(inputElement, vertexShader);
         }
 
-        public Buffer IndexBuffer
+        public ObjectPasser(Buffer vertexBuffer,
+            Buffer indexBuffer, Shader vertexShader,
+            Shader pixelShader, BufferLayout bufferLayout)
         {
-            set => indexBuffer = value;
-            get => indexBuffer;
+            passVertexBuffer = vertexBuffer;
+            passIndexBuffer = indexBuffer;
+            passVertexShader = vertexShader;
+            passPixelShader = pixelShader;
+            PassbufferLayout = bufferLayout;
         }
 
-        public Shader VertexShader
+        public void Pass()
         {
-            set => vertexShader = value;
-            get => vertexShader;
+            Manager.VertexBuffer = passVertexBuffer;
+            Manager.IndexBuffer = passIndexBuffer;
+            Manager.VertexShader = passVertexShader as VertexShader;
+            Manager.PixelShader = passPixelShader as PixelShader;
+            Manager.BufferLayout = PassbufferLayout;
+
+            Manager.DrawObjectIndexed(passIndexCount == 0 ? passIndexBuffer.Count : passIndexCount, passBaseIndexLocation,
+                passBaseVertexLocation, passPrimitiveType);
         }
 
-        public Shader PixelShader
+        public PrimitiveType PrimitiveType
         {
-            set => pixelShader = value;
-            get => pixelShader;
+            set => passPrimitiveType = value;
+            get => passPrimitiveType;
         }
 
-        public BufferLayout BufferLayout
+        public int PassBaseVertexLocation
         {
-            set => bufferLayout = value;
-            get => bufferLayout;
+            set => passBaseVertexLocation = value;
+            get => passBaseVertexLocation;
+        }
+
+        public int PassBaseIndexLocation
+        {
+            set => passBaseIndexLocation = value;
+            get => passBaseIndexLocation;
+        }
+
+        public int PassIndexCount
+        {
+            set => passIndexCount = value;
+            get => passIndexCount;
         }
 
     }
