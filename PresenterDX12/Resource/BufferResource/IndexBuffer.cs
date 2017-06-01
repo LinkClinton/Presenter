@@ -8,6 +8,8 @@ namespace Presenter
 {
     public class IndexBuffer<T> : Buffer, IIndexBuffer where T : struct
     {
+        private SharpDX.Direct3D12.IndexBufferView bufferview;
+
         public IndexBuffer(T[] indices)
         {
             resource = Manager.ID3D12Device.CreateCommittedResource(
@@ -19,6 +21,15 @@ namespace Presenter
             Update(indices);
 
             count = indices.Length;
+
+            bufferview = new SharpDX.Direct3D12.IndexBufferView()
+            {
+                BufferLocation = resource.GPUVirtualAddress,
+                SizeInBytes = Size,
+                Format = SharpDX.DXGI.Format.R32_UInt
+            };
         }
+
+        internal SharpDX.Direct3D12.IndexBufferView IndexBufferView => bufferview;
     }
 }

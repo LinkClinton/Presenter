@@ -8,6 +8,7 @@ namespace Presenter
 {
     public class VertexBuffer<T> : Buffer, IVertexBuffer where T : struct
     {
+        private SharpDX.Direct3D12.VertexBufferView bufferview;
 
         public VertexBuffer(T[] vertices)
         {
@@ -22,6 +23,15 @@ namespace Presenter
             Update(vertices);
 
             count = vertices.Length;
+
+            bufferview = new SharpDX.Direct3D12.VertexBufferView()
+            {
+                BufferLocation = resource.GPUVirtualAddress,
+                SizeInBytes = Size,
+                StrideInBytes = SharpDX.Utilities.SizeOf<T>()
+            };
         }
+
+        internal SharpDX.Direct3D12.VertexBufferView VertexBufferView => bufferview;
     }
 }
