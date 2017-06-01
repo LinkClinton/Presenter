@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Interface\ISurface.cs" />
+    <Compile Include="Common\ObjectPasser.cs" />
     <Compile Include="Resource\BufferResource\Interface\IBuffer.cs" />
     <Compile Include="Resource\BufferResource\Interface\IBufferLayout.cs" />
     <Compile Include="Resource\BufferResource\Interface\IConstantBuffer.cs" />
