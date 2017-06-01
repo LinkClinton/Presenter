@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    class IndexBuffer<T> : Buffer, IIndexBuffer where T : struct
+    public class IndexBuffer<T> : Buffer, IIndexBuffer where T : struct
     {
         public IndexBuffer(T[] indices)
         {
