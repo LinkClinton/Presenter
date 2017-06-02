@@ -73,7 +73,9 @@
     <Compile Include="Resource\BufferResource\Interface\IVertexBuffer.cs" />
     <Compile Include="Resource\BufferResource\VertexBuffer.cs" />
     <Compile Include="Resource\Interface\IResource.cs" />
+    <Compile Include="Resource\Interface\IResourceLayout.cs" />
     <Compile Include="Resource\Resource.cs" />
+    <Compile Include="Resource\ResourceLayout.cs" />
     <Compile Include="Shader\Interface\IPixelShader.cs" />
     <Compile Include="Shader\Interface\IShader.cs" />
     <Compile Include="Shader\Interface\IVertexShader.cs" />

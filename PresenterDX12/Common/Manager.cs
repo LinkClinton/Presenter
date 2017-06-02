@@ -71,8 +71,7 @@ namespace Presenter
             ID3D12CommandAllocator.Reset();
 
             ID3D12GraphicsCommandList.Reset(ID3D12CommandAllocator, null);
-
-
+            
             ID3D12GraphicsCommandList.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
             {
                 Height = surface.Height,

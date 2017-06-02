@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ObjectPasser
+    public class ObjectPasser : IObjectPasser
     {
         private Buffer passVertexBuffer;
         private Buffer passIndexBuffer;

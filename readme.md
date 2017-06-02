@@ -96,7 +96,7 @@ Present Object to Window.
 
     Element[] elements = new Element[2];
 
-    BufferLayout layout = new BufferLayout(elements);
+    BufferLayout layout = new BufferLayout(elements, vertexshader);
     ```
 
 - Set 
@@ -118,7 +118,22 @@ Present Object to Window.
         Format : DXGI_R8G8B8A8_UNORM
         CpuAccessFlags: None
         MipLevels : 1
-        Support: WIC Supported.
+        Support: WIC Supported
+    ```
+
+### ObjectPasser
+
+Draw a Object way such as GraphicsPipelineState.
+
+- Create and Run
+    ```C#
+    ObjectPasser passer = new ObjectPasser(...);
+
+    Manager.ClearObject();
+
+    passer.Pass();
+
+    Manager.FlushObject();
     ```
 
 ## Sample
