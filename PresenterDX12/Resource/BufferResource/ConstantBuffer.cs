@@ -16,7 +16,7 @@ namespace Presenter
                 SharpDX.Direct3D12.ResourceStates.GenericRead);
 
             resourceStart = resource.Map(0);
-            
+
             count = dataCount;
         }
 

@@ -28,7 +28,7 @@ namespace Presenter
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct Element
+        public class Element
         {
             public ElementSize Size;
             public string Tag;

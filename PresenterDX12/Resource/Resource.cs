@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Resource : IResource
+    public abstract class Resource : IResource
     {
         protected int size;
 
@@ -21,7 +21,7 @@ namespace Presenter
 
         public virtual void Update<T>(T[] data) where T : struct
         {
-            SharpDX.Utilities.Write(resourceStart, data, SharpDX.Utilities.SizeOf<T>(),
+            SharpDX.Utilities.Write(resourceStart, data, 0,
                 data.Length);
         }
 

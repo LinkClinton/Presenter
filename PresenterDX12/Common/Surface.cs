@@ -35,7 +35,7 @@ namespace Presenter
 
             APILibrary.Win32.Internal.GetClientRect(surfaceHandle, ref realRect);
 
-            var factory = new SharpDX.DXGI.Factory4();
+            using (var factory = new SharpDX.DXGI.Factory4())
             {
                 var tempSwapChain = new SharpDX.DXGI.SwapChain(factory, Manager.ID3D12CommandQueue,
                     new SharpDX.DXGI.SwapChainDescription()

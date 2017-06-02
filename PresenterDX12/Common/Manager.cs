@@ -31,8 +31,6 @@ namespace Presenter
         private static SharpDX.Direct3D12.CommandAllocator commandAllocator;
         private static SharpDX.Direct3D12.GraphicsCommandList graphicsCommandList;
 
-        private static SharpDX.Direct3D12.RootSignature rootSignature;
-
         private static SharpDX.Direct3D12.Fence fence;
 
         private static long fenceValue;
@@ -40,16 +38,15 @@ namespace Presenter
 
         static Manager()
         {
+#if DEBUG
+            SharpDX.Direct3D12.DebugInterface.Get().EnableDebugLayer();          
+#endif
             ID3D12Device = new SharpDX.Direct3D12.Device(null, SharpDX.Direct3D.FeatureLevel.Level_11_0);
 
             ID3D12CommandQueue = ID3D12Device.CreateCommandQueue(
                 new SharpDX.Direct3D12.CommandQueueDescription(SharpDX.Direct3D12.CommandListType.Direct));
 
             ID3D12CommandAllocator = ID3D12Device.CreateCommandAllocator(SharpDX.Direct3D12.CommandListType.Direct);
-
-            ID3D12RootSignature = ID3D12Device.CreateRootSignature(
-                new SharpDX.Direct3D12.RootSignatureDescription(SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout)
-                .Serialize());
 
             ID3D12GraphicsCommandList = ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
                 ID3D12CommandAllocator, null);
@@ -70,7 +67,8 @@ namespace Presenter
         {
             ID3D12CommandAllocator.Reset();
 
-            ID3D12GraphicsCommandList.Reset(ID3D12CommandAllocator, null);
+            ID3D12GraphicsCommandList.Reset(ID3D12CommandAllocator, 
+                graphicsPipelineState?.ID3D12GraphicsPipelineState);
             
             ID3D12GraphicsCommandList.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
             {
@@ -90,13 +88,14 @@ namespace Presenter
                 Bottom = surface.Height
             });
 
-            ID3D12GraphicsCommandList.SetGraphicsRootSignature(ID3D12RootSignature);
+            ID3D12GraphicsCommandList.SetGraphicsRootSignature(graphicsPipelineState?.ResourceLayout.ID3D12RootSignature);
 
             ID3D12GraphicsCommandList.ResourceBarrierTransition(surface.RenderTargetView[surface.IDXGISwapChain.CurrentBackBufferIndex],
                  SharpDX.Direct3D12.ResourceStates.Present, SharpDX.Direct3D12.ResourceStates.RenderTarget);
 
             var RTVHandle = surface.ID3D12RenderTargetViewHeap.CPUDescriptorHandleForHeapStart;
             RTVHandle += surface.IDXGISwapChain.CurrentBackBufferIndex * surface.ID3D12RenderTargetViewHeapSize;
+
             ID3D12GraphicsCommandList.SetRenderTargets(RTVHandle, null);
 
             ID3D12GraphicsCommandList.ClearRenderTargetView(RTVHandle, new SharpDX.Mathematics.Interop.RawColor4(
@@ -155,12 +154,6 @@ namespace Presenter
         {
             private set => graphicsCommandList = value;
             get => graphicsCommandList;
-        }
-
-        internal static SharpDX.Direct3D12.RootSignature ID3D12RootSignature
-        {
-            private set => rootSignature = value;
-            get => rootSignature;
         }
 
         internal static SharpDX.Direct3D12.Fence ID3D12Fence

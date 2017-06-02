@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IResourceLayout
+    interface IShaderResource : IResource
     {
-        ResourceLayout.Element[] Elements { get; }
-
-        int SlotCount { get; }
     }
 }
