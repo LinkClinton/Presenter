@@ -31,6 +31,8 @@ namespace Presenter
         private static SharpDX.Direct3D12.CommandAllocator commandAllocator;
         private static SharpDX.Direct3D12.GraphicsCommandList graphicsCommandList;
 
+        private static SharpDX.Direct3D12.RootSignature commonRootSignature;
+
         private static SharpDX.Direct3D12.Fence fence;
 
         private static long fenceValue;
@@ -38,9 +40,6 @@ namespace Presenter
 
         static Manager()
         {
-#if DEBUG
-            SharpDX.Direct3D12.DebugInterface.Get().EnableDebugLayer();          
-#endif
             ID3D12Device = new SharpDX.Direct3D12.Device(null, SharpDX.Direct3D.FeatureLevel.Level_11_0);
 
             ID3D12CommandQueue = ID3D12Device.CreateCommandQueue(
@@ -61,6 +60,10 @@ namespace Presenter
             ID2D1Factory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded);
 
             ImagingFactory = new SharpDX.WIC.ImagingFactory();
+
+
+            commonRootSignature = ID3D12Device.CreateRootSignature(
+                new SharpDX.Direct3D12.RootSignatureDescription(SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout).Serialize());
         }
 
         public static void ClearObject()
@@ -88,7 +91,10 @@ namespace Presenter
                 Bottom = surface.Height
             });
 
-            ID3D12GraphicsCommandList.SetGraphicsRootSignature(graphicsPipelineState?.ResourceLayout.ID3D12RootSignature);
+
+            if (graphicsPipelineState != null)
+                ID3D12GraphicsCommandList.SetGraphicsRootSignature(graphicsPipelineState?.ResourceLayout.ID3D12RootSignature);
+            else ID3D12GraphicsCommandList.SetGraphicsRootSignature(commonRootSignature);
 
             ID3D12GraphicsCommandList.ResourceBarrierTransition(surface.RenderTargetView[surface.IDXGISwapChain.CurrentBackBufferIndex],
                  SharpDX.Direct3D12.ResourceStates.Present, SharpDX.Direct3D12.ResourceStates.RenderTarget);
