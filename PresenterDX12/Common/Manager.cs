@@ -40,6 +40,9 @@ namespace Presenter
 
         static Manager()
         {
+#if DEBUG
+            SharpDX.Direct3D12.DebugInterface.Get().EnableDebugLayer();
+#endif
             ID3D12Device = new SharpDX.Direct3D12.Device(null, SharpDX.Direct3D.FeatureLevel.Level_11_0);
 
             ID3D12CommandQueue = ID3D12Device.CreateCommandQueue(
@@ -68,6 +71,8 @@ namespace Presenter
 
         public static void ClearObject()
         {
+            resouceInput.Reset();
+
             ID3D12CommandAllocator.Reset();
 
             ID3D12GraphicsCommandList.Reset(ID3D12CommandAllocator, 

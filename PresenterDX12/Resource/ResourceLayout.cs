@@ -8,16 +8,33 @@ namespace Presenter
 {
     public class ResourceLayout : IResourceLayout
     {
+        public enum ResourceType
+        {
+            ConstantBufferView,
+            ShaderResourceView,
+            ResourceHeap
+        }
+
         public class Element
         {
             public SubResource ConstantBufferView;
             public SubResource ShaderResourceView;
+
+            public ResourceType Type;
+            public int Register;
 
             public Element(SubResource constantBufferView = null,
                 SubResource shaderResourceView = null)
             {
                 ConstantBufferView = constantBufferView;
                 ShaderResourceView = shaderResourceView;
+                Type = ResourceType.ResourceHeap;
+            }
+
+            public Element(ResourceType type, int register)
+            {
+                Type = type;
+                Register = register;
             }
 
         }
@@ -48,26 +65,40 @@ namespace Presenter
 
             for (int i = 0; i < elements.Length; i++)
             {
-                int rootCount = 0;
+                switch (elements[i].Type)
+                {
+                    case ResourceType.ConstantBufferView:
+                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                            new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ConstantBufferView);
+                        break;
+                    case ResourceType.ShaderResourceView:
+                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                             new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ShaderResourceView);
+                        break;
+                    case ResourceType.ResourceHeap:
+                        int rootCount = 0;
 
-                if (elements[i].ConstantBufferView != null) rootCount++;
-                if (elements[i].ShaderResourceView != null) rootCount++;
+                        if (elements[i].ConstantBufferView != null) rootCount++;
+                        if (elements[i].ShaderResourceView != null) rootCount++;
 
-                SharpDX.Direct3D12.DescriptorRange[] range = new SharpDX.Direct3D12.DescriptorRange[rootCount];
+                        SharpDX.Direct3D12.DescriptorRange[] range = new SharpDX.Direct3D12.DescriptorRange[rootCount];
 
-                rootCount = 0;
+                        rootCount = 0;
 
-                if (elements[i].ConstantBufferView != null)
-                    range[rootCount++] = new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ConstantBufferView,
-                        elements[i].ConstantBufferView.Count, elements[i].ConstantBufferView.Start, 0, int.MinValue);
+                        if (elements[i].ConstantBufferView != null)
+                            range[rootCount++] = new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ConstantBufferView,
+                                elements[i].ConstantBufferView.Count, elements[i].ConstantBufferView.Start, 0, int.MinValue);
 
-                if (elements[i].ShaderResourceView != null)
-                    range[rootCount++] = new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ShaderResourceView,
-                        elements[i].ShaderResourceView.Count, elements[i].ShaderResourceView.Start, 0, int.MinValue);
+                        if (elements[i].ShaderResourceView != null)
+                            range[rootCount++] = new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ShaderResourceView,
+                                elements[i].ShaderResourceView.Count, elements[i].ShaderResourceView.Start, 0, int.MinValue);
 
-
-                rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
-                    range);
+                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                            range);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             SharpDX.Direct3D12.RootSignatureDescription rootDesc = new SharpDX.Direct3D12.RootSignatureDescription(

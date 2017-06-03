@@ -53,6 +53,8 @@ namespace Presenter
 
         public int MaxCount => heap.Description.DescriptorCount;
 
-        
+        internal SharpDX.Direct3D12.DescriptorHeap ID3D12DescriptorHeap => heap;
+
+
     }
 }
