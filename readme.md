@@ -19,12 +19,11 @@ Present Object to Window.
     ```C#
     Manager.Surface = new Surface(...); //Create Surface to Render.
     ```
-- Set Shader
+- Set GraphicsPipelineState
     ```C#
-    Manager.VertexShader = new VertexShader(...); //VertexShader
-
-    Manager.PixelShader = new PixelShader(...); //PixelShader
+    Manager.GraphicsPipelineState = new GraphicsPipelineState(...);
     ```
+
 - Set Buffer to Shader
     ```C#
     Manager.ConstantBuffer[(Shader,WhichID)] = new ConstantBuffer<T>(...);
@@ -50,6 +49,17 @@ Present Object to Window.
     On Windows size changed, you can reset the surface.
     ```C#
     Surface surface.Reset(new_width, new_height, windowed = true);
+    ```
+
+### GraphicsPipelineState
+A GraphicsPipelineState.
+
+You must set it before you do anything.
+
+- Create
+    ```C#
+    GraphicsPipelineState graphicsPipelineState = new GraphicsPipelineState(VertexShader, 
+        PixelShader, BufferLayout);
     ```
 
 ### Buffer
@@ -96,12 +106,7 @@ Present Object to Window.
 
     Element[] elements = new Element[2];
 
-    BufferLayout layout = new BufferLayout(elements, vertexshader);
-    ```
-
-- Set 
-    ```C#
-    Manager.BufferLayout = new BufferLayout(...);
+    BufferLayout layout = new BufferLayout(elements);
     ```
 
 ### ShaderResource
@@ -120,21 +125,36 @@ Present Object to Window.
         MipLevels : 1
         Support: WIC Supported
     ```
+### ResourceLayout
 
-### ObjectPasser
+It is not important for Presenter.
 
-Draw a Object way such as GraphicsPipelineState.
+If you want to run with PresenterDX12 and Presenter, you should give up some function(such as PutObject)
 
-- Create and Run
+You can use this way to send resource to `Shader`.
+
+- Create
     ```C#
-    ObjectPasser passer = new ObjectPasser(...);
-
-    Manager.ClearObject();
-
-    passer.Pass();
-
-    Manager.FlushObject();
+    ResourceLayout.Element[] resouceElements
+        = new ResourceLayout.Element[]
+        {
+            new ResourceLayout.Element(ResourceLayout.ResourceType.ConstantBufferView, 0),
+            new ResourceLayout.Element(ResourceLayout.ResourceType.ShaderResourceView, 0)
+        };
+    //for this code, we create ResourceLayout for one ConstantBuffer and one ShaderResource.
     ```
+- Set Resource by ResourceLayout
+    ```C#
+    Manager.ResourceInput[InputSlot] = ...//which kind resource you create
+    
+    //for example.
+    Manager.ResourceInput[0] = Buffer;
+    Manager.ResourceInput[1] = Texture;
+
+    //we Set a ConstantBuffer in 0 InputSlot
+    //we Set a ShaderResource in 1 InputSlot
+    ```
+
 
 ## Sample
 
