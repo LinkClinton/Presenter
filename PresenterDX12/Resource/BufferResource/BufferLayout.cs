@@ -82,6 +82,7 @@ namespace Presenter
 
         internal SharpDX.Direct3D12.InputLayoutDescription ID3D12InputLayoutDescription
             => layout;
+
     }
 
     

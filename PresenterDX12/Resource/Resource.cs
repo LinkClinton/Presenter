@@ -25,8 +25,17 @@ namespace Presenter
                 data.Length);
         }
 
+        protected long UploadRequiredSize(SharpDX.Direct3D12.Resource resource)
+        {
+            var desc = resource.Description;
+            Manager.ID3D12Device.GetCopyableFootprints(ref desc, 0, 1, 0, null, null, null, out long result);
+            return result;
+        }
+
         public int Size => size;
 
         internal SharpDX.Direct3D12.Resource ID3D12Resource => resource;
+
+        ~Resource() => SharpDX.Utilities.Dispose(ref resource);
     }
 }

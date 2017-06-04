@@ -13,5 +13,6 @@ namespace Presenter
        
         public byte[] ByteCode => bytecode;
 
+        ~Shader() => SharpDX.Utilities.Dispose(ref bytecode);
     }
 }

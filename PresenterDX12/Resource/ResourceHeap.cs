@@ -30,14 +30,7 @@ namespace Presenter
 
         public void AddResource<T>(ConstantBuffer<T> constantBuffer) where T : struct
         {
-            SharpDX.Direct3D12.ConstantBufferViewDescription bufferview =
-                new SharpDX.Direct3D12.ConstantBufferViewDescription()
-                {
-                    BufferLocation = constantBuffer.ID3D12Resource.GPUVirtualAddress,
-                    SizeInBytes = (constantBuffer.Size + 255) & ~255
-                };
-
-            Manager.ID3D12Device.CreateConstantBufferView(bufferview,
+            Manager.ID3D12Device.CreateConstantBufferView(constantBuffer.BufferView,
                         heap.CPUDescriptorHandleForHeapStart + heapCount * heapSize);
             heapCount++;
         }
@@ -55,6 +48,6 @@ namespace Presenter
 
         internal SharpDX.Direct3D12.DescriptorHeap ID3D12DescriptorHeap => heap;
 
-
+        ~ResourceHeap() => SharpDX.Utilities.Dispose(ref heap);
     }
 }

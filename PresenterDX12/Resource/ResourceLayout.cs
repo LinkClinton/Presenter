@@ -50,7 +50,7 @@ namespace Presenter
                 Count = count;
             }
 
-            public static implicit operator SubResource((int Start,int Count) subResource)
+            public static implicit operator SubResource((int Start, int Count) subResource)
                 => new SubResource(subResource.Start, subResource.Count);
         }
 
@@ -73,7 +73,7 @@ namespace Presenter
                         break;
                     case ResourceType.ShaderResourceView:
                         rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
-                             new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ShaderResourceView);
+                            new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ShaderResourceView);
                         break;
                     case ResourceType.ResourceHeap:
                         int rootCount = 0;
@@ -104,7 +104,8 @@ namespace Presenter
             SharpDX.Direct3D12.RootSignatureDescription rootDesc = new SharpDX.Direct3D12.RootSignatureDescription(
                 SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout, rootParameter);
 
-            rootSignature = Manager.ID3D12Device.CreateRootSignature(rootDesc.Serialize());
+
+            rootSignature = Manager.ID3D12Device.CreateRootSignature(0, rootDesc.Serialize());
 
             layoutElements = elements;
         }
@@ -114,5 +115,7 @@ namespace Presenter
         public int SlotCount => layoutElements.Length;
 
         internal SharpDX.Direct3D12.RootSignature ID3D12RootSignature => rootSignature;
+
+        ~ResourceLayout() => SharpDX.Utilities.Dispose(ref rootSignature);
     }
 }

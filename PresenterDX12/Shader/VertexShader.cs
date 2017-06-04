@@ -19,7 +19,7 @@ namespace Presenter
 
 #if DEBUG
             SharpDX.D3DCompiler.CompilationResult result = SharpDX.D3DCompiler.ShaderBytecode.Compile(bytecode, entrypoint, "vs_5_0",
-                 SharpDX.D3DCompiler.ShaderFlags.Debug | SharpDX.D3DCompiler.ShaderFlags.SkipOptimization);
+                 SharpDX.D3DCompiler.ShaderFlags.Debug);
 #else
             SharpDX.D3DCompiler.CompilationResult result = SharpDX.D3DCompiler.ShaderBytecode.Compile(bytecode, entrypoint, "vs_5_0",
                  SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel2);

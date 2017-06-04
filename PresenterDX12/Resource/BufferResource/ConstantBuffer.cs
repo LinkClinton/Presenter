@@ -8,6 +8,8 @@ namespace Presenter
 {
     public class ConstantBuffer<T> : Buffer, IConstantBuffer where T : struct
     {
+        private SharpDX.Direct3D12.ConstantBufferViewDescription bufferview;
+
         public ConstantBuffer(int dataSize, int dataCount = 1)
         {
             resource = Manager.ID3D12Device.CreateCommittedResource(
@@ -16,6 +18,12 @@ namespace Presenter
                 SharpDX.Direct3D12.ResourceStates.GenericRead);
 
             resourceStart = resource.Map(0);
+
+            bufferview = new SharpDX.Direct3D12.ConstantBufferViewDescription()
+            {
+                BufferLocation = resource.GPUVirtualAddress,
+                SizeInBytes = (Size + 255) & ~255
+            };
 
             count = dataCount;
         }
@@ -31,6 +39,12 @@ namespace Presenter
 
             Update(ref data);
 
+            bufferview = new SharpDX.Direct3D12.ConstantBufferViewDescription()
+            {
+                BufferLocation = resource.GPUVirtualAddress,
+                SizeInBytes = (Size + 255) & ~255
+            };
+
             count = 1;
         }
 
@@ -45,7 +59,15 @@ namespace Presenter
 
             Update(data);
 
+            bufferview = new SharpDX.Direct3D12.ConstantBufferViewDescription()
+            {
+                BufferLocation = resource.GPUVirtualAddress,
+                SizeInBytes = (Size + 255) & ~255
+            };
+
             count = data.Length;
         }
+
+        internal SharpDX.Direct3D12.ConstantBufferViewDescription BufferView => bufferview;
     }
 }

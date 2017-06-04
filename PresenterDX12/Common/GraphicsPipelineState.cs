@@ -65,6 +65,9 @@ namespace Presenter
         public BufferLayout BufferLayout => bufferLayout;
 
         public ResourceLayout ResourceLayout => resourceLayout;
+
+        ~GraphicsPipelineState() => SharpDX.Utilities.Dispose(ref pipelineState);
+        
     }
 
     public partial class Manager

@@ -123,6 +123,15 @@ namespace Presenter
         {
             throw new NotImplementedException();
         }
+
+        ~Surface()
+        {
+            SharpDX.Utilities.Dispose(ref surfaceSwapChain);
+            SharpDX.Utilities.Dispose(ref surfaceRTVHeap);
+
+            for (int i = 0; i < surfaceRTV.Length; i++)
+                SharpDX.Utilities.Dispose(ref surfaceRTV[i]);
+        }
     }
 
     public static partial class Manager

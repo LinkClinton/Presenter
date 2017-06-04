@@ -36,13 +36,13 @@
       <HintPath>..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.D3DCompiler, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.D3DCompiler.4.0.1\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
+      <HintPath>..\..\Mico\packages\SharpDX.D3DCompiler.4.0.1\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct2D1, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.Direct2D1.4.0.1\lib\net45\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D12, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.Direct3D12.4.0.1\lib\net45\SharpDX.Direct3D12.dll</HintPath>
+      <HintPath>..\..\Mico\packages\SharpDX.Direct3D12.4.0.1\lib\net45\SharpDX.Direct3D12.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
@@ -63,6 +63,8 @@
     <Compile Include="Common\Interface\ISurface.cs" />
     <Compile Include="Common\Manager.cs" />
     <Compile Include="Common\Surface.cs" />
+    <Compile Include="Private\Helper\WICHelper.cs" />
+    <Compile Include="Private\Helper\WICIndexer.cs" />
     <Compile Include="Private\Indexer\ResourceInputIndexer.cs" />
     <Compile Include="Private\Indexer\SurfaceRenderTargetViewIndexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Resource\ResourceLayout.cs" />
     <Compile Include="Resource\ShaderResource\Interface\IShaderResource.cs" />
     <Compile Include="Resource\ShaderResource\ShaderResource.cs" />
+    <Compile Include="Resource\ShaderResource\Texture.cs" />
     <Compile Include="Shader\Interface\IPixelShader.cs" />
     <Compile Include="Shader\Interface\IShader.cs" />
     <Compile Include="Shader\Interface\IVertexShader.cs" />
