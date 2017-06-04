@@ -51,26 +51,27 @@ namespace Presenter
             ID2D1Device = new SharpDX.Direct2D1.Device(ID2D1Factory, ID3D11Device.QueryInterface<SharpDX.DXGI.Device>());
 
             ID2D1DeviceContext = new SharpDX.Direct2D1.DeviceContext(ID2D1Device, SharpDX.Direct2D1.DeviceContextOptions.None);
-
-            SharpDX.Direct3D11.RasterizerStateDescription raster_desc = new SharpDX.Direct3D11.RasterizerStateDescription()
-            {
-                FillMode = SharpDX.Direct3D11.FillMode.Solid,
-                CullMode = SharpDX.Direct3D11.CullMode.None,
-                IsFrontCounterClockwise = false,
-                DepthBias = 0,
-                SlopeScaledDepthBias = 0,
-                DepthBiasClamp = 0,
-                IsDepthClipEnabled = true,
-                IsScissorEnabled = false,
-                IsMultisampleEnabled = false,
-                IsAntialiasedLineEnabled = false
-            };
-
-            context3d.Rasterizer.State = new SharpDX.Direct3D11.RasterizerState(ID3D11Device, raster_desc);
         }
 
         public static void ClearObject()
         {
+            resouceInput.Reset();
+
+            ID3D11DeviceContext.Rasterizer.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
+            {
+                Width = surface.Width,
+                Height = surface.Height,
+                MinDepth = 0f,
+                MaxDepth = 1f,
+                X = 0,
+                Y = 0
+            });
+
+            ID3D11DeviceContext.OutputMerger.SetTargets(surface.ID3D11DepthStencilView,
+                surface.ID3D11RenderTargetView);
+
+            ID2D1DeviceContext.Target = surface.Target;
+
             ID2D1DeviceContext.BeginDraw();
 
             ID3D11DeviceContext.ClearRenderTargetView(Surface.ID3D11RenderTargetView,
@@ -130,38 +131,12 @@ namespace Presenter
             get => context3d;
         }
 
-        public static CullMode CullMode
-        {
-            get => (CullMode)ID3D11DeviceContext.Rasterizer.State.Description.CullMode;
-            set
-            {
-                SharpDX.Direct3D11.RasterizerStateDescription desc = ID3D11DeviceContext.Rasterizer.State.Description;
-
-                desc.CullMode = (SharpDX.Direct3D11.CullMode)value;
-
-                ID3D11DeviceContext.Rasterizer.State = new SharpDX.Direct3D11.RasterizerState(ID3D11Device, desc);
-            }
-        }
-
-        public static FillMode FillMode
-        {
-            get => (FillMode)ID3D11DeviceContext.Rasterizer.State.Description.FillMode;
-            set
-            {
-                SharpDX.Direct3D11.RasterizerStateDescription desc = ID3D11DeviceContext.Rasterizer.State.Description;
-
-                desc.FillMode = (SharpDX.Direct3D11.FillMode)value;
-
-                ID3D11DeviceContext.Rasterizer.State = new SharpDX.Direct3D11.RasterizerState(ID3D11Device, desc);
-            }
-        }
-
         public static Matrix3x2 Transform
         {
             set
             {
                 transform = value;
-
+                
                 ID2D1DeviceContext.Transform = new SharpDX.Mathematics.Interop.RawMatrix3x2()
                 {
                     M11 = transform.M11,

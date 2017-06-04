@@ -35,20 +35,18 @@ namespace Presenter
         }
 
         private SharpDX.Direct3D11.InputLayout layout;
+        private SharpDX.Direct3D11.InputElement[] layoutDesc;
 
-        public BufferLayout(Element[] elements, Shader vertexShader = null)
+        public BufferLayout(Element[] elements)
         {
-#if DEBUG
-            if (Manager.VertexShader is null && vertexShader is null) throw new Exception("Vertex Shader is null");
-#endif
 
-            SharpDX.Direct3D11.InputElement[] desc = new SharpDX.Direct3D11.InputElement[elements.Length];
+            layoutDesc = new SharpDX.Direct3D11.InputElement[elements.Length];
 
             int bit_off = 0;
 
             for (int i = 0; i < elements.Length; i++)
             {
-                desc[i].SemanticName = elements[i].Tag;
+                layoutDesc[i].SemanticName = elements[i].Tag;
 
                 int add_off = 0;
 
@@ -56,54 +54,42 @@ namespace Presenter
                 {
                     case ElementSize.eFloat1:
                         add_off = 4;
-                        desc[i].Format = SharpDX.DXGI.Format.R8G8B8A8_UInt;
+                        layoutDesc[i].Format = SharpDX.DXGI.Format.R8G8B8A8_UInt;
                         break;
                     case ElementSize.eFloat2:
                         add_off = 8;
-                        desc[i].Format = SharpDX.DXGI.Format.R32G32_Float;
+                        layoutDesc[i].Format = SharpDX.DXGI.Format.R32G32_Float;
                         break;
                     case ElementSize.eFloat3:
                         add_off = 12;
-                        desc[i].Format = SharpDX.DXGI.Format.R32G32B32_Float;
+                        layoutDesc[i].Format = SharpDX.DXGI.Format.R32G32B32_Float;
                         break;
                     case ElementSize.eFlaot4:
                         add_off = 16;
-                        desc[i].Format = SharpDX.DXGI.Format.R32G32B32A32_Float;
+                        layoutDesc[i].Format = SharpDX.DXGI.Format.R32G32B32A32_Float;
                         break;
                     default:
                         break;
                 }
 
-                desc[i].Classification = SharpDX.Direct3D11.InputClassification.PerVertexData;
+                layoutDesc[i].Classification = SharpDX.Direct3D11.InputClassification.PerVertexData;
 
-                desc[i].AlignedByteOffset = bit_off;
+                layoutDesc[i].AlignedByteOffset = bit_off;
                 bit_off += add_off;
 
             }
 
-            if (vertexShader is null)
-                layout = new SharpDX.Direct3D11.InputLayout(Manager.ID3D11Device, Manager.VertexShader.ByteCode, desc);
-            else layout = new SharpDX.Direct3D11.InputLayout(Manager.ID3D11Device, vertexShader.ByteCode, desc);
+
         }
 
-        internal SharpDX.Direct3D11.InputLayout ID3D11InputLayout => layout;
+        internal SharpDX.Direct3D11.InputLayout ID3D11InputLayout
+        {
+            get => layout;
+            set => layout = value;
+        }
+
+        internal SharpDX.Direct3D11.InputElement[] Elements => layoutDesc;
 
         ~BufferLayout() => SharpDX.Utilities.Dispose(ref layout);
-    }
-
-    public static partial class Manager
-    {
-        private static BufferLayout bufferlayout;
-
-        public static BufferLayout BufferLayout
-        {
-            get => bufferlayout;
-            set
-            {
-                bufferlayout = value;
-
-                ID3D11DeviceContext.InputAssembler.InputLayout = bufferlayout.ID3D11InputLayout;
-            }
-        }
     }
 }

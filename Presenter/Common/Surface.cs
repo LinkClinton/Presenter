@@ -180,9 +180,6 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref dxgiadapte);
             SharpDX.Utilities.Dispose(ref dxgifactory);
             SharpDX.Utilities.Dispose(ref surface);
-
-            if (Manager.Surface == this)
-                Manager.Surface = this;
         }
 
         internal SharpDX.DXGI.SwapChain IDXGISwapChain => swapchain;
@@ -226,21 +223,6 @@ namespace Presenter
             set
             {
                 surface = value;
-
-                ID3D11DeviceContext.Rasterizer.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
-                {
-                    Width = surface.Width,
-                    Height = surface.Height,
-                    MinDepth = 0f,
-                    MaxDepth = 1f,
-                    X = 0,
-                    Y = 0
-                });
-
-                ID3D11DeviceContext.OutputMerger.SetTargets(surface.ID3D11DepthStencilView,
-                    surface.ID3D11RenderTargetView);
-
-                context2d.Target = surface.Target;
             }
         }
     }

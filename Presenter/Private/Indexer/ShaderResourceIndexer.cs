@@ -48,8 +48,8 @@ namespace Presenter
     {
         public ShaderResource this[int index]
         {
-            get => Manager.ShaderResource[(Manager.VertexShader, index)];
-            set => Manager.ShaderResource[(Manager.VertexShader, index)] = value;
+            get => Manager.ShaderResource[(Manager.GraphicsPipelineState?.VertexShader, index)];
+            set => Manager.ShaderResource[(Manager.GraphicsPipelineState?.VertexShader, index)] = value;
         }
     }
 
@@ -57,8 +57,8 @@ namespace Presenter
     {
         public ShaderResource this[int index]
         {
-            get => Manager.ShaderResource[(Manager.PixelShader, index)];
-            set => Manager.ShaderResource[(Manager.PixelShader, index)] = value;
+            get => Manager.ShaderResource[(Manager.GraphicsPipelineState?.PixelShader, index)];
+            set => Manager.ShaderResource[(Manager.GraphicsPipelineState?.PixelShader, index)] = value;
         }
     }
 

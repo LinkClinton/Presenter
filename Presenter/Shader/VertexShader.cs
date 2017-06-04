@@ -12,8 +12,9 @@ namespace Presenter
 
         public VertexShader(string shaderfile, string entrypoint, bool isCompiled = false)
         {
-            bytecode = new SharpDX.D3DCompiler.ShaderBytecode(
-                new System.IO.FileStream(shaderfile, System.IO.FileMode.Open));
+            System.IO.FileStream file = new System.IO.FileStream(shaderfile, System.IO.FileMode.Open);
+
+            bytecode = new SharpDX.D3DCompiler.ShaderBytecode(file);
 
             if (isCompiled is true)
             {
@@ -31,6 +32,8 @@ namespace Presenter
             if (result.HasErrors is true) throw new Exception(result.Message);
 
             shader = new SharpDX.Direct3D11.VertexShader(Manager.ID3D11Device, bytecode = result.Bytecode);
+
+            file.Close();
         }
 
         internal SharpDX.Direct3D11.VertexShader ID3D11VertexShader => shader;
@@ -38,19 +41,5 @@ namespace Presenter
         ~VertexShader() => SharpDX.Utilities.Dispose(ref shader);
     }
 
-    public static partial class Manager
-    {
-        private static VertexShader vertexshader;
-
-        public static VertexShader VertexShader
-        {
-            get => vertexshader;
-            set
-            {
-                vertexshader = value;
-
-                ID3D11DeviceContext.VertexShader.SetShader(vertexshader.ID3D11VertexShader, null, 0);
-            }
-        }
-    }
+   
 }

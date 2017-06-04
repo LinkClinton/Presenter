@@ -48,8 +48,8 @@ namespace Presenter
     {
         public Buffer this[int index]
         {
-            get => Manager.ConstantBuffer[(Manager.VertexShader, index)];
-            set => Manager.ConstantBuffer[(Manager.VertexShader, index)] = value;
+            get => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.VertexShader, index)];
+            set => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.VertexShader, index)] = value;
         }
     }
 
@@ -57,8 +57,8 @@ namespace Presenter
     {
         public Buffer this[int index]
         {
-            get => Manager.ConstantBuffer[(Manager.PixelShader, index)];
-            set => Manager.ConstantBuffer[(Manager.PixelShader, index)] = value;
+            get => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.PixelShader, index)];
+            set => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.PixelShader, index)] = value;
         }
     }
 

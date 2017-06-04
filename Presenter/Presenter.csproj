@@ -62,15 +62,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\GraphicsPipelineState.cs" />
+    <Compile Include="Common\Interface\IGraphicsPipelineState.cs" />
     <Compile Include="Common\Interface\IObjectPasser.cs" />
     <Compile Include="Common\Interface\ISurface.cs" />
-    <Compile Include="Common\ObjectPasser.cs" />
+    <Compile Include="Private\Indexer\ResourceInputIndexer.cs" />
     <Compile Include="Resource\BufferResource\Interface\IBuffer.cs" />
     <Compile Include="Resource\BufferResource\Interface\IBufferLayout.cs" />
     <Compile Include="Resource\BufferResource\Interface\IConstantBuffer.cs" />
     <Compile Include="Resource\BufferResource\Interface\IIndexBuffer.cs" />
     <Compile Include="Resource\BufferResource\Interface\IVertexBuffer.cs" />
     <Compile Include="Resource\Interface\IResource.cs" />
+    <Compile Include="Resource\Interface\IResourceHeap.cs" />
+    <Compile Include="Resource\Interface\IResourceLayout.cs" />
+    <Compile Include="Resource\ResourceHeap.cs" />
+    <Compile Include="Resource\ResourceLayout.cs" />
     <Compile Include="Resource\ShaderResource\Interface\IShaderResource.cs" />
     <Compile Include="Resource\ShaderResource\Interface\ITexture.cs" />
     <Compile Include="Resource\SurfaceResource\Bitmap.cs" />
