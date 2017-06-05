@@ -57,13 +57,18 @@ namespace Presenter
 
         private Element[] layoutElements;
 
-        public ResourceLayout(Element[] elements)
+        private int staticSamplerCount = 0;
+
+        public ResourceLayout(Element[] elements, int StaticSamplerCount = 0)
         {
             layoutElements = elements;
+            staticSamplerCount = StaticSamplerCount;
         }
 
         public Element[] Elements => layoutElements;
 
         public int SlotCount => layoutElements.Length;
+
+        public int StaticSamplerCount => staticSamplerCount;
     }
 }

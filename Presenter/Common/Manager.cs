@@ -37,9 +37,13 @@ namespace Presenter
 
         static Manager()
         {
+#if DEBUG
             ID3D11Device = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware,
-                 SharpDX.Direct3D11.DeviceCreationFlags.BgraSupport);
-            
+                             SharpDX.Direct3D11.DeviceCreationFlags.BgraSupport | SharpDX.Direct3D11.DeviceCreationFlags.Debug);
+#else
+            ID3D11Device = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware,
+                           SharpDX.Direct3D11.DeviceCreationFlags.BgraSupport);
+#endif
             ID3D11DeviceContext = ID3D11Device.ImmediateContext; 
 
             ID2D1Factory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded);

@@ -11,5 +11,7 @@ namespace Presenter
         ResourceLayout.Element[] Elements { get; }
 
         int SlotCount { get; }
+
+        int StaticSamplerCount { get; }
     }
 }

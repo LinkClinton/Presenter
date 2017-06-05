@@ -12,7 +12,7 @@ namespace Presenter
 
         private int maxCount;
 
-        ResourceHeap(int count)
+        public ResourceHeap(int count)
         {
             maxCount = count;
         }

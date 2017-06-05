@@ -57,9 +57,11 @@ namespace Presenter
 
         private Element[] layoutElements;
 
+        private int staticSamplerCount = 0;
+
         private SharpDX.Direct3D12.RootSignature rootSignature;
 
-        public ResourceLayout(Element[] elements)
+        public ResourceLayout(Element[] elements, int StaticSamplerCount = 0)
         {
             SharpDX.Direct3D12.RootParameter[] rootParameter = new SharpDX.Direct3D12.RootParameter[elements.Length];
 
@@ -101,9 +103,18 @@ namespace Presenter
                 }
             }
 
-            SharpDX.Direct3D12.RootSignatureDescription rootDesc = new SharpDX.Direct3D12.RootSignatureDescription(
-                SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout, rootParameter);
+            SharpDX.Direct3D12.StaticSamplerDescription[] sampleState =
+                new SharpDX.Direct3D12.StaticSamplerDescription[staticSamplerCount = StaticSamplerCount];
 
+            for (int i = 0; i < sampleState.Length; i++)
+            {
+                sampleState[i] = new SharpDX.Direct3D12.StaticSamplerDescription(SharpDX.Direct3D12.ShaderVisibility.All,
+                    i, 0);
+            }
+
+
+            SharpDX.Direct3D12.RootSignatureDescription rootDesc = new SharpDX.Direct3D12.RootSignatureDescription(
+                SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout, rootParameter, sampleState);
 
             rootSignature = Manager.ID3D12Device.CreateRootSignature(0, rootDesc.Serialize());
 
@@ -113,6 +124,8 @@ namespace Presenter
         public Element[] Elements => layoutElements;
 
         public int SlotCount => layoutElements.Length;
+
+        public int StaticSamplerCount => staticSamplerCount;
 
         internal SharpDX.Direct3D12.RootSignature ID3D12RootSignature => rootSignature;
 
