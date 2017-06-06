@@ -10,6 +10,11 @@ namespace Presenter
     {
         private List<SharpDX.Direct3D12.DescriptorHeap> heapSet = new List<SharpDX.Direct3D12.DescriptorHeap>();
 
+        internal ResourceInputIndexer()
+        {
+
+        }
+
         public object this[int index]
         { 
             set
@@ -45,11 +50,11 @@ namespace Presenter
         }
     }
 
-    public static partial class Manager
+    public partial class ResourceLayout
     {
         private static ResourceInputIndexer resouceInput = new ResourceInputIndexer();
 
-        public static ResourceInputIndexer ResourceInput => resouceInput;
+        public static ResourceInputIndexer InputSlot => resouceInput;
     }
 
 }

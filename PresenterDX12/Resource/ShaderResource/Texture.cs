@@ -93,6 +93,7 @@ namespace Presenter
                 Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
             }
             
+            
             size = imagesize;
 
             resourceview = new SharpDX.Direct3D12.ShaderResourceViewDescription()

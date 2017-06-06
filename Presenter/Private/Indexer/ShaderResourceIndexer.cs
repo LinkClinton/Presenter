@@ -6,67 +6,44 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ShaderResourceIndexer
+    public class VertexShaderResourceIndexer 
     {
         private Dictionary<int, ShaderResource> vsshaderresource = new Dictionary<int, ShaderResource>();
-        private Dictionary<int, ShaderResource> psshaderresource = new Dictionary<int, ShaderResource>();
 
-        public ShaderResource this[(Shader target, int which) index]
+        internal VertexShaderResourceIndexer()
         {
-            get
-            {
-                switch (index.target)
-                {
-                    case VertexShader e:
-                        return vsshaderresource[index.which];
-                    case PixelShader e:
-                        return psshaderresource[index.which];
-                    default:
-                        return null;
-                }
-            }
-            set
-            {
-                switch (index.target)
-                {
-                    case VertexShader e:
-                        vsshaderresource[index.which] = value;
-                        Manager.ID3D11DeviceContext.VertexShader.SetShaderResource(index.which, value.ID3D11ShaderResourceView);
-                        break;
-                    case PixelShader e:
-                        psshaderresource[index.which] = value;
-                        Manager.ID3D11DeviceContext.PixelShader.SetShaderResource(index.which, value.ID3D11ShaderResourceView);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
 
-    public class VertexShaderResourceIndexer
-    {
+        }
+
         public ShaderResource this[int index]
         {
-            get => Manager.ShaderResource[(Manager.GraphicsPipelineState?.VertexShader, index)];
-            set => Manager.ShaderResource[(Manager.GraphicsPipelineState?.VertexShader, index)] = value;
+            get => vsshaderresource[index];
+            set
+            {
+                vsshaderresource[index] = value;
+                Manager.ID3D11DeviceContext.VertexShader.SetShaderResource(index, value.ID3D11ShaderResourceView);
+            }
         }
     }
 
     public class PixelShaderResourceIndexer
     {
+        private Dictionary<int, ShaderResource> psshaderresource = new Dictionary<int, ShaderResource>();
+
+        internal PixelShaderResourceIndexer()
+        {
+
+        }
+
         public ShaderResource this[int index]
         {
-            get => Manager.ShaderResource[(Manager.GraphicsPipelineState?.PixelShader, index)];
-            set => Manager.ShaderResource[(Manager.GraphicsPipelineState?.PixelShader, index)] = value;
+            get => psshaderresource[index];
+            set
+            {
+                psshaderresource[index] = value;
+                Manager.ID3D11DeviceContext.PixelShader.SetShaderResource(index, value.ID3D11ShaderResourceView);
+            }
         }
-    }
-
-    public static partial class Manager
-    {
-        private static ShaderResourceIndexer shaderresource = new ShaderResourceIndexer();
-
-        public static ShaderResourceIndexer ShaderResource => shaderresource;
     }
 
     public partial class VertexShader
@@ -74,7 +51,7 @@ namespace Presenter
         private static VertexShaderResourceIndexer resource =
             new VertexShaderResourceIndexer();
 
-        public static VertexShaderResourceIndexer Resource => resource;
+        public static VertexShaderResourceIndexer ExResource => resource;
     }
 
     public partial class PixelShader
@@ -82,7 +59,7 @@ namespace Presenter
         private static PixelShaderResourceIndexer resource = 
             new PixelShaderResourceIndexer();
 
-        public static PixelShaderResourceIndexer Resource => resource;
+        public static PixelShaderResourceIndexer ExResource => resource;
     }
 
 }

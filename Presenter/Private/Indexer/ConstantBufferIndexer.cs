@@ -6,67 +6,44 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ConstantBufferIndexer
-    {
-        private Dictionary<int, Buffer> vsshaderbuffer = new Dictionary<int, Buffer>();
-        private Dictionary<int, Buffer> psshaderbuffer = new Dictionary<int, Buffer>();
-
-        public Buffer this[(Shader target, int which) index]
-        {
-            get
-            {
-                switch (index.target)
-                {
-                    case VertexShader e:
-                        return vsshaderbuffer[index.which];
-                    case PixelShader e:
-                        return psshaderbuffer[index.which];
-                    default:
-                        return null;
-                }
-            }
-            set
-            {
-                switch (index.target)
-                {
-                    case VertexShader e:
-                        vsshaderbuffer[index.which] = value;
-                        Manager.ID3D11DeviceContext.VertexShader.SetConstantBuffer(index.which, value.ID3D11Buffer);
-                        break;
-                    case PixelShader e:
-                        psshaderbuffer[index.which] = value;
-                        Manager.ID3D11DeviceContext.PixelShader.SetConstantBuffer(index.which, value.ID3D11Buffer);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-
     public class VertexShaderConstantBufferIndexer
     {
+        private Dictionary<int, Buffer> vsshaderbuffer = new Dictionary<int, Buffer>();
+
+        internal VertexShaderConstantBufferIndexer()
+        {
+
+        }
+
         public Buffer this[int index]
         {
-            get => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.VertexShader, index)];
-            set => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.VertexShader, index)] = value;
+            get => vsshaderbuffer[index];
+            set
+            {
+                vsshaderbuffer[index] = value;
+                Manager.ID3D11DeviceContext.VertexShader.SetConstantBuffer(index, value.ID3D11Buffer);
+            }
         }
     }
 
     public class PixelShaderConstantBufferIndexer
     {
+        private Dictionary<int, Buffer> psshaderbuffer = new Dictionary<int, Buffer>();
+
+        internal PixelShaderConstantBufferIndexer()
+        {
+
+        }
+
         public Buffer this[int index]
         {
-            get => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.PixelShader, index)];
-            set => Manager.ConstantBuffer[(Manager.GraphicsPipelineState?.PixelShader, index)] = value;
+            get => psshaderbuffer[index];
+            set
+            {
+                psshaderbuffer[index] = value;
+                Manager.ID3D11DeviceContext.PixelShader.SetConstantBuffer(index, value.ID3D11Buffer);
+            }
         }
-    }
-
-    public static partial class Manager
-    {
-        private static ConstantBufferIndexer constantbuffer = new ConstantBufferIndexer();
-
-        public static ConstantBufferIndexer ConstantBuffer => constantbuffer;
     }
 
     public partial class VertexShader
@@ -74,7 +51,8 @@ namespace Presenter
         private static VertexShaderConstantBufferIndexer constantbuffer = 
             new VertexShaderConstantBufferIndexer();
 
-        public static VertexShaderConstantBufferIndexer ConstantBuffer => constantbuffer;
+        public static VertexShaderConstantBufferIndexer ExConstantBuffer 
+            => constantbuffer;
     }
 
     public partial class PixelShader
@@ -82,7 +60,7 @@ namespace Presenter
         private static PixelShaderConstantBufferIndexer constantBuffer =
             new PixelShaderConstantBufferIndexer();
 
-        public static PixelShaderConstantBufferIndexer ConstantBuffer
+        public static PixelShaderConstantBufferIndexer ExConstantBuffer
            => constantBuffer;
     }
 

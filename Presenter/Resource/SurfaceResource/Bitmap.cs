@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class Bitmap : IBitmap
+    public partial class ExBitmap : IBitmap
     {
         private SharpDX.Direct2D1.Bitmap bitmap;
 
-        public Bitmap(string filename)
+        public ExBitmap(string filename)
         {
             SharpDX.WIC.BitmapDecoder decoder = new SharpDX.WIC.BitmapDecoder(Manager.ImagingFactory,
                 filename, SharpDX.IO.NativeFileAccess.Read, SharpDX.WIC.DecodeOptions.CacheOnLoad);
@@ -35,13 +35,13 @@ namespace Presenter
 
         internal SharpDX.Direct2D1.Bitmap ID2D1Bitmap => bitmap;
 
-        ~Bitmap() => SharpDX.Utilities.Dispose(ref bitmap);
+        ~ExBitmap() => SharpDX.Utilities.Dispose(ref bitmap);
     }
 
     public static partial class Manager
     {
-        public static void PutBitmap((float left, float top, float right, float bottom) rect,
-          Bitmap bitmap)
+        public static void ExPutBitmap((float left, float top, float right, float bottom) rect,
+          ExBitmap bitmap)
         {
             ID2D1DeviceContext.DrawBitmap(bitmap.ID2D1Bitmap, new SharpDX.Mathematics.Interop.RawRectangleF(
                 rect.left, rect.top, rect.right, rect.bottom), 1f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);

@@ -59,7 +59,7 @@ namespace Presenter
 
         public static void ClearObject()
         {
-            resouceInput.Reset();
+            ResourceLayout.InputSlot.Reset();
 
             ID3D11DeviceContext.Rasterizer.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
             {
@@ -135,7 +135,7 @@ namespace Presenter
             get => context3d;
         }
 
-        public static Matrix3x2 Transform
+        public static Matrix3x2 exTransform
         {
             set
             {

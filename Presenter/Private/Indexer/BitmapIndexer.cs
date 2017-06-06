@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class BitmapIndexer
+    public class BitmapContext
     {
-        private Dictionary<string, Bitmap> bitmapindexer = new Dictionary<string, Bitmap>();
+        private Dictionary<string, ExBitmap> bitmapindexer = new Dictionary<string, ExBitmap>();
 
-        public Bitmap this[string index]
+        internal BitmapContext()
+        {
+
+        }
+
+        public ExBitmap this[string index]
         {
             get
             {
                 if (bitmapindexer.ContainsKey(index) is false)
-                    bitmapindexer.Add(index, new Bitmap(index));
+                    bitmapindexer.Add(index, new ExBitmap(index));
                 return bitmapindexer[index];
             }
         }
@@ -24,25 +29,10 @@ namespace Presenter
             => bitmapindexer.Remove(index);
     }
 
-    public class BitmapContext
-    {
-        public Bitmap this[string index]
-        {
-            get => Manager.Bitmap[index];
-        }
-    }
-
-    public static partial class Manager
-    {
-        private static BitmapIndexer bitmap = new BitmapIndexer();
-
-        public static BitmapIndexer Bitmap => bitmap;
-    }
-
-    public partial class Bitmap
+    public partial class ExBitmap
     {
         private static BitmapContext context = new BitmapContext();
 
-        public BitmapContext Context => context;
+        public static BitmapContext ExContext => context;
     }
 }

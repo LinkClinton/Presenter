@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class BrushIndexer
+    public class BrushContext
     {
-        private Dictionary<(float red, float green, float blue, float alpha), Brush> brushindexer
-            = new Dictionary<(float red, float green, float blue, float alpha), Brush>();
+        private Dictionary<(float red, float green, float blue, float alpha), ExBrush> brushindexer
+             = new Dictionary<(float red, float green, float blue, float alpha), ExBrush>();
 
-        public Brush this[(float red, float green, float blue, float alpha) index]
+        internal BrushContext()
+        {
+
+        }
+
+        public ExBrush this[(float red, float green, float blue, float alpha) index]
         {
             get
             {
                 if (brushindexer.ContainsKey(index) is false)
-                    brushindexer.Add(index, new Brush(index));
+                    brushindexer.Add(index, new ExBrush(index));
                 return brushindexer[index];
             }
         }
@@ -25,31 +30,11 @@ namespace Presenter
             => brushindexer.Remove(index);
     }
 
-    public class BrushContext
-    {
-        public Brush this[(float red,float green, float blue,float alpha) index]
-        {
-            get => Manager.Brush[index];
-        }
-
-        public void Destory((float red, float green, float blue, float alpha) index)
-        {
-            Manager.Brush.Destory(index);
-        }
-    }
-
-    public static partial class Manager
-    {
-        private static BrushIndexer brush = new BrushIndexer();
-
-        public static BrushIndexer Brush => brush;
-    }
-
-    public partial class Brush
+    public partial class ExBrush
     {
         private static BrushContext context = new BrushContext();
 
-        public static BrushContext Context => context;
+        public static BrushContext ExContext => context;
     }
 
 

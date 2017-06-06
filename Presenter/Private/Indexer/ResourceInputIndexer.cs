@@ -27,6 +27,11 @@ namespace Presenter
 #endif 
         }
 
+        internal ResourceInputIndexer()
+        {
+
+        }
+
         public object this[int index]
         { 
             set
@@ -42,14 +47,14 @@ namespace Presenter
                     case Buffer buffer:
                         ReportError(index, ResourceLayout.ResourceType.ConstantBufferView, element.Type);
 
-                        VertexShader.ConstantBuffer[element.Register] = buffer;
-                        PixelShader.ConstantBuffer[element.Register] = buffer;
+                        VertexShader.ExConstantBuffer[element.Register] = buffer;
+                        PixelShader.ExConstantBuffer[element.Register] = buffer;
                         break;
                     case ShaderResource shaderresource:
                         ReportError(index, ResourceLayout.ResourceType.ShaderResourceView, element.Type);
 
-                        VertexShader.Resource[element.Register] = shaderresource;
-                        PixelShader.Resource[element.Register] = shaderresource;
+                        VertexShader.ExResource[element.Register] = shaderresource;
+                        PixelShader.ExResource[element.Register] = shaderresource;
                         break;
                     case ResourceHeap heap:
                         ReportError(index, ResourceLayout.ResourceType.ResourceHeap, element.Type);
@@ -67,16 +72,16 @@ namespace Presenter
 
                                     register = element.ConstantBufferView.Start + bufferCount - 1;
 
-                                    VertexShader.ConstantBuffer[register] = buffer;
-                                    PixelShader.ConstantBuffer[register] = buffer;
+                                    VertexShader.ExConstantBuffer[register] = buffer;
+                                    PixelShader.ExConstantBuffer[register] = buffer;
                                     break;
                                 case ShaderResource shaderresource:
                                     ReportError(++resourceCount, element.ShaderResourceView.Count, ResourceLayout.ResourceType.ShaderResourceView);
 
                                     register = element.ShaderResourceView.Start + resourceCount - 1;
 
-                                    VertexShader.Resource[register] = shaderresource;
-                                    PixelShader.Resource[register] = shaderresource;
+                                    VertexShader.ExResource[register] = shaderresource;
+                                    PixelShader.ExResource[register] = shaderresource;
                                     break;
                                 default:
                                     break;
@@ -95,11 +100,10 @@ namespace Presenter
         }
     }
 
-    public static partial class Manager
+    public partial class ResourceLayout
     {
         private static ResourceInputIndexer resouceInput = new ResourceInputIndexer();
 
-        public static ResourceInputIndexer ResourceInput => resouceInput;
+        public static ResourceInputIndexer InputSlot => resouceInput;
     }
-
 }

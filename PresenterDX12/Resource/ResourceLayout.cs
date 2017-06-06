@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ResourceLayout : IResourceLayout
+    public partial class ResourceLayout : IResourceLayout
     {
         public enum ResourceType
         {

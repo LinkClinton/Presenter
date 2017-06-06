@@ -71,7 +71,9 @@ namespace Presenter
 
         public static void ClearObject()
         {
-            resouceInput.Reset();
+            WaitForFrame();
+
+            ResourceLayout.InputSlot.Reset();
 
             ID3D12CommandAllocator.Reset();
 
@@ -137,8 +139,6 @@ namespace Presenter
             ID3D12CommandQueue.ExecuteCommandList(ID3D12GraphicsCommandList);
 
             surface.IDXGISwapChain.Present(1, 0);
-
-            WaitForFrame();
         }
 
      
