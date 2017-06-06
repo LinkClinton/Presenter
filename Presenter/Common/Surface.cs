@@ -19,8 +19,6 @@ namespace Presenter
         private SharpDX.Direct3D11.RenderTargetView surfaceRTV;
         private SharpDX.Direct3D11.DepthStencilView surfaceDSV;
 
-        private SharpDX.Direct2D1.Bitmap1 surfaceTarget;
-
         private IntPtr surfaceHandle;
 
         private (float red, float green, float blue, float alpha) backGround
@@ -83,26 +81,10 @@ namespace Presenter
                     OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None
                 }));
 
-            SharpDX.DXGI.Surface surface;
-
-            surfaceTarget = new SharpDX.Direct2D1.Bitmap1(Manager.ID2D1DeviceContext,
-                surface = swapchain.GetBackBuffer<SharpDX.DXGI.Surface>(0), new SharpDX.Direct2D1.BitmapProperties1()
-                {
-                    BitmapOptions = SharpDX.Direct2D1.BitmapOptions.Target | SharpDX.Direct2D1.BitmapOptions.CannotDraw,
-                    DpiX = Manager.DpiX,
-                    DpiY = Manager.DpiY,
-                    PixelFormat = new SharpDX.Direct2D1.PixelFormat()
-                    {
-                        Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                        AlphaMode = SharpDX.Direct2D1.AlphaMode.Premultiplied
-                    }
-                });
-
 
             SharpDX.Utilities.Dispose(ref dxgidevice);
             SharpDX.Utilities.Dispose(ref dxgiadapte);
             SharpDX.Utilities.Dispose(ref dxgifactory);
-            SharpDX.Utilities.Dispose(ref surface);
         }
 
         public void Reset(int new_width, int new_height, bool windowed = true)
@@ -113,7 +95,6 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref surfaceDepthBuffer);
             SharpDX.Utilities.Dispose(ref surfaceRTV);
             SharpDX.Utilities.Dispose(ref surfaceDSV);
-            SharpDX.Utilities.Dispose(ref surfaceTarget);
             SharpDX.Utilities.Dispose(ref swapchain);
 
             SharpDX.DXGI.Device dxgidevice = Manager.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
@@ -160,34 +141,17 @@ namespace Presenter
                     OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None
                 }));
 
-            SharpDX.DXGI.Surface surface;
-
-            surfaceTarget = new SharpDX.Direct2D1.Bitmap1(Manager.ID2D1DeviceContext,
-                surface = swapchain.GetBackBuffer<SharpDX.DXGI.Surface>(0), new SharpDX.Direct2D1.BitmapProperties1()
-                {
-                    BitmapOptions = SharpDX.Direct2D1.BitmapOptions.Target | SharpDX.Direct2D1.BitmapOptions.CannotDraw,
-                    DpiX = Manager.DpiX,
-                    DpiY = Manager.DpiY,
-                    PixelFormat = new SharpDX.Direct2D1.PixelFormat()
-                    {
-                        Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                        AlphaMode = SharpDX.Direct2D1.AlphaMode.Premultiplied
-                    }
-                });
-
 
             SharpDX.Utilities.Dispose(ref dxgidevice);
             SharpDX.Utilities.Dispose(ref dxgiadapte);
             SharpDX.Utilities.Dispose(ref dxgifactory);
-            SharpDX.Utilities.Dispose(ref surface);
+
         }
 
         internal SharpDX.DXGI.SwapChain IDXGISwapChain => swapchain;
 
         internal SharpDX.Direct3D11.RenderTargetView ID3D11RenderTargetView => surfaceRTV;
         internal SharpDX.Direct3D11.DepthStencilView ID3D11DepthStencilView => surfaceDSV;
-
-        internal SharpDX.Direct2D1.Bitmap1 Target => surfaceTarget;
 
         internal IntPtr Handle => surfaceHandle;
 
@@ -208,7 +172,6 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref surfaceDepthBuffer);
             SharpDX.Utilities.Dispose(ref surfaceRTV);
             SharpDX.Utilities.Dispose(ref surfaceDSV);
-            SharpDX.Utilities.Dispose(ref surfaceTarget);
             SharpDX.Utilities.Dispose(ref swapchain);
         }
     }

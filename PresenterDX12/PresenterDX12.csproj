@@ -68,6 +68,11 @@
     <Compile Include="Private\Indexer\ResourceInputIndexer.cs" />
     <Compile Include="Private\Indexer\SurfaceRenderTargetViewIndexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Public\Enum\CullMode.cs" />
+    <Compile Include="Public\Enum\ElementSize.cs" />
+    <Compile Include="Public\Enum\FillMode.cs" />
+    <Compile Include="Public\Enum\PrimitiveType.cs" />
+    <Compile Include="Public\Enum\ResourceType.cs" />
     <Compile Include="Resource\BufferResource\Buffer.cs" />
     <Compile Include="Resource\BufferResource\BufferLayout.cs" />
     <Compile Include="Resource\BufferResource\ConstantBuffer.cs" />

@@ -8,13 +8,6 @@ namespace Presenter
 {
     public partial class ResourceLayout : IResourceLayout
     {
-        public enum ResourceType
-        {
-            ConstantBufferView,
-            ShaderResourceView,
-            ResourceHeap
-        }
-
         public class Element
         {
             public SubResource ConstantBufferView;

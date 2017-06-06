@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IBitmap
+    public enum FillMode
     {
-        float Width { get; }
-        float Height { get; }
+        Wireframe = 2,
+        Solid = 3
     }
 }

@@ -7,26 +7,10 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    public enum PrimitiveType
-    {
-        UNK,
-        PointList,
-        LineList,
-        LineStrip,
-        TriangleList,
-        TriangleStrip,
-    };
 
-    public class BufferLayout : IBufferLayout
-    {
-        public enum ElementSize
-        {
-            eFloat1,
-            eFloat2,
-            eFloat3,
-            eFlaot4
-        }
 
+    public partial class BufferLayout : IBufferLayout
+    {
         [StructLayout(LayoutKind.Sequential)]
         public class Element
         {

@@ -8,8 +8,8 @@ namespace Presenter
 {
     public class ResourceInputIndexer
     {
-        private void ReportError(int index, ResourceLayout.ResourceType input,
-            ResourceLayout.ResourceType target)
+        private void ReportError(int index, ResourceType input,
+            ResourceType target)
         {
 #if DEBUG
             if (input != target)
@@ -18,7 +18,7 @@ namespace Presenter
 #endif 
         }
 
-        private void ReportError(int currentCount, int targetCount, ResourceLayout.ResourceType type)
+        private void ReportError(int currentCount, int targetCount, ResourceType type)
         {
 #if DEBUG
             if (currentCount > targetCount && targetCount != -1)
@@ -45,19 +45,19 @@ namespace Presenter
                 switch (value)
                 {
                     case Buffer buffer:
-                        ReportError(index, ResourceLayout.ResourceType.ConstantBufferView, element.Type);
+                        ReportError(index, ResourceType.ConstantBufferView, element.Type);
 
                         VertexShader.ExConstantBuffer[element.Register] = buffer;
                         PixelShader.ExConstantBuffer[element.Register] = buffer;
                         break;
                     case ShaderResource shaderresource:
-                        ReportError(index, ResourceLayout.ResourceType.ShaderResourceView, element.Type);
+                        ReportError(index, ResourceType.ShaderResourceView, element.Type);
 
                         VertexShader.ExResource[element.Register] = shaderresource;
                         PixelShader.ExResource[element.Register] = shaderresource;
                         break;
                     case ResourceHeap heap:
-                        ReportError(index, ResourceLayout.ResourceType.ResourceHeap, element.Type);
+                        ReportError(index, ResourceType.ResourceHeap, element.Type);
 
                         int bufferCount = 0;
                         int resourceCount = 0;
@@ -68,7 +68,7 @@ namespace Presenter
                             switch (item)
                             {
                                 case Buffer buffer:
-                                    ReportError(++bufferCount, element.ConstantBufferView.Count, ResourceLayout.ResourceType.ConstantBufferView);
+                                    ReportError(++bufferCount, element.ConstantBufferView.Count, ResourceType.ConstantBufferView);
 
                                     register = element.ConstantBufferView.Start + bufferCount - 1;
 
@@ -76,7 +76,7 @@ namespace Presenter
                                     PixelShader.ExConstantBuffer[register] = buffer;
                                     break;
                                 case ShaderResource shaderresource:
-                                    ReportError(++resourceCount, element.ShaderResourceView.Count, ResourceLayout.ResourceType.ShaderResourceView);
+                                    ReportError(++resourceCount, element.ShaderResourceView.Count, ResourceType.ShaderResourceView);
 
                                     register = element.ShaderResourceView.Start + resourceCount - 1;
 

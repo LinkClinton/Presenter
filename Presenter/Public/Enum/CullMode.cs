@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IFontface
+    public enum CullMode
     {
-        float Size { get; }
-        int Weight { get; }
+        CullNone = 1,
+        CullFront = 2,
+        CullBack = 3
     }
 }

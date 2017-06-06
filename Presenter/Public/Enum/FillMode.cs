@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IBrush
+    public enum FillMode
     {
-        float Red { get; }
-        float Green { get; }
-        float Blue { get; }
-        float Alpha { get; }
+        Wireframe = 2,
+        Solid = 3
     }
 }

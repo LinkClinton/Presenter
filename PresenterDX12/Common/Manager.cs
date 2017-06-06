@@ -7,19 +7,6 @@ using System.Numerics;
 
 namespace Presenter
 {
-    public enum CullMode
-    {
-        CullNone = 1,
-        CullFront = 2,
-        CullBack = 3
-    }
-
-    public enum FillMode
-    {
-        Wireframe = 2,
-        Solid = 3
-    }
-
     public static partial class Manager
     {
         private static SharpDX.Direct2D1.Factory1 d2d1Factory;
@@ -138,7 +125,7 @@ namespace Presenter
 
             ID3D12CommandQueue.ExecuteCommandList(ID3D12GraphicsCommandList);
 
-            surface.IDXGISwapChain.Present(1, 0);
+            surface.IDXGISwapChain.Present(0, 0);
         }
 
      
