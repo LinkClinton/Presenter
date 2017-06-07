@@ -51,7 +51,6 @@ namespace Presenter
 
             ImagingFactory = new SharpDX.WIC.ImagingFactory();
 
-
             commonRootSignature = ID3D12Device.CreateRootSignature(
                 new SharpDX.Direct3D12.RootSignatureDescription(SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout).Serialize());
         }
@@ -71,8 +70,8 @@ namespace Presenter
             {
                 Height = surface.Height,
                 Width = surface.Width,
-                MaxDepth = 1f,
-                MinDepth = 0f,
+                MaxDepth = 1.0f,
+                MinDepth = 0.0f,
                 X = 0f,
                 Y = 0f
             });
@@ -86,23 +85,28 @@ namespace Presenter
             });
 
 
-            if (graphicsPipelineState != null)
-                ID3D12GraphicsCommandList.SetGraphicsRootSignature(graphicsPipelineState?.ResourceLayout.ID3D12RootSignature);
-            else ID3D12GraphicsCommandList.SetGraphicsRootSignature(commonRootSignature);
-
             ID3D12GraphicsCommandList.ResourceBarrierTransition(surface.RenderTargetView[surface.IDXGISwapChain.CurrentBackBufferIndex],
                  SharpDX.Direct3D12.ResourceStates.Present, SharpDX.Direct3D12.ResourceStates.RenderTarget);
 
             var RTVHandle = surface.ID3D12RenderTargetViewHeap.CPUDescriptorHandleForHeapStart;
+            var DSVHandle = surface.ID3D12DepthStencilViewHeap.CPUDescriptorHandleForHeapStart;
+
             RTVHandle += surface.IDXGISwapChain.CurrentBackBufferIndex * surface.ID3D12RenderTargetViewHeapSize;
 
-            ID3D12GraphicsCommandList.SetRenderTargets(RTVHandle, null);
+            ID3D12GraphicsCommandList.SetRenderTargets(RTVHandle, DSVHandle);
 
             ID3D12GraphicsCommandList.ClearRenderTargetView(RTVHandle, new SharpDX.Mathematics.Interop.RawColor4(
                 surface.BackGround.red, surface.BackGround.green, surface.BackGround.blue, surface.BackGround.alpha));
+
+            ID3D12GraphicsCommandList.ClearDepthStencilView(DSVHandle,
+                SharpDX.Direct3D12.ClearFlags.FlagsDepth | SharpDX.Direct3D12.ClearFlags.FlagsStencil, 1.0f, 0);
+
+            if (graphicsPipelineState != null)
+                ID3D12GraphicsCommandList.SetGraphicsRootSignature(graphicsPipelineState?.ResourceLayout.ID3D12RootSignature);
+            else ID3D12GraphicsCommandList.SetGraphicsRootSignature(commonRootSignature);
         }
 
-        private static void WaitForFrame()
+        internal static void WaitForFrame()
         {
             long localFence = fenceValue;
             ID3D12CommandQueue.Signal(ID3D12Fence, localFence);

@@ -18,6 +18,36 @@ namespace Presenter
         private SharpDX.Direct3D12.GraphicsPipelineStateDescription graphicsDesc;
         private SharpDX.Direct3D12.PipelineState pipelineState;
 
+        private static SharpDX.Direct3D12.DepthStencilStateDescription DepthStencilStateDefault
+        {
+            get
+            {
+                return new SharpDX.Direct3D12.DepthStencilStateDescription()
+                {
+                    IsDepthEnabled = true,
+                    DepthWriteMask = SharpDX.Direct3D12.DepthWriteMask.All,
+                    DepthComparison = SharpDX.Direct3D12.Comparison.Less,
+                    IsStencilEnabled = false,
+                    StencilReadMask = 0xff,
+                    StencilWriteMask = 0xff,
+                    FrontFace = new SharpDX.Direct3D12.DepthStencilOperationDescription()
+                    {
+                        FailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
+                        DepthFailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
+                        PassOperation = SharpDX.Direct3D12.StencilOperation.Keep,
+                        Comparison = SharpDX.Direct3D12.Comparison.Always
+                    },
+                    BackFace = new SharpDX.Direct3D12.DepthStencilOperationDescription()
+                    {
+                        FailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
+                        DepthFailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
+                        PassOperation = SharpDX.Direct3D12.StencilOperation.Keep,
+                        Comparison = SharpDX.Direct3D12.Comparison.Always
+                    }
+                };
+            }
+        }
+
         public GraphicsPipelineState(VertexShader vertexshader,
             PixelShader pixelshader, BufferLayout bufferlayout,
             ResourceLayout resourcelayout)
@@ -36,12 +66,8 @@ namespace Presenter
                 PixelShader = pixelShader.ByteCode,
                 RasterizerState = SharpDX.Direct3D12.RasterizerStateDescription.Default(),
                 BlendState = SharpDX.Direct3D12.BlendStateDescription.Default(),
-                DepthStencilFormat = SharpDX.DXGI.Format.D32_Float,
-                DepthStencilState = new SharpDX.Direct3D12.DepthStencilStateDescription()
-                {
-                    IsDepthEnabled = false,
-                    IsStencilEnabled = false
-                },
+                DepthStencilFormat = Surface.DepthStencilFormat,
+                DepthStencilState = DepthStencilStateDefault,
                 SampleMask = int.MaxValue,
                 PrimitiveTopologyType = SharpDX.Direct3D12.PrimitiveTopologyType.Triangle,
                 RenderTargetCount = 1,
