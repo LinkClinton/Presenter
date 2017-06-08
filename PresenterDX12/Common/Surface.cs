@@ -139,6 +139,8 @@ namespace Presenter
                 CommandList.Close();
                 
                 Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
+
+                Manager.WaitForFrame();
             }
 
         }
@@ -202,9 +204,11 @@ namespace Presenter
         {
             SharpDX.Utilities.Dispose(ref surfaceSwapChain);
             SharpDX.Utilities.Dispose(ref surfaceRTVHeap);
+            SharpDX.Utilities.Dispose(ref surfaceDSVHeap);
 
             for (int i = 0; i < surfaceRTV.Length; i++)
                 SharpDX.Utilities.Dispose(ref surfaceRTV[i]);
+            SharpDX.Utilities.Dispose(ref surfaceDSV);
         }
     }
 

@@ -44,7 +44,7 @@ namespace Presenter
                 X = 0,
                 Y = 0
             });
-
+            
             ID3D11DeviceContext.OutputMerger.SetTargets(surface.ID3D11DepthStencilView,
                 surface.ID3D11RenderTargetView);
 
