@@ -71,6 +71,7 @@
     <Compile Include="Public\Enum\ElementSize.cs" />
     <Compile Include="Public\Enum\FillMode.cs" />
     <Compile Include="Public\Enum\PrimitiveType.cs" />
+    <Compile Include="Public\Enum\ResourceFormat.cs" />
     <Compile Include="Public\Enum\ResourceType.cs" />
     <Compile Include="Resource\BufferResource\Buffer.cs" />
     <Compile Include="Resource\BufferResource\BufferLayout.cs" />

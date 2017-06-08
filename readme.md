@@ -11,7 +11,6 @@ Present Object to Window.
     Manager.ClearObject(); //clear Surface and Set White Color.
 
     Manager.DrawObjectIndexed(...); //DrawBuffer.
-    Manager.PutObject(...); //Draw Object such as line,rectangle...
     
     Manager.FlushObject(); //Flush Object and Present it.
     ```
@@ -26,10 +25,7 @@ Present Object to Window.
 
 - Set Buffer to Shader
     ```C#
-    Manager.ConstantBuffer[(Shader,WhichID)] = new ConstantBuffer<T>(...);
-
-    //Shader is a VertexShader or PixelShader...
-    //For example: Manager.ConstantBuffer[(Manager.VertexShader,0)]
+    ResourceLayout.InputSlot[which] = new ConstantBuffer<T>(...);
     ```
 
 ### Surface 
@@ -40,10 +36,7 @@ Present Object to Window.
     ```
 - BackGround 
     ```C#
-    Surface surface.BackGround = Brush.Context[(color)];
-
-    //you can use Context to get 2D resource.
-    //or Surface surface.BackGround = Manager.Brush[(color)];
+    Surface surface.BackGround = (1, 1, 1, 1);
     ```
 - Reset  
     On Windows size changed, you can reset the surface.
@@ -71,10 +64,6 @@ You must set it before you do anything.
 
     ConstantBuffer<T> buffer = new ConstantBuffer<T>(ref data);
     ConstantBuffer<T> buffer = new ConstantBuffer<T>(data[]);
-
-    //Other Way to Set
-    VertexShader.ConstantBuffer[which] = new ConstantBuffer<T>(...);
-    PixelShader.ConstantBuffer[which] = new ConstantBuffer<T>(...);
     ```
 - VertexBuffer
     ```C#
@@ -113,7 +102,7 @@ You must set it before you do anything.
 
 - Set 
     ```C#
-    Manager.ShaderResource[(Shader,WhichID)] = new ShaderResource();
+    ResourceLayout.InputSlot[which] = new ShaderResource(...);
     ```
 - Texture
     ```
@@ -126,12 +115,6 @@ You must set it before you do anything.
         Support: WIC Supported
     ```
 ### ResourceLayout
-
-It is not important for Presenter.
-
-If you want to run with PresenterDX12 and Presenter, you should give up some function(such as PutObject)
-
-You can use this way to send resource to `Shader`.
 
 - Create
     ```C#

@@ -71,6 +71,7 @@
     <Compile Include="Public\Enum\ElementSize.cs" />
     <Compile Include="Public\Enum\FillMode.cs" />
     <Compile Include="Public\Enum\PrimitiveType.cs" />
+    <Compile Include="Public\Enum\ResourceFormat.cs" />
     <Compile Include="Public\Enum\ResourceType.cs" />
     <Compile Include="Resource\BufferResource\Interface\IBuffer.cs" />
     <Compile Include="Resource\BufferResource\Interface\IBufferLayout.cs" />
@@ -93,6 +94,12 @@
     <Compile Include="Private\Indexer\ConstantBufferIndexer.cs" />
     <Compile Include="Private\Indexer\ShaderResourceIndexer.cs" />
     <Compile Include="Common\Manager.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\ITexture1D.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\ITexture2D.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\ITexture3D.cs" />
+    <Compile Include="Resource\ShaderResource\Texture1D.cs" />
+    <Compile Include="Resource\ShaderResource\Texture2D.cs" />
+    <Compile Include="Resource\ShaderResource\Texture3D.cs" />
     <Compile Include="Shader\Interface\IPixelShader.cs" />
     <Compile Include="Shader\Interface\IShader.cs" />
     <Compile Include="Shader\Interface\IVertexShader.cs" />

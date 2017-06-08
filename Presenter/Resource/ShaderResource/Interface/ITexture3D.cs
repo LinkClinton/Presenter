@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IShaderResource : IResource
+    interface ITexture3D
     {
-        ResourceFormat PixelFormat { get; }
+        int Width { get; }
+        int Height { get; }
+        int Depth { get; }
+
+        int MipLevels { get; }
     }
 }
