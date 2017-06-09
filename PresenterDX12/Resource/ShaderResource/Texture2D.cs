@@ -127,7 +127,7 @@ namespace Presenter
                     using (var frame = decoder.GetFrame(0))
                     {
 
-                        converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppRGBA,
+                        converter.Initialize(frame, frame.PixelFormat,
                              SharpDX.WIC.BitmapDitherType.None, null, 0, SharpDX.WIC.BitmapPaletteType.MedianCut);
 
                         int width = converter.Size.Width;
@@ -142,7 +142,8 @@ namespace Presenter
 
                         converter.CopyPixels(pixels, rowPitch);
 
-                        Texture2D texture = new Texture2D(width, height, ResourceFormat.R8G8B8A8, miplevels);
+                        Texture2D texture = new Texture2D(width, height, (ResourceFormat)WICHelper.Translate[converter.PixelFormat],
+                            miplevels);
 
                         texture.Update(pixels);
 
