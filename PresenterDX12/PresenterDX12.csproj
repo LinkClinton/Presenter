@@ -90,8 +90,13 @@
     <Compile Include="Resource\ResourceHeap.cs" />
     <Compile Include="Resource\ResourceLayout.cs" />
     <Compile Include="Resource\ShaderResource\Interface\IShaderResource.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\ITexture1D.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\ITexture2D.cs" />
+    <Compile Include="Resource\ShaderResource\Interface\ITexture3D.cs" />
     <Compile Include="Resource\ShaderResource\ShaderResource.cs" />
-    <Compile Include="Resource\ShaderResource\Texture.cs" />
+    <Compile Include="Resource\ShaderResource\Texture1D.cs" />
+    <Compile Include="Resource\ShaderResource\Texture2D.cs" />
+    <Compile Include="Resource\ShaderResource\Texture3D.cs" />
     <Compile Include="Shader\Interface\IPixelShader.cs" />
     <Compile Include="Shader\Interface\IShader.cs" />
     <Compile Include="Shader\Interface\IVertexShader.cs" />

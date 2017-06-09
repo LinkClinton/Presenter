@@ -84,7 +84,6 @@
     <Compile Include="Resource\ResourceHeap.cs" />
     <Compile Include="Resource\ResourceLayout.cs" />
     <Compile Include="Resource\ShaderResource\Interface\IShaderResource.cs" />
-    <Compile Include="Resource\ShaderResource\Interface\ITexture.cs" />
     <Compile Include="Resource\BufferResource\Buffer.cs" />
     <Compile Include="Resource\BufferResource\BufferLayout.cs" />
     <Compile Include="Resource\BufferResource\ConstantBuffer.cs" />

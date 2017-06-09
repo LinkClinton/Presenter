@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface ITexture : IShaderResource
+    interface ITexture2D
     {
-
-
         int Width { get; }
         int Height { get; }
+
+        int MipLevels { get; }
     }
 }
