@@ -11,7 +11,7 @@ namespace Presenter
         private int tWidth;
         private int mipLevels;
 
-        public Texture1D(int width, ResourceFormat format, int miplevels = 0)
+        public Texture1D(int width, ResourceFormat format, int miplevels = 1)
         {
             tWidth = width;
             pixelFormat = format;
@@ -34,6 +34,16 @@ namespace Presenter
                 resource);
 
             size = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+        }
+
+        public override void Update<T>(ref T data)
+        {
+            base.Update(ref data);
+        }
+
+        public override void Update<T>(T[] data)
+        {
+            base.Update(data);
         }
 
         public int Width => tWidth;

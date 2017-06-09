@@ -29,27 +29,27 @@ namespace Presenter
             switch (format)
             {
                 case ResourceFormat.R32G32B32A32_Float:
-                    return 128;
+                    return 16;
                 case ResourceFormat.R16G16B16A16_Float:
-                    return 64;
+                    return 8;
                 case ResourceFormat.R16G16B16A16:
-                    return 64;
+                    return 8;
                 case ResourceFormat.R8G8B8A8:
-                    return 32;
+                    return 4;
                 case ResourceFormat.B8G8R8A8:
-                    return 32;
+                    return 4;
                 case ResourceFormat.B8G8R8X8:
-                    return 32;
+                    return 4;
                 case ResourceFormat.R32_Float:
-                    return 32;
+                    return 4;
                 case ResourceFormat.R16_Float:
-                    return 16;
+                    return 2;
                 case ResourceFormat.R16:
-                    return 16;
+                    return 2;
                 case ResourceFormat.R8:
-                    return 8;
+                    return 1;
                 case ResourceFormat.A8:
-                    return 8;
+                    return 1;
                 case ResourceFormat.Unknown:
                     return 0;
             }

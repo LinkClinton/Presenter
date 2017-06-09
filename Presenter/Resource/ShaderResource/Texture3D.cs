@@ -13,7 +13,7 @@ namespace Presenter
         private int tDepth;
         private int mipLevels;
 
-        public Texture3D(int width,int height,int depth,ResourceFormat format,int miplevels = 0)
+        public Texture3D(int width, int height, int depth, ResourceFormat format, int miplevels = 1)
         {
             tWidth = width;
             tHeight = height;
@@ -39,6 +39,22 @@ namespace Presenter
                 resource);
 
             size = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth * tHeight * tDepth;
+        }
+
+        public override void Update<T>(ref T data)
+        {
+            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+            int depthPitch = rowPitch * tHeight;
+
+            Manager.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch, depthPitch);
+        }
+
+        public override void Update<T>(T[] data)
+        {
+            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+            int depthPitch = rowPitch * tHeight;
+
+            Manager.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch, depthPitch);
         }
 
         public int Width => tWidth;

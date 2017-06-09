@@ -109,7 +109,6 @@
     <Compile Include="Resource\ShaderResource\ShaderResource.cs" />
     <Compile Include="Shader\Shader.cs" />
     <Compile Include="Common\Surface.cs" />
-    <Compile Include="Resource\ShaderResource\Texture.cs" />
     <Compile Include="Resource\BufferResource\VertexBuffer.cs" />
     <Compile Include="Shader\VertexShader.cs" />
   </ItemGroup>
