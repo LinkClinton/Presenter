@@ -14,49 +14,24 @@ namespace Presenter
         private BufferLayout bufferLayout;
         private ResourceLayout resourceLayout;
 
+        private DepthStencilState depthStencilState;
 
         private SharpDX.Direct3D12.GraphicsPipelineStateDescription graphicsDesc;
         private SharpDX.Direct3D12.PipelineState pipelineState;
 
-        private static SharpDX.Direct3D12.DepthStencilStateDescription DepthStencilStateDefault
-        {
-            get
-            {
-                return new SharpDX.Direct3D12.DepthStencilStateDescription()
-                {
-                    IsDepthEnabled = true,
-                    DepthWriteMask = SharpDX.Direct3D12.DepthWriteMask.All,
-                    DepthComparison = SharpDX.Direct3D12.Comparison.Less,
-                    IsStencilEnabled = false,
-                    StencilReadMask = 0xff,
-                    StencilWriteMask = 0xff,
-                    FrontFace = new SharpDX.Direct3D12.DepthStencilOperationDescription()
-                    {
-                        FailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
-                        DepthFailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
-                        PassOperation = SharpDX.Direct3D12.StencilOperation.Keep,
-                        Comparison = SharpDX.Direct3D12.Comparison.Always
-                    },
-                    BackFace = new SharpDX.Direct3D12.DepthStencilOperationDescription()
-                    {
-                        FailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
-                        DepthFailOperation = SharpDX.Direct3D12.StencilOperation.Keep,
-                        PassOperation = SharpDX.Direct3D12.StencilOperation.Keep,
-                        Comparison = SharpDX.Direct3D12.Comparison.Always
-                    }
-                };
-            }
-        }
+       
 
         public GraphicsPipelineState(VertexShader vertexshader,
             PixelShader pixelshader, BufferLayout bufferlayout,
-            ResourceLayout resourcelayout)
+            ResourceLayout resourcelayout, DepthStencilState depthstencilstate)
         {
             vertexShader = vertexshader;
             pixelShader = pixelshader;
 
             bufferLayout = bufferlayout;
             resourceLayout = resourcelayout;
+
+            depthStencilState = depthstencilstate;
 
             graphicsDesc = new SharpDX.Direct3D12.GraphicsPipelineStateDescription()
             {
@@ -67,7 +42,7 @@ namespace Presenter
                 RasterizerState = SharpDX.Direct3D12.RasterizerStateDescription.Default(),
                 BlendState = SharpDX.Direct3D12.BlendStateDescription.Default(),
                 DepthStencilFormat = Surface.DepthStencilFormat,
-                DepthStencilState = DepthStencilStateDefault,
+                DepthStencilState = depthStencilState.ID3D12DepthStencilState,
                 SampleMask = int.MaxValue,
                 PrimitiveTopologyType = SharpDX.Direct3D12.PrimitiveTopologyType.Triangle,
                 RenderTargetCount = 1,
@@ -91,6 +66,8 @@ namespace Presenter
         public BufferLayout BufferLayout => bufferLayout;
 
         public ResourceLayout ResourceLayout => resourceLayout;
+
+        public DepthStencilState DepthStencilState => depthStencilState;
 
         ~GraphicsPipelineState() => SharpDX.Utilities.Dispose(ref pipelineState);
         

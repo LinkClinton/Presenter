@@ -58,7 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DepthStencilState.cs" />
     <Compile Include="Common\GraphicsPipelineState.cs" />
+    <Compile Include="Common\Interface\IDepthStencilState.cs" />
     <Compile Include="Common\Interface\IGraphicsPipelineState.cs" />
     <Compile Include="Common\Interface\ISurface.cs" />
     <Compile Include="Common\Manager.cs" />

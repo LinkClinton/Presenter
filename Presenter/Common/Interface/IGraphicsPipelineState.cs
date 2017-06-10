@@ -14,5 +14,7 @@ namespace Presenter
 
         BufferLayout BufferLayout { get; }
         ResourceLayout ResourceLayout { get; }
+
+        DepthStencilState DepthStencilState { get; }
     }
 }

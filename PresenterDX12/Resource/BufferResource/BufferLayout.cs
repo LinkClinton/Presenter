@@ -14,6 +14,12 @@ namespace Presenter
         {
             public ElementSize Size;
             public string Tag;
+
+            public Element(string tag, ElementSize size)
+            {
+                Tag = tag;
+                Size = size;
+            }
         }
 
         private SharpDX.Direct3D12.InputLayoutDescription layout;
