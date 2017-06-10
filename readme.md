@@ -106,10 +106,10 @@ You must set it before you do anything.
     ```
 - Texture
     ```
-    Texture texture = new Texture(filename);
+    Texture2D texture = Texture2D.FromFile(...);
 
     Simple Texture Loader.
-        Format : DXGI_R8G8B8A8_UNORM
+        Format : The Bitmap format
         CpuAccessFlags: None
         MipLevels : 1
         Support: WIC Supported

@@ -47,14 +47,14 @@ namespace Presenter
                     case Buffer buffer:
                         ReportError(index, ResourceType.ConstantBufferView, element.Type);
 
-                        VertexShader.ExConstantBuffer[element.Register] = buffer;
-                        PixelShader.ExConstantBuffer[element.Register] = buffer;
+                        Manager.ID3D11DeviceContext.VertexShader.SetConstantBuffer(element.Register, buffer.ID3D11Buffer);
+                        Manager.ID3D11DeviceContext.PixelShader.SetConstantBuffer(element.Register, buffer.ID3D11Buffer);
                         break;
                     case ShaderResource shaderresource:
                         ReportError(index, ResourceType.ShaderResourceView, element.Type);
 
-                        VertexShader.ExResource[element.Register] = shaderresource;
-                        PixelShader.ExResource[element.Register] = shaderresource;
+                        Manager.ID3D11DeviceContext.VertexShader.SetShaderResource(element.Register, shaderresource.ID3D11ShaderResourceView);
+                        Manager.ID3D11DeviceContext.PixelShader.SetShaderResource(element.Register, shaderresource.ID3D11ShaderResourceView);
                         break;
                     case ResourceHeap heap:
                         ReportError(index, ResourceType.ResourceHeap, element.Type);
@@ -72,16 +72,16 @@ namespace Presenter
 
                                     register = element.ConstantBufferView.Start + bufferCount - 1;
 
-                                    VertexShader.ExConstantBuffer[register] = buffer;
-                                    PixelShader.ExConstantBuffer[register] = buffer;
+                                    Manager.ID3D11DeviceContext.VertexShader.SetConstantBuffer(register, buffer.ID3D11Buffer);
+                                    Manager.ID3D11DeviceContext.PixelShader.SetConstantBuffer(register, buffer.ID3D11Buffer);
                                     break;
                                 case ShaderResource shaderresource:
                                     ReportError(++resourceCount, element.ShaderResourceView.Count, ResourceType.ShaderResourceView);
 
                                     register = element.ShaderResourceView.Start + resourceCount - 1;
 
-                                    VertexShader.ExResource[register] = shaderresource;
-                                    PixelShader.ExResource[register] = shaderresource;
+                                    Manager.ID3D11DeviceContext.VertexShader.SetShaderResource(register, shaderresource.ID3D11ShaderResourceView);
+                                    Manager.ID3D11DeviceContext.PixelShader.SetShaderResource(register, shaderresource.ID3D11ShaderResourceView);
                                     break;
                                 default:
                                     break;

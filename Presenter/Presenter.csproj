@@ -90,8 +90,6 @@
     <Compile Include="Private\Helper\WICHelper.cs" />
     <Compile Include="Private\Helper\WICIndexer.cs" />
     <Compile Include="Resource\BufferResource\IndexBuffer.cs" />
-    <Compile Include="Private\Indexer\ConstantBufferIndexer.cs" />
-    <Compile Include="Private\Indexer\ShaderResourceIndexer.cs" />
     <Compile Include="Common\Manager.cs" />
     <Compile Include="Resource\ShaderResource\Interface\ITexture1D.cs" />
     <Compile Include="Resource\ShaderResource\Interface\ITexture2D.cs" />

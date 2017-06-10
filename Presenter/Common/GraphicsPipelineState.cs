@@ -15,18 +15,6 @@ namespace Presenter
         private ResourceLayout resourceLayout;
 
         public GraphicsPipelineState(VertexShader vertexshader,
-            PixelShader pixelshader, BufferLayout bufferlayout)
-        {
-            vertexShader = vertexshader;
-            pixelShader = pixelshader;
-
-            bufferLayout = bufferlayout;
-
-            bufferlayout.ID3D11InputLayout = new SharpDX.Direct3D11.InputLayout(Manager.ID3D11Device,
-                vertexshader.ByteCode, bufferlayout.Elements);
-        }
-
-        public GraphicsPipelineState(VertexShader vertexshader,
             PixelShader pixelshader, BufferLayout bufferlayout,
             ResourceLayout resourcelayout)
         {

@@ -11,17 +11,30 @@ namespace Presenter
         public VertexBuffer(T[] vertices)
         {
             resource = Manager.ID3D12Device.CreateCommittedResource(
-                  new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Upload),
+                  new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Default),
                   SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.
                   Buffer(size = (SharpDX.Utilities.SizeOf<T>() * vertices.Length)),
                   SharpDX.Direct3D12.ResourceStates.GenericRead);
-
-            resourceStart = resource.Map(0);
 
             Update(vertices);
 
             count = vertices.Length;
         }
+
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        public override void Update<T>(ref T data) 
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        {
+            UpdateDefaultBuffer(ref data);
+        }
+
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        public override void Update<T>(T[] data)
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        {
+            UpdateDefaultBuffer(data);
+        }
+
     }
 
     public static partial class Manager

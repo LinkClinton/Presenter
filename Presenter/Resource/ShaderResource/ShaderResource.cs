@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ShaderResource : Resource, IShaderResource
+    public abstract class ShaderResource : Resource, IShaderResource
     {
         protected SharpDX.Direct3D11.ShaderResourceView resourceview;
 

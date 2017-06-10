@@ -6,11 +6,76 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Buffer : Resource, IBuffer
+    public abstract class Buffer : Resource, IBuffer
     {
         protected int count;
 
         public int Count => count;
+
+        protected void UpdateDefaultBuffer<T>(ref T data) where T : struct
+        {
+            using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
+                Manager.ID3D12CommandAllocator, null))
+            {
+                CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.GenericRead,
+                     SharpDX.Direct3D12.ResourceStates.CopyDestination);
+
+                using (var uploadBuffer = Manager.ID3D12Device.CreateCommittedResource(new SharpDX.Direct3D12.HeapProperties(
+                     SharpDX.Direct3D12.HeapType.Upload), SharpDX.Direct3D12.HeapFlags.None,
+                     SharpDX.Direct3D12.ResourceDescription.Buffer(size),
+                   SharpDX.Direct3D12.ResourceStates.GenericRead))
+                {
+                    var ptr = uploadBuffer.Map(0);
+
+                    SharpDX.Utilities.Write(ptr, ref data);
+
+                    uploadBuffer.Unmap(0);
+
+                    CommandList.CopyResource(resource, uploadBuffer);
+
+                    CommandList.ResourceBarrierTransition(resource,
+                         SharpDX.Direct3D12.ResourceStates.CopyDestination, SharpDX.Direct3D12.ResourceStates.GenericRead);
+
+                    CommandList.Close();
+
+                    Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
+
+                    Manager.WaitForFrame();
+                }
+            }
+        }
+
+        protected void UpdateDefaultBuffer<T>(T[] data) where T : struct
+        {
+            using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
+              Manager.ID3D12CommandAllocator, null))
+            {
+                CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.GenericRead,
+                     SharpDX.Direct3D12.ResourceStates.CopyDestination);
+
+                using (var uploadBuffer = Manager.ID3D12Device.CreateCommittedResource(new SharpDX.Direct3D12.HeapProperties(
+                     SharpDX.Direct3D12.HeapType.Upload), SharpDX.Direct3D12.HeapFlags.None,
+                     SharpDX.Direct3D12.ResourceDescription.Buffer(size), SharpDX.Direct3D12.ResourceStates.GenericRead))
+                {
+                    var ptr = uploadBuffer.Map(0);
+
+                    SharpDX.Utilities.Write(ptr, data, 0, data.Length);
+
+                    uploadBuffer.Unmap(0);
+
+                    CommandList.CopyResource(resource, uploadBuffer);
+
+                    CommandList.ResourceBarrierTransition(resource,
+                         SharpDX.Direct3D12.ResourceStates.CopyDestination, SharpDX.Direct3D12.ResourceStates.GenericRead);
+
+                    CommandList.Close();
+
+                    Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
+
+                    Manager.WaitForFrame();
+                }
+            }
+        }
     }
 
     public static partial class Manager
