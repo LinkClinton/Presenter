@@ -15,6 +15,8 @@ namespace Presenter
 
         private void Update()
         {
+            SharpDX.Utilities.Dispose(ref depthStencilState);
+
             depthStencilState = new SharpDX.Direct3D11.DepthStencilState(Manager.ID3D11Device,
                 depthStencilDesc);
         }
@@ -47,6 +49,8 @@ namespace Presenter
                 Update();
             }
         }
+
+        ~DepthStencilState() => SharpDX.Utilities.Dispose(ref depthStencilState);
 
         internal SharpDX.Direct3D11.DepthStencilState ID3D11DepthStencilState
             => depthStencilState;

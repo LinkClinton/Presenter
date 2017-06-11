@@ -10,11 +10,10 @@ namespace Presenter
     {
         private SharpDX.Direct3D11.PixelShader shader;
 
-        public PixelShader(string shaderfile, string entrypoint, bool isCompiled = false)
+        private void CreatePixelShader(SharpDX.D3DCompiler.ShaderBytecode byteCode,
+            string entrypoint,bool isCompiled = false)
         {
-            System.IO.FileStream file = new System.IO.FileStream(shaderfile, System.IO.FileMode.Open);
-
-            bytecode = new SharpDX.D3DCompiler.ShaderBytecode(file);
+            bytecode = byteCode;
 
             if (isCompiled is true)
             {
@@ -32,6 +31,18 @@ namespace Presenter
             if (result.Message != null || result.Message != null) throw new Exception(result.Message);
 
             shader = new SharpDX.Direct3D11.PixelShader(Manager.ID3D11Device, bytecode = result.Bytecode);
+        }
+
+        public PixelShader(byte[] shaderCode, string entrypoint, bool isCompiled = false)
+        {
+            CreatePixelShader(new SharpDX.D3DCompiler.ShaderBytecode(shaderCode), entrypoint, isCompiled);
+        }
+
+        public PixelShader(string shaderfile, string entrypoint, bool isCompiled = false)
+        {
+            System.IO.FileStream file = new System.IO.FileStream(shaderfile, System.IO.FileMode.Open);
+
+            CreatePixelShader(new SharpDX.D3DCompiler.ShaderBytecode(file), entrypoint, isCompiled);
 
             file.Close();
         }
