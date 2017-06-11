@@ -46,6 +46,11 @@ namespace Presenter
             base.Update(data);
         }
 
+        public override void Update(IntPtr data)
+        {
+            base.Update(data);
+        }
+
         public int Width => tWidth;
 
         public int MipLevels => mipLevels;

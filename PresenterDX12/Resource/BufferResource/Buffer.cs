@@ -76,6 +76,38 @@ namespace Presenter
                 }
             }
         }
+
+        protected void UpdateDefaultBuffer(IntPtr data)
+        {
+            using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
+             Manager.ID3D12CommandAllocator, null))
+            {
+                CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.GenericRead,
+                     SharpDX.Direct3D12.ResourceStates.CopyDestination);
+
+                using (var uploadBuffer = Manager.ID3D12Device.CreateCommittedResource(new SharpDX.Direct3D12.HeapProperties(
+                     SharpDX.Direct3D12.HeapType.Upload), SharpDX.Direct3D12.HeapFlags.None,
+                     SharpDX.Direct3D12.ResourceDescription.Buffer(size), SharpDX.Direct3D12.ResourceStates.GenericRead))
+                {
+                    var ptr = uploadBuffer.Map(0);
+
+                    SharpDX.Utilities.CopyMemory(ptr, data, size);
+
+                    uploadBuffer.Unmap(0);
+
+                    CommandList.CopyResource(resource, uploadBuffer);
+
+                    CommandList.ResourceBarrierTransition(resource,
+                         SharpDX.Direct3D12.ResourceStates.CopyDestination, SharpDX.Direct3D12.ResourceStates.GenericRead);
+
+                    CommandList.Close();
+
+                    Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
+
+                    Manager.WaitForFrame();
+                }
+            }
+        }
     }
 
     public static partial class Manager

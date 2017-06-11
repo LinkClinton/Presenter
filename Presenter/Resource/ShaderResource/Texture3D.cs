@@ -57,6 +57,14 @@ namespace Presenter
             Manager.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch, depthPitch);
         }
 
+        public override void Update(IntPtr data)
+        {
+            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+            int depthPitch = rowPitch * tHeight;
+
+            Manager.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, depthPitch);
+        }
+
         public int Width => tWidth;
 
         public int Height => tHeight;

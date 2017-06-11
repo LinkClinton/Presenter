@@ -35,6 +35,11 @@ namespace Presenter
             UpdateDefaultBuffer(data);
         }
 
+        public override void Update(IntPtr data)
+        {
+            UpdateDefaultBuffer(data);
+        }
+
     }
 
     public static partial class Manager

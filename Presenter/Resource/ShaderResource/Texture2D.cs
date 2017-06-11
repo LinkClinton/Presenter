@@ -54,6 +54,13 @@ namespace Presenter
             Manager.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch);
         }
 
+        public override void Update(IntPtr data)
+        {
+            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+
+            Manager.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, size);
+        }
+
         public static Texture2D FromFile(string filename, int miplevels = 1)
         {
             using (var decoder = new SharpDX.WIC.BitmapDecoder(Manager.ImagingFactory,

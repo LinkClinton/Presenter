@@ -25,6 +25,11 @@ namespace Presenter
                 data.Length);
         }
 
+        public virtual void Update(IntPtr data)
+        {
+            SharpDX.Utilities.CopyMemory(resourceStart, data, size);
+        }
+
         public int Size => size;
 
         internal SharpDX.Direct3D12.Resource ID3D12Resource => resource;
