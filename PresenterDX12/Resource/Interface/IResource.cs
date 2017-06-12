@@ -12,6 +12,8 @@ namespace Presenter
 
         void Update<T>(T[] data) where T : struct;
 
+        void Update(IntPtr data);
+
         int Size { get; }
     }
 }

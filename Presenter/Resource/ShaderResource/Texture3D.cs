@@ -13,6 +13,9 @@ namespace Presenter
         private int tDepth;
         private int mipLevels;
 
+        private int rowPitch;
+        private int depthPitch;
+
         public Texture3D(int width, int height, int depth, ResourceFormat format, int miplevels = 1)
         {
             tWidth = width;
@@ -20,6 +23,9 @@ namespace Presenter
             tDepth = depth;
             pixelFormat = format;
             mipLevels = miplevels;
+
+            rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+            depthPitch = rowPitch * tHeight;
 
             resource = new SharpDX.Direct3D11.Texture3D(Manager.ID3D11Device,
                 new SharpDX.Direct3D11.Texture3DDescription()
@@ -43,25 +49,16 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-            int depthPitch = rowPitch * tHeight;
-
             Manager.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch, depthPitch);
         }
 
         public override void Update<T>(T[] data)
         {
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-            int depthPitch = rowPitch * tHeight;
-
             Manager.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch, depthPitch);
         }
 
         public override void Update(IntPtr data)
         {
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-            int depthPitch = rowPitch * tHeight;
-
             Manager.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, depthPitch);
         }
 

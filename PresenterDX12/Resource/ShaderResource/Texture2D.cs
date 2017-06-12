@@ -11,6 +11,7 @@ namespace Presenter
         private int tWidth;
         private int tHeight;
         private int mipLevels;
+        private int rowPitch;
 
         public Texture2D(int width, int height, ResourceFormat format, int miplevels = 1)
         {
@@ -18,6 +19,8 @@ namespace Presenter
             tHeight = height;
             pixelFormat = format;
             mipLevels = miplevels;
+
+            rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
 
             resource = Manager.ID3D12Device.CreateCommittedResource(
               new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Default),
@@ -38,6 +41,31 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
+            var handle = System.Runtime.InteropServices.GCHandle.Alloc(data, System.Runtime.InteropServices.GCHandleType.Pinned);
+            IntPtr ptr = IntPtr.Zero;
+            System.Runtime.InteropServices.Marshal.StructureToPtr(data, ptr, false);
+
+            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+            
+            Update(ptr);
+
+            handle.Free();
+        }
+
+        public override void Update<T>(T[] data)
+        {
+            var handle = System.Runtime.InteropServices.GCHandle.Alloc(data, System.Runtime.InteropServices.GCHandleType.Pinned);
+            IntPtr ptr = System.Runtime.InteropServices.Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
+
+            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
+            
+            Update(ptr);
+
+            handle.Free();
+        }
+
+        public override void Update(IntPtr data)
+        {
             using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
                 Manager.ID3D12CommandAllocator, null))
             {
@@ -49,88 +77,6 @@ namespace Presenter
                   SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Texture2D(
                        resource.Description.Format, tWidth, tHeight), SharpDX.Direct3D12.ResourceStates.GenericRead))
                 {
-                    var handle = System.Runtime.InteropServices.GCHandle.Alloc(data, System.Runtime.InteropServices.GCHandleType.Pinned);
-                    IntPtr ptr = IntPtr.Zero;
-                    System.Runtime.InteropServices.Marshal.StructureToPtr(data, ptr, false);
-
-                    int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-                    int size = rowPitch * tHeight;
-
-                    uploadBuffer.WriteToSubresource(0, null, ptr, rowPitch, size);
-
-                    handle.Free();
-
-                    CommandList.CopyTextureRegion(
-                    new SharpDX.Direct3D12.TextureCopyLocation(resource, 0), 0, 0, 0,
-                    new SharpDX.Direct3D12.TextureCopyLocation(uploadBuffer, 0), null);
-
-                    CommandList.ResourceBarrierTransition(resource,
-                         SharpDX.Direct3D12.ResourceStates.CopyDestination, SharpDX.Direct3D12.ResourceStates.NonPixelShaderResource);
-
-                    CommandList.Close();
-
-                    Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
-
-                    Manager.WaitForFrame();
-                }
-            }
-        }
-
-        public override void Update<T>(T[] data)
-        {
-            using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-               Manager.ID3D12CommandAllocator, null))
-            {
-                CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.NonPixelShaderResource,
-                     SharpDX.Direct3D12.ResourceStates.CopyDestination);
-
-                using (var uploadBuffer = Manager.ID3D12Device.CreateCommittedResource(new SharpDX.Direct3D12.HeapProperties(
-                 SharpDX.Direct3D12.CpuPageProperty.WriteBack, SharpDX.Direct3D12.MemoryPool.L0),
-                  SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Texture2D(
-                       resource.Description.Format, tWidth, tHeight), SharpDX.Direct3D12.ResourceStates.GenericRead))
-                {
-                    var handle = System.Runtime.InteropServices.GCHandle.Alloc(data, System.Runtime.InteropServices.GCHandleType.Pinned);
-                    IntPtr ptr = System.Runtime.InteropServices.Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-
-                    int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-                    int size = rowPitch * tHeight;
-
-                    uploadBuffer.WriteToSubresource(0, null, ptr, rowPitch, size);
-
-                    handle.Free();
-
-                    CommandList.CopyTextureRegion(
-                    new SharpDX.Direct3D12.TextureCopyLocation(resource, 0), 0, 0, 0,
-                    new SharpDX.Direct3D12.TextureCopyLocation(uploadBuffer, 0), null);
-
-                    CommandList.ResourceBarrierTransition(resource,
-                         SharpDX.Direct3D12.ResourceStates.CopyDestination, SharpDX.Direct3D12.ResourceStates.NonPixelShaderResource);
-
-                    CommandList.Close();
-
-                    Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
-
-                    Manager.WaitForFrame();
-                }
-            }
-        }
-
-        public override void Update(IntPtr data)
-        {
-            using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-              Manager.ID3D12CommandAllocator, null))
-            {
-                CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.NonPixelShaderResource,
-                     SharpDX.Direct3D12.ResourceStates.CopyDestination);
-
-                using (var uploadBuffer = Manager.ID3D12Device.CreateCommittedResource(new SharpDX.Direct3D12.HeapProperties(
-                 SharpDX.Direct3D12.CpuPageProperty.WriteBack, SharpDX.Direct3D12.MemoryPool.L0),
-                  SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Texture2D(
-                       resource.Description.Format, tWidth, tHeight), SharpDX.Direct3D12.ResourceStates.GenericRead))
-                {
-                    int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-                    int size = rowPitch * tHeight;
-
                     uploadBuffer.WriteToSubresource(0, null, data, rowPitch, size);
 
                     CommandList.CopyTextureRegion(

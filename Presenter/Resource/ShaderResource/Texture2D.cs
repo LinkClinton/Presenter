@@ -12,12 +12,16 @@ namespace Presenter
         private int tHeight;
         private int mipLevels;
 
+        private int rowPitch;
+
         public Texture2D(int width, int height, ResourceFormat format, int miplevels = 1)
         {
             tWidth = width;
             tHeight = height;
             pixelFormat = format;
             mipLevels = miplevels;
+
+            rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
 
             resource = new SharpDX.Direct3D11.Texture2D(Manager.ID3D11Device,
                 new SharpDX.Direct3D11.Texture2DDescription()
@@ -42,22 +46,16 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-
             Manager.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch);
         }
 
         public override void Update<T>(T[] data)
         {
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-
             Manager.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch);
         }
 
         public override void Update(IntPtr data)
         {
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-
             Manager.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, size);
         }
 
