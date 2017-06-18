@@ -164,7 +164,7 @@ We can create ResourceTable from ResourceHeap.
 
 Look At [**Mico**](https://github.com/LinkClinton/Mico/tree/master/Sample)
 
-Look At [**SampleSet**]()
+Look At [**SampleSet**](https://github.com/LinkClinton/SampleSet)
 
 ## Request
 
