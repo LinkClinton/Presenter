@@ -4,28 +4,28 @@ Present Object to Window.
 
 ## Introduction
 
-### Manager `static class`
+### GraphicsPipeline `static class`
 
 - Render Object
     ```C#
-    Manager.ClearObject(); //clear Surface and Set White Color.
+    GraphicsPipeline.Open(...); // Open GraphicsPipeline
 
-    Manager.DrawObjectIndexed(...); //DrawBuffer.
+    GraphicsPipeline.PutObject(...); //Put Object to GraphicsPipeline
     
-    Manager.FlushObject(); //Flush Object and Present it.
+    GraphicsPipeline.Close(); //Close GraphicsPipeline and Present
+    //And the GraphicsPipelineState will be clear.
     ```
-- Set Target Surface
+
+- Change GraphicsPipelineState
     ```C#
-    Manager.Surface = new Surface(...); //Create Surface to Render.
-    ```
-- Set GraphicsPipelineState
-    ```C#
-    Manager.GraphicsPipelineState = new GraphicsPipelineState(...);
+    //If you want to change GraphicsPipeline when GraphicsPipeline is opening.
+
+    GraphicsPipeline.Reset(...);
     ```
 
 - Set Buffer to Shader
     ```C#
-    ResourceLayout.InputSlot[which] = new ConstantBuffer<T>(...);
+    GraphicsPipeline.InputSlot[which] = new ConstantBuffer<T>(...);
     ```
 
 ### Surface 
@@ -83,7 +83,7 @@ You must set it before you do anything.
     //Set 
     Manager.IndexBuffer = new IndexBuffer<T>(data[]);
     ```
-### BufferLayout
+### InputLayout
 
 - Create From Element
     ```C#
@@ -95,21 +95,21 @@ You must set it before you do anything.
 
     Element[] elements = new Element[2];
 
-    BufferLayout layout = new BufferLayout(elements);
+    InputLayout layout = new InputLayout(elements);
     ```
 
 ### ShaderResource
 
 - Set 
     ```C#
-    ResourceLayout.InputSlot[which] = new ShaderResource(...);
+    GraphicsPipeline.InputSlot[which] = new ShaderResource(...);
     ```
 - Texture
     ```
     Texture2D texture = Texture2D.FromFile(...);
 
     Simple Texture Loader.
-        Format : The Bitmap format
+        Format : R8G8B8A8
         CpuAccessFlags: None
         MipLevels : 1
         Support: WIC Supported
@@ -128,20 +128,43 @@ You must set it before you do anything.
     ```
 - Set Resource by ResourceLayout
     ```C#
-    Manager.ResourceInput[InputSlot] = ...//which kind resource you create
-    
-    //for example.
-    Manager.ResourceInput[0] = Buffer;
-    Manager.ResourceInput[1] = Texture;
+    GraphicsPipeline.InputSlot[which] = ...;
 
-    //we Set a ConstantBuffer in 0 InputSlot
-    //we Set a ShaderResource in 1 InputSlot
+    //Set Resource.
+    //We support this resource:
+    //ConstantBufferView, ShaderResourceView, ConstantBufferViewTable, ShaderResourceViewTable
+    ```
+
+### ResourceHeap and ResourceTable
+
+The Heap can create ResourceView from Resource.
+
+We can create ResourceTable from ResourceHeap.
+
+**If you want to set Table,you should set Heap what the Table used.** 
+
+- Create
+    ```C#
+    ResourceHeap heap = new ResourceHeap(MaxCount in Heap);
+    ```
+
+- AddResource
+    ```C#
+    ResourceHeap.AddResource(...);
+    ```
+- To ResourceTable
+    ```C#
+    ResourceTable table = new ResourceTable(heap, start pos in heap);
+
+    //You can think the Table is a pointer,We will set resource from Table's first element.
     ```
 
 
 ## Sample
 
 Look At [**Mico**](https://github.com/LinkClinton/Mico/tree/master/Sample)
+
+Look At [**SampleSet**]()
 
 ## Request
 

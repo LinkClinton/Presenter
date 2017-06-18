@@ -84,6 +84,9 @@ namespace Presenter
             VertexShaderStage.Reset();
             PixelShaderStage.Reset();
             OutputMergerStage.Reset();
+
+            surface = null;
+            graphicsPipelineState = null;
         }
 
         internal static SharpDX.Direct3D12.GraphicsCommandList ID3D12GraphicsCommandList
