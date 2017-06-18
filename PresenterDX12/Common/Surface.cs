@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class Surface : ISurface
+    public partial class Surface
     {
         private SharpDX.DXGI.SwapChain3 surfaceSwapChain;
 
@@ -27,7 +27,7 @@ namespace Presenter
 
         private IntPtr surfaceHandle;
 
-        public Surface(IntPtr handle,bool windowed = true)
+        public Surface(IntPtr handle, bool windowed = true)
         {
             surfaceHandle = handle;
 
@@ -37,7 +37,7 @@ namespace Presenter
 
             using (var factory = new SharpDX.DXGI.Factory4())
             {
-                var tempSwapChain = new SharpDX.DXGI.SwapChain(factory, Manager.ID3D12CommandQueue,
+                var tempSwapChain = new SharpDX.DXGI.SwapChain(factory, Engine.ID3D12CommandQueue,
                     new SharpDX.DXGI.SwapChainDescription()
                     {
                         BufferCount = BufferCount,
@@ -63,7 +63,7 @@ namespace Presenter
                 SharpDX.Utilities.Dispose(ref tempSwapChain);
             }
 
-            ID3D12RenderTargetViewHeap = Manager.ID3D12Device.CreateDescriptorHeap(
+            ID3D12RenderTargetViewHeap = Engine.ID3D12Device.CreateDescriptorHeap(
                 new SharpDX.Direct3D12.DescriptorHeapDescription()
                 {
                     DescriptorCount = BufferCount,
@@ -71,11 +71,11 @@ namespace Presenter
                     Type = SharpDX.Direct3D12.DescriptorHeapType.RenderTargetView,
                     NodeMask = 0
                 });
-            
-            ID3D12RenderTargetViewHeapSize = Manager.ID3D12Device.
+
+            ID3D12RenderTargetViewHeapSize = Engine.ID3D12Device.
                 GetDescriptorHandleIncrementSize(SharpDX.Direct3D12.DescriptorHeapType.RenderTargetView);
 
-            ID3D12DepthStencilViewHeap = Manager.ID3D12Device.CreateDescriptorHeap(
+            ID3D12DepthStencilViewHeap = Engine.ID3D12Device.CreateDescriptorHeap(
                 new SharpDX.Direct3D12.DescriptorHeapDescription()
                 {
                     DescriptorCount = 1,
@@ -84,7 +84,7 @@ namespace Presenter
                     NodeMask = 0
                 });
 
-            ID3D12DepthStencilViewHeapSize = Manager.ID3D12Device.
+            ID3D12DepthStencilViewHeapSize = Engine.ID3D12Device.
                 GetDescriptorHandleIncrementSize(SharpDX.Direct3D12.DescriptorHeapType.DepthStencilView);
 
             surfaceRTV = new SharpDX.Direct3D12.Resource[BufferCount];
@@ -94,13 +94,13 @@ namespace Presenter
             for (int i = 0; i < BufferCount; i++)
             {
                 surfaceRTV[i] = IDXGISwapChain.GetBackBuffer<SharpDX.Direct3D12.Resource>(i);
-               
-                Manager.ID3D12Device.CreateRenderTargetView(surfaceRTV[i], null, RTVHandle);
+
+                Engine.ID3D12Device.CreateRenderTargetView(surfaceRTV[i], null, RTVHandle);
 
                 RTVHandle += ID3D12RenderTargetViewHeapSize;
             }
 
-            surfaceDSV = Manager.ID3D12Device.CreateCommittedResource(
+            surfaceDSV = Engine.ID3D12Device.CreateCommittedResource(
                    new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Default),
                     SharpDX.Direct3D12.HeapFlags.None, new SharpDX.Direct3D12.ResourceDescription()
                     {
@@ -122,7 +122,7 @@ namespace Presenter
                      });
 
 
-            Manager.ID3D12Device.CreateDepthStencilView(surfaceDSV, new SharpDX.Direct3D12.DepthStencilViewDescription()
+            Engine.ID3D12Device.CreateDepthStencilView(surfaceDSV, new SharpDX.Direct3D12.DepthStencilViewDescription()
             {
                 Flags = SharpDX.Direct3D12.DepthStencilViewFlags.None,
                 Dimension = SharpDX.Direct3D12.DepthStencilViewDimension.Texture2D,
@@ -130,17 +130,17 @@ namespace Presenter
                 Texture2D = new SharpDX.Direct3D12.DepthStencilViewDescription.Texture2DResource() { MipSlice = 0 }
             }, ID3D12DepthStencilViewHeap.CPUDescriptorHandleForHeapStart);
 
-            using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-                Manager.ID3D12CommandAllocator, null))
+            using (var CommandList = Engine.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
+                Engine.ID3D12CommandAllocator, null))
             {
                 CommandList.ResourceBarrierTransition(surfaceDSV, SharpDX.Direct3D12.ResourceStates.Common,
                      SharpDX.Direct3D12.ResourceStates.DepthWrite);
 
                 CommandList.Close();
-                
-                Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
 
-                Manager.WaitForFrame();
+                Engine.ID3D12CommandQueue.ExecuteCommandList(CommandList);
+
+                Engine.Wait();
             }
 
         }
@@ -197,7 +197,7 @@ namespace Presenter
 
         public void Reset(int new_width, int new_height, bool windowed = true)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Wait for support");
         }
 
         ~Surface()
@@ -212,15 +212,13 @@ namespace Presenter
         }
     }
 
-    public static partial class Manager
+    public static partial class GraphicsPipeline
     {
         private static Surface surface;
 
-        public static Surface Surface
+        public static Surface Target
         {
-            set => surface = value;
             get => surface;
         }
     }
-
 }

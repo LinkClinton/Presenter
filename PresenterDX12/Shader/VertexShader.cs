@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class VertexShader : Shader, IVertexShader
+    public class VertexShader : Shader
     {
         private void CreateVertexShader(SharpDX.D3DCompiler.ShaderBytecode byteCode,
             string entrypoint, bool isCompiled = false)

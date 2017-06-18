@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class DepthStencilState : IDepthStencilState
+    public class DepthStencilState
     {
         internal static SharpDX.Direct3D12.DepthStencilStateDescription DepthStencilStateDefault
         {

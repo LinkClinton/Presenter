@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Texture2D : ShaderResource, ITexture2D
+    public class Texture2D : ShaderResource
     {
         private int tWidth;
         private int tHeight;
@@ -22,7 +22,7 @@ namespace Presenter
 
             rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
 
-            resource = Manager.ID3D12Device.CreateCommittedResource(
+            resource = Engine.ID3D12Device.CreateCommittedResource(
               new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Default),
                SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Texture2D(
                    (SharpDX.DXGI.Format)pixelFormat, width, height, 1, (short)mipLevels),
@@ -33,7 +33,7 @@ namespace Presenter
                 Shader4ComponentMapping = DefaultComponentMapping(),
                 Dimension = SharpDX.Direct3D12.ShaderResourceViewDimension.Texture2D,
                 Format = resource.Description.Format,
-                Texture1D = new SharpDX.Direct3D12.ShaderResourceViewDescription.Texture1DResource() { MipLevels = mipLevels }
+                Texture2D = new SharpDX.Direct3D12.ShaderResourceViewDescription.Texture2DResource() { MipLevels = miplevels }
             };
 
             size = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth * tHeight;
@@ -45,8 +45,6 @@ namespace Presenter
             IntPtr ptr = IntPtr.Zero;
             System.Runtime.InteropServices.Marshal.StructureToPtr(data, ptr, false);
 
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-            
             Update(ptr);
 
             handle.Free();
@@ -57,8 +55,6 @@ namespace Presenter
             var handle = System.Runtime.InteropServices.GCHandle.Alloc(data, System.Runtime.InteropServices.GCHandleType.Pinned);
             IntPtr ptr = System.Runtime.InteropServices.Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
 
-            int rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
-            
             Update(ptr);
 
             handle.Free();
@@ -66,13 +62,13 @@ namespace Presenter
 
         public override void Update(IntPtr data)
         {
-            using (var CommandList = Manager.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-                Manager.ID3D12CommandAllocator, null))
+            using (var CommandList = Engine.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
+                Engine.ID3D12CommandAllocator, null))
             {
                 CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.NonPixelShaderResource,
                      SharpDX.Direct3D12.ResourceStates.CopyDestination);
 
-                using (var uploadBuffer = Manager.ID3D12Device.CreateCommittedResource(new SharpDX.Direct3D12.HeapProperties(
+                using (var uploadBuffer = Engine.ID3D12Device.CreateCommittedResource(new SharpDX.Direct3D12.HeapProperties(
                  SharpDX.Direct3D12.CpuPageProperty.WriteBack, SharpDX.Direct3D12.MemoryPool.L0),
                   SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Texture2D(
                        resource.Description.Format, tWidth, tHeight), SharpDX.Direct3D12.ResourceStates.GenericRead))
@@ -88,20 +84,20 @@ namespace Presenter
 
                     CommandList.Close();
 
-                    Manager.ID3D12CommandQueue.ExecuteCommandList(CommandList);
+                    Engine.ID3D12CommandQueue.ExecuteCommandList(CommandList);
 
-                    Manager.WaitForFrame();
+                    Engine.Wait();
                 }
             }
         }
 
         public static Texture2D FromFile(string filename, int miplevels = 1)
-        {
-            using (var decoder = new SharpDX.WIC.BitmapDecoder(Manager.ImagingFactory,
-            filename, SharpDX.IO.NativeFileAccess.Read, SharpDX.WIC.DecodeOptions.CacheOnLoad))
+        {   
+            using (var decoder = new SharpDX.WIC.BitmapDecoder(Engine.ImagingFactory,
+                filename, SharpDX.IO.NativeFileAccess.Read, SharpDX.WIC.DecodeOptions.CacheOnLoad))
             {
 
-                using (var converter = new SharpDX.WIC.FormatConverter(Manager.ImagingFactory))
+                using (var converter = new SharpDX.WIC.FormatConverter(Engine.ImagingFactory))
                 {
 
                     using (var frame = decoder.GetFrame(0))

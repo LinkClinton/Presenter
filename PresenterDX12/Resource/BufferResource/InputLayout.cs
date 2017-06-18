@@ -7,24 +7,11 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    public class BufferLayout : IBufferLayout
-    {
-        [StructLayout(LayoutKind.Sequential)]
-        public class Element
-        {
-            public ElementSize Size;
-            public string Tag;
-
-            public Element(string tag, ElementSize size)
-            {
-                Tag = tag;
-                Size = size;
-            }
-        }
-
+    public partial class InputLayout
+    { 
         private SharpDX.Direct3D12.InputLayoutDescription layout;
 
-        public BufferLayout(Element[] elements)
+        public InputLayout(Element[] elements)
         {
             SharpDX.Direct3D12.InputElement[] desc = new SharpDX.Direct3D12.InputElement[elements.Length];
 

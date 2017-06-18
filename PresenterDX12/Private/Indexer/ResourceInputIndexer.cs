@@ -8,53 +8,48 @@ namespace Presenter
 {
     public class ResourceInputIndexer
     {
-        private List<SharpDX.Direct3D12.DescriptorHeap> heapSet = new List<SharpDX.Direct3D12.DescriptorHeap>();
-
-        internal ResourceInputIndexer()
-        {
-
-        }
-
         public object this[int index]
-        { 
+        {
             set
             {
                 switch (value)
                 {
                     case Buffer buffer:
-                        Manager.ID3D12GraphicsCommandList.SetGraphicsRootConstantBufferView(index,
+                        GraphicsPipeline.ID3D12GraphicsCommandList.SetGraphicsRootConstantBufferView(index,
                             buffer.ID3D12Resource.GPUVirtualAddress);
                         break;
-                    case ShaderResource shaderresource:
-                        Manager.ID3D12GraphicsCommandList.SetGraphicsRootConstantBufferView(index,
-                            shaderresource.ID3D12Resource.GPUVirtualAddress);
+                    case ShaderResource shaderResource:
+                        GraphicsPipeline.ID3D12GraphicsCommandList.SetGraphicsRootShaderResourceView(index,
+                            shaderResource.ID3D12Resource.GPUVirtualAddress);
                         break;
-                    case ResourceHeap heap:
-                        if (heapSet.Contains(heap.ID3D12DescriptorHeap) is false)
-                        {
-                            heapSet.Add(heap.ID3D12DescriptorHeap);
-                            Manager.ID3D12GraphicsCommandList.SetDescriptorHeaps(heapSet.ToArray());
-                        }
-                        Manager.ID3D12GraphicsCommandList.SetGraphicsRootDescriptorTable(index,
-                            heap.ID3D12DescriptorHeap.GPUDescriptorHandleForHeapStart);
+                    case ResourceTable resourceTable:
+                        GraphicsPipeline.ID3D12GraphicsCommandList.SetGraphicsRootDescriptorTable(index,
+                            resourceTable.ID3D12GpuDescriptorHandle);
                         break;
                     default:
                         break;
                 }
-            } 
-        }
-        
-        public void Reset()
-        {
-            heapSet.Clear();
+            }
         }
     }
 
-    public partial class ResourceLayout
+    public static partial class GraphicsPipeline
     {
         private static ResourceInputIndexer resouceInput = new ResourceInputIndexer();
 
         public static ResourceInputIndexer InputSlot => resouceInput;
+
+        public static void SetHeaps(ResourceHeap[] heaps)
+        {
+            SharpDX.Direct3D12.DescriptorHeap[] dx12heaps = new SharpDX.Direct3D12.DescriptorHeap[heaps.Length];
+
+            for (int i = 0; i < heaps.Length; i++)
+            {
+                dx12heaps[i] = heaps[i].ID3D12DescriptorHeap;
+            }
+
+            ID3D12GraphicsCommandList.SetDescriptorHeaps(dx12heaps);
+        }
     }
 
 }

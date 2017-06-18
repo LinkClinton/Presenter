@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ResourceHeap : IResourceHeap
+    public class ResourceHeap
     {
         private SharpDX.Direct3D12.DescriptorHeap heap;
         private int heapSize;
@@ -14,7 +14,7 @@ namespace Presenter
 
         public ResourceHeap(int count)
         {
-            heap = Manager.ID3D12Device.CreateDescriptorHeap(
+            heap = Engine.ID3D12Device.CreateDescriptorHeap(
                 new SharpDX.Direct3D12.DescriptorHeapDescription()
                 {
                     DescriptorCount = count,
@@ -22,7 +22,7 @@ namespace Presenter
                     Type = SharpDX.Direct3D12.DescriptorHeapType.ConstantBufferViewShaderResourceViewUnorderedAccessView
                 });
 
-            heapSize = Manager.ID3D12Device.GetDescriptorHandleIncrementSize(
+            heapSize = Engine.ID3D12Device.GetDescriptorHandleIncrementSize(
                 SharpDX.Direct3D12.DescriptorHeapType.ConstantBufferViewShaderResourceViewUnorderedAccessView);
 
             heapCount = 0;
@@ -30,14 +30,14 @@ namespace Presenter
 
         public void AddResource<T>(ConstantBuffer<T> constantBuffer) where T : struct
         {
-            Manager.ID3D12Device.CreateConstantBufferView(constantBuffer.BufferView,
+            Engine.ID3D12Device.CreateConstantBufferView(constantBuffer.BufferView,
                         heap.CPUDescriptorHandleForHeapStart + heapCount * heapSize);
             heapCount++;
         }
 
         public void AddResource(ShaderResource resource)
         {
-            Manager.ID3D12Device.CreateShaderResourceView(resource.ID3D12Resource, resource.ShaderResourceView,
+            Engine.ID3D12Device.CreateShaderResourceView(resource.ID3D12Resource, resource.ShaderResourceView,
                 heap.CPUDescriptorHandleForHeapStart + heapCount * heapSize);
             heapCount++;
         }
@@ -45,6 +45,8 @@ namespace Presenter
         public int Count => heapCount;
 
         public int MaxCount => heap.Description.DescriptorCount;
+
+        internal int Size => heapSize;
 
         internal SharpDX.Direct3D12.DescriptorHeap ID3D12DescriptorHeap => heap;
 

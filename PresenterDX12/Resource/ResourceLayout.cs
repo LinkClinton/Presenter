@@ -6,48 +6,8 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class ResourceLayout : IResourceLayout
+    public partial class ResourceLayout 
     {
-        public class Element
-        {
-            public SubResource ConstantBufferView;
-            public SubResource ShaderResourceView;
-
-            public ResourceType Type;
-            public int Register;
-
-            public Element(SubResource constantBufferView = null,
-                SubResource shaderResourceView = null)
-            {
-                ConstantBufferView = constantBufferView;
-                ShaderResourceView = shaderResourceView;
-                Type = ResourceType.ResourceHeap;
-            }
-
-            public Element(ResourceType type, int register)
-            {
-                Type = type;
-                Register = register;
-            }
-
-        }
-
-        public class SubResource
-        {
-            public int Start;
-            public int Count;
-
-            public SubResource(int start, int count)
-            {
-                Start = start;
-                Count = count;
-            }
-
-            public static implicit operator SubResource((int Start, int Count) subResource)
-                => new SubResource(subResource.Start, subResource.Count);
-        }
-
-
         private Element[] layoutElements;
 
         private int staticSamplerCount = 0;
@@ -70,26 +30,15 @@ namespace Presenter
                         rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
                             new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ShaderResourceView);
                         break;
-                    case ResourceType.ResourceHeap:
-                        int rootCount = 0;
-
-                        if (elements[i].ConstantBufferView != null) rootCount++;
-                        if (elements[i].ShaderResourceView != null) rootCount++;
-
-                        SharpDX.Direct3D12.DescriptorRange[] range = new SharpDX.Direct3D12.DescriptorRange[rootCount];
-
-                        rootCount = 0;
-
-                        if (elements[i].ConstantBufferView != null)
-                            range[rootCount++] = new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ConstantBufferView,
-                                elements[i].ConstantBufferView.Count, elements[i].ConstantBufferView.Start, 0, int.MinValue);
-
-                        if (elements[i].ShaderResourceView != null)
-                            range[rootCount++] = new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ShaderResourceView,
-                                elements[i].ShaderResourceView.Count, elements[i].ShaderResourceView.Start, 0, int.MinValue);
-
+                    case ResourceType.ConstantBufferTable:
                         rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
-                            range);
+                            new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ConstantBufferView,
+                            elements[i].Count, elements[i].Register));
+                        break;
+                    case ResourceType.ShaderResourceTable:
+                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                            new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ShaderResourceView,
+                            elements[i].Count, elements[i].Register));
                         break;
                     default:
                         break;
@@ -109,7 +58,7 @@ namespace Presenter
             SharpDX.Direct3D12.RootSignatureDescription rootDesc = new SharpDX.Direct3D12.RootSignatureDescription(
                 SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout, rootParameter, sampleState);
 
-            rootSignature = Manager.ID3D12Device.CreateRootSignature(0, rootDesc.Serialize());
+            rootSignature = Engine.ID3D12Device.CreateRootSignature(0, rootDesc.Serialize());
 
             layoutElements = elements;
         }

@@ -10,6 +10,7 @@ namespace Presenter
     {
         ConstantBufferView,
         ShaderResourceView,
-        ResourceHeap
+        ConstantBufferTable,
+        ShaderResourceTable
     }
 }

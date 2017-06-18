@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ConstantBuffer<T> : Buffer, IConstantBuffer where T : struct
+    public class ConstantBuffer<T> : Buffer where T : struct
     {
         private SharpDX.Direct3D12.ConstantBufferViewDescription bufferview;
 
-        public ConstantBuffer(int dataSize, int dataCount = 1)
+        private IntPtr resourceStart;
+
+        public ConstantBuffer(int dataCount = 1)
         {
-            resource = Manager.ID3D12Device.CreateCommittedResource(
+            resource = Engine.ID3D12Device.CreateCommittedResource(
                 new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Upload),
-                SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Buffer(size = dataSize),
+                SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Buffer(
+                    size = dataCount*SharpDX.Utilities.SizeOf<T>()),
                 SharpDX.Direct3D12.ResourceStates.GenericRead);
 
             resourceStart = resource.Map(0);
@@ -30,7 +33,7 @@ namespace Presenter
 
         public ConstantBuffer(T data)
         {
-            resource = Manager.ID3D12Device.CreateCommittedResource(
+            resource = Engine.ID3D12Device.CreateCommittedResource(
               new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Upload),
               SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Buffer(size = SharpDX.Utilities.SizeOf<T>()),
               SharpDX.Direct3D12.ResourceStates.GenericRead);
@@ -50,7 +53,7 @@ namespace Presenter
 
         public ConstantBuffer(T[] data)
         {
-            resource = Manager.ID3D12Device.CreateCommittedResource(
+            resource = Engine.ID3D12Device.CreateCommittedResource(
               new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Upload),
               SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Buffer(size = (SharpDX.Utilities.SizeOf<T>() * data.Length)),
               SharpDX.Direct3D12.ResourceStates.GenericRead);
@@ -67,6 +70,28 @@ namespace Presenter
 
             count = data.Length;
         }
+
+        public override void Update(IntPtr data)
+        {
+            SharpDX.Utilities.CopyMemory(resourceStart, data, size);
+        }
+
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        public override void Update<T>(T[] data)
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        {
+            SharpDX.Utilities.Write(resourceStart, data, 0,
+               data.Length);
+        }
+
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        public override void Update<T>(ref T data)
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        {
+            SharpDX.Utilities.Write(resourceStart,ref data);
+        }
+
+
 
         internal SharpDX.Direct3D12.ConstantBufferViewDescription BufferView => bufferview;
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class PixelShader : Shader, IPixelShader
+    public class PixelShader : Shader
     {
         private void CreatePixelShader(SharpDX.D3DCompiler.ShaderBytecode byteCode,
             string entrypoint, bool isCompiled = false)

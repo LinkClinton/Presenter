@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class GraphicsPipelineState : IGraphicsPipelineState
+    public class GraphicsPipelineState 
     {
         private VertexShader vertexShader;
         private PixelShader pixelShader;
 
-        private BufferLayout bufferLayout;
+        private InputLayout inputLayout;
         private ResourceLayout resourceLayout;
 
         private DepthStencilState depthStencilState;
@@ -19,23 +19,21 @@ namespace Presenter
         private SharpDX.Direct3D12.GraphicsPipelineStateDescription graphicsDesc;
         private SharpDX.Direct3D12.PipelineState pipelineState;
 
-       
-
         public GraphicsPipelineState(VertexShader vertexshader,
-            PixelShader pixelshader, BufferLayout bufferlayout,
+            PixelShader pixelshader, InputLayout bufferlayout,
             ResourceLayout resourcelayout, DepthStencilState depthstencilstate)
         {
             vertexShader = vertexshader;
             pixelShader = pixelshader;
 
-            bufferLayout = bufferlayout;
+            inputLayout = bufferlayout;
             resourceLayout = resourcelayout;
 
             depthStencilState = depthstencilstate;
 
             graphicsDesc = new SharpDX.Direct3D12.GraphicsPipelineStateDescription()
             {
-                InputLayout = bufferLayout.ID3D12InputLayoutDescription,
+                InputLayout = inputLayout.ID3D12InputLayoutDescription,
                 RootSignature = resourceLayout.ID3D12RootSignature,
                 VertexShader = vertexShader.ByteCode,
                 PixelShader = pixelShader.ByteCode,
@@ -53,7 +51,7 @@ namespace Presenter
 
             graphicsDesc.RenderTargetFormats[0] = SharpDX.DXGI.Format.R8G8B8A8_UNorm;
 
-            pipelineState = Manager.ID3D12Device.CreateGraphicsPipelineState(graphicsDesc);
+            pipelineState = Engine.ID3D12Device.CreateGraphicsPipelineState(graphicsDesc);
         }
 
         internal SharpDX.Direct3D12.PipelineState ID3D12GraphicsPipelineState
@@ -63,30 +61,31 @@ namespace Presenter
 
         public PixelShader PixelShader => pixelShader;
 
-        public BufferLayout BufferLayout => bufferLayout;
+        public InputLayout InputLayout => inputLayout;
 
         public ResourceLayout ResourceLayout => resourceLayout;
 
         public DepthStencilState DepthStencilState => depthStencilState;
 
         ~GraphicsPipelineState() => SharpDX.Utilities.Dispose(ref pipelineState);
-        
     }
 
-    public partial class Manager
+    public static partial class GraphicsPipeline
     {
         private static GraphicsPipelineState graphicsPipelineState;
 
-        public static GraphicsPipelineState GraphicsPipelineState
+
+        public static GraphicsPipelineState State
         {
             get => graphicsPipelineState;
-            set
-            {
-                graphicsPipelineState = value;
+        }
 
-                ID3D12GraphicsCommandList.SetGraphicsRootSignature(graphicsPipelineState.ResourceLayout.ID3D12RootSignature);
-                ID3D12GraphicsCommandList.PipelineState = graphicsPipelineState.ID3D12GraphicsPipelineState;
-            }
+        public static void Reset(GraphicsPipelineState GraphicsPipelineState)
+        {
+            graphicsPipelineState = GraphicsPipelineState;
+
+            graphicsCommandList.PipelineState = State.ID3D12GraphicsPipelineState;
+            graphicsCommandList.SetGraphicsRootSignature(State.ResourceLayout.ID3D12RootSignature);
         }
     }
 }
