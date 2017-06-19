@@ -74,6 +74,8 @@
     <Compile Include="Public\Enum\CullMode.cs" />
     <Compile Include="Public\Enum\ElementSize.cs" />
     <Compile Include="Public\Enum\FillMode.cs" />
+    <Compile Include="Public\Enum\TextureFilter.cs" />
+    <Compile Include="Public\Enum\TextureAddressMode.cs" />
     <Compile Include="Public\InputLayoutElement.cs" />
     <Compile Include="Public\Enum\PrimitiveType.cs" />
     <Compile Include="Public\Enum\ResourceFormat.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Resource\ResourceLayout.cs" />
     <Compile Include="Resource\ResourceTable.cs" />
     <Compile Include="Resource\ShaderResource\ShaderResource.cs" />
+    <Compile Include="Public\StaticSampler.cs" />
     <Compile Include="Resource\ShaderResource\Texture1D.cs" />
     <Compile Include="Resource\ShaderResource\Texture2D.cs" />
     <Compile Include="Resource\ShaderResource\Texture3D.cs" />

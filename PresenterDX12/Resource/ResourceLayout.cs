@@ -10,11 +10,13 @@ namespace Presenter
     {
         private Element[] layoutElements;
 
+        private StaticSampler[] layoutStaticSamplers;
+
         private int staticSamplerCount = 0;
 
         private SharpDX.Direct3D12.RootSignature rootSignature;
 
-        public ResourceLayout(Element[] elements, int StaticSamplerCount = 0)
+        public ResourceLayout(Element[] elements, StaticSampler[] staticSamplers)
         {
             SharpDX.Direct3D12.RootParameter[] rootParameter = new SharpDX.Direct3D12.RootParameter[elements.Length];
 
@@ -46,12 +48,17 @@ namespace Presenter
             }
 
             SharpDX.Direct3D12.StaticSamplerDescription[] sampleState =
-                new SharpDX.Direct3D12.StaticSamplerDescription[staticSamplerCount = StaticSamplerCount];
+                new SharpDX.Direct3D12.StaticSamplerDescription[staticSamplerCount = staticSamplers.Length];
 
             for (int i = 0; i < sampleState.Length; i++)
             {
-                sampleState[i] = new SharpDX.Direct3D12.StaticSamplerDescription(SharpDX.Direct3D12.ShaderVisibility.All,
-                    i, 0);
+                sampleState[i] = new SharpDX.Direct3D12.StaticSamplerDescription(SharpDX.Direct3D12.ShaderVisibility.All, i, 0)
+                {
+                    AddressU = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressU,
+                    AddressV = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressV,
+                    AddressW = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressW,
+                    Filter = (SharpDX.Direct3D12.Filter)staticSamplers[i].Filter
+                };
             }
 
 
@@ -61,9 +68,13 @@ namespace Presenter
             rootSignature = Engine.ID3D12Device.CreateRootSignature(0, rootDesc.Serialize());
 
             layoutElements = elements;
+
+            layoutStaticSamplers = staticSamplers;
         }
 
         public Element[] Elements => layoutElements;
+
+        public StaticSampler[] StaticSamplers => layoutStaticSamplers;
 
         public int SlotCount => layoutElements.Length;
 

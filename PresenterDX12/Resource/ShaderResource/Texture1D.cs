@@ -16,7 +16,7 @@ namespace Presenter
             tWidth = width;
             pixelFormat = format;
             mipLevels = miplevels;
-
+            
             resource = Engine.ID3D12Device.CreateCommittedResource(
                 new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Default),
                  SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Texture1D(

@@ -103,7 +103,7 @@ namespace Presenter
                     using (var frame = decoder.GetFrame(0))
                     {
 
-                        converter.Initialize(frame, frame.PixelFormat,
+                        converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppRGBA,
                              SharpDX.WIC.BitmapDitherType.None, null, 0, SharpDX.WIC.BitmapPaletteType.MedianCut);
 
                         int width = converter.Size.Width;
