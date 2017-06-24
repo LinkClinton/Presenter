@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BlendState.cs" />
     <Compile Include="Common\DepthStencilState.cs" />
     <Compile Include="Common\Engine.cs" />
     <Compile Include="Common\GraphicsPipeline.cs" />
@@ -71,6 +72,9 @@
     <Compile Include="Private\Helper\WICIndexer.cs" />
     <Compile Include="Private\Indexer\ResourceInputIndexer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Public\Enum\BlendOption.cs" />
+    <Compile Include="Public\Enum\BlendOperation.cs" />
+    <Compile Include="Public\Enum\ColorMask.cs" />
     <Compile Include="Public\Enum\CullMode.cs" />
     <Compile Include="Public\Enum\ElementSize.cs" />
     <Compile Include="Public\Enum\FillMode.cs" />

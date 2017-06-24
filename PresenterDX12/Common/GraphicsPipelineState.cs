@@ -15,13 +15,15 @@ namespace Presenter
         private ResourceLayout resourceLayout;
 
         private DepthStencilState depthStencilState;
+        private BlendState blendState;
 
         private SharpDX.Direct3D12.GraphicsPipelineStateDescription graphicsDesc;
         private SharpDX.Direct3D12.PipelineState pipelineState;
 
         public GraphicsPipelineState(VertexShader vertexshader,
             PixelShader pixelshader, InputLayout bufferlayout,
-            ResourceLayout resourcelayout, DepthStencilState depthstencilstate)
+            ResourceLayout resourcelayout, DepthStencilState depthstencilstate = null,
+            BlendState blendstate = null)
         {
             vertexShader = vertexshader;
             pixelShader = pixelshader;
@@ -29,7 +31,8 @@ namespace Presenter
             inputLayout = bufferlayout;
             resourceLayout = resourcelayout;
 
-            depthStencilState = depthstencilstate;
+            depthStencilState = depthstencilstate is null ? new DepthStencilState(false, false) : depthstencilstate;
+            blendState = blendState is null ? new BlendState(false) : blendState;
 
             graphicsDesc = new SharpDX.Direct3D12.GraphicsPipelineStateDescription()
             {
@@ -38,7 +41,7 @@ namespace Presenter
                 VertexShader = vertexShader.ByteCode,
                 PixelShader = pixelShader.ByteCode,
                 RasterizerState = SharpDX.Direct3D12.RasterizerStateDescription.Default(),
-                BlendState = SharpDX.Direct3D12.BlendStateDescription.Default(),
+                BlendState = blendState.ID3D12BlendState,
                 DepthStencilFormat = Surface.DepthStencilFormat,
                 DepthStencilState = depthStencilState.ID3D12DepthStencilState,
                 SampleMask = int.MaxValue,
@@ -66,6 +69,8 @@ namespace Presenter
         public ResourceLayout ResourceLayout => resourceLayout;
 
         public DepthStencilState DepthStencilState => depthStencilState;
+
+        public BlendState BlendState => blendState;
 
         ~GraphicsPipelineState() => SharpDX.Utilities.Dispose(ref pipelineState);
     }

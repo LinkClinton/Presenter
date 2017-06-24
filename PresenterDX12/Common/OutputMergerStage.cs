@@ -10,10 +10,18 @@ namespace Presenter
     {
         public void Reset()
         {
-
+            
         }
 
         public DepthStencilState DepthStencilState => GraphicsPipeline.State.DepthStencilState;
+
+        public BlendState BlendState => GraphicsPipeline.State.BlendState;
+
+        public (float red,float green,float blue,float alpha) BlendFactor
+        {
+            set => GraphicsPipeline.ID3D12GraphicsCommandList.BlendFactor = new SharpDX.Mathematics.Interop.RawVector4(
+                value.red, value.green, value.blue, value.alpha);
+        }
     }
 
     class StaticOutputMergerStage: OutputMergerStage { }
