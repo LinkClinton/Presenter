@@ -15,14 +15,21 @@ namespace Presenter
         {
             rtvBlend = new SharpDX.Direct3D12.RenderTargetBlendDescription()
             {
-                IsBlendEnabled = isEnable
+                IsBlendEnabled = isEnable,
+                LogicOpEnable = false,
+                SourceBlend = SharpDX.Direct3D12.BlendOption.One,
+                DestinationBlend = SharpDX.Direct3D12.BlendOption.Zero,
+                BlendOperation = SharpDX.Direct3D12.BlendOperation.Add,
+                SourceAlphaBlend = SharpDX.Direct3D12.BlendOption.One,
+                DestinationAlphaBlend = SharpDX.Direct3D12.BlendOption.Zero,
+                AlphaBlendOperation = SharpDX.Direct3D12.BlendOperation.Add,
+                LogicOp = SharpDX.Direct3D12.LogicOperation.Noop,
+                RenderTargetWriteMask = SharpDX.Direct3D12.ColorWriteMaskFlags.All
             };
 
-            blendState = new SharpDX.Direct3D12.BlendStateDescription()
-            {
-                AlphaToCoverageEnable = false,
-                IndependentBlendEnable = false
-            };
+
+
+            blendState = SharpDX.Direct3D12.BlendStateDescription.Default();
 
             blendState.RenderTarget[0] = rtvBlend;
         }

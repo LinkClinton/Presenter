@@ -16,51 +16,59 @@ namespace Presenter
 
         private SharpDX.Direct3D12.RootSignature rootSignature;
 
-        public ResourceLayout(Element[] elements, StaticSampler[] staticSamplers)
+        public ResourceLayout(Element[] elements = null, StaticSampler[] staticSamplers = null)
         {
-            SharpDX.Direct3D12.RootParameter[] rootParameter = new SharpDX.Direct3D12.RootParameter[elements.Length];
+            SharpDX.Direct3D12.RootParameter[] rootParameter = null;
 
-            for (int i = 0; i < elements.Length; i++)
+            if (elements != null)
             {
-                switch (elements[i].Type)
+                rootParameter = new SharpDX.Direct3D12.RootParameter[elements.Length];
+
+                for (int i = 0; i < elements.Length; i++)
                 {
-                    case ResourceType.ConstantBufferView:
-                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
-                            new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ConstantBufferView);
-                        break;
-                    case ResourceType.ShaderResourceView:
-                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
-                            new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ShaderResourceView);
-                        break;
-                    case ResourceType.ConstantBufferTable:
-                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
-                            new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ConstantBufferView,
-                            elements[i].Count, elements[i].Register));
-                        break;
-                    case ResourceType.ShaderResourceTable:
-                        rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
-                            new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ShaderResourceView,
-                            elements[i].Count, elements[i].Register));
-                        break;
-                    default:
-                        break;
+                    switch (elements[i].Type)
+                    {
+                        case ResourceType.ConstantBufferView:
+                            rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                                new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ConstantBufferView);
+                            break;
+                        case ResourceType.ShaderResourceView:
+                            rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                                new SharpDX.Direct3D12.RootDescriptor(elements[i].Register, 0), SharpDX.Direct3D12.RootParameterType.ShaderResourceView);
+                            break;
+                        case ResourceType.ConstantBufferTable:
+                            rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                                new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ConstantBufferView,
+                                elements[i].Count, elements[i].Register));
+                            break;
+                        case ResourceType.ShaderResourceTable:
+                            rootParameter[i] = new SharpDX.Direct3D12.RootParameter(SharpDX.Direct3D12.ShaderVisibility.All,
+                                new SharpDX.Direct3D12.DescriptorRange(SharpDX.Direct3D12.DescriptorRangeType.ShaderResourceView,
+                                elements[i].Count, elements[i].Register));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
-            SharpDX.Direct3D12.StaticSamplerDescription[] sampleState =
-                new SharpDX.Direct3D12.StaticSamplerDescription[staticSamplerCount = staticSamplers.Length];
+            SharpDX.Direct3D12.StaticSamplerDescription[] sampleState = null;
 
-            for (int i = 0; i < sampleState.Length; i++)
+            if (staticSamplers != null)
             {
-                sampleState[i] = new SharpDX.Direct3D12.StaticSamplerDescription(SharpDX.Direct3D12.ShaderVisibility.All, i, 0)
-                {
-                    AddressU = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressU,
-                    AddressV = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressV,
-                    AddressW = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressW,
-                    Filter = (SharpDX.Direct3D12.Filter)staticSamplers[i].Filter
-                };
-            }
+                sampleState = new SharpDX.Direct3D12.StaticSamplerDescription[staticSamplerCount = staticSamplers.Length];
 
+                for (int i = 0; i < sampleState.Length; i++)
+                {
+                    sampleState[i] = new SharpDX.Direct3D12.StaticSamplerDescription(SharpDX.Direct3D12.ShaderVisibility.All, i, 0)
+                    {
+                        AddressU = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressU,
+                        AddressV = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressV,
+                        AddressW = (SharpDX.Direct3D12.TextureAddressMode)staticSamplers[i].AddressW,
+                        Filter = (SharpDX.Direct3D12.Filter)staticSamplers[i].Filter
+                    };
+                }
+            }
 
             SharpDX.Direct3D12.RootSignatureDescription rootDesc = new SharpDX.Direct3D12.RootSignatureDescription(
                 SharpDX.Direct3D12.RootSignatureFlags.AllowInputAssemblerInputLayout, rootParameter, sampleState);

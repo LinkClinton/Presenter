@@ -21,15 +21,16 @@ namespace Presenter
         private SharpDX.Direct3D12.PipelineState pipelineState;
 
         public GraphicsPipelineState(VertexShader vertexshader,
-            PixelShader pixelshader, InputLayout bufferlayout,
-            ResourceLayout resourcelayout, DepthStencilState depthstencilstate = null,
+            PixelShader pixelshader, InputLayout inputlayout,
+            ResourceLayout resourcelayout = null, DepthStencilState depthstencilstate = null,
             BlendState blendstate = null)
         {
             vertexShader = vertexshader;
             pixelShader = pixelshader;
 
-            inputLayout = bufferlayout;
-            resourceLayout = resourcelayout;
+            inputLayout = inputlayout;
+
+            resourceLayout = resourcelayout is null ? new ResourceLayout() : resourcelayout;
 
             depthStencilState = depthstencilstate is null ? new DepthStencilState(false, false) : depthstencilstate;
             blendState = blendState is null ? new BlendState(false) : blendState;
