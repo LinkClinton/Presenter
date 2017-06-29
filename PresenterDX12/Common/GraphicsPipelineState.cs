@@ -33,7 +33,7 @@ namespace Presenter
             resourceLayout = resourcelayout is null ? new ResourceLayout() : resourcelayout;
 
             depthStencilState = depthstencilstate is null ? new DepthStencilState(false, false) : depthstencilstate;
-            blendState = blendState is null ? new BlendState(false) : blendState;
+            blendState = blendstate is null ? new BlendState(false) : blendstate;
 
             graphicsDesc = new SharpDX.Direct3D12.GraphicsPipelineStateDescription()
             {

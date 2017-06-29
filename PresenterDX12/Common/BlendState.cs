@@ -82,6 +82,13 @@ namespace Presenter
             set => rtvBlend.SourceBlend = (SharpDX.Direct3D12.BlendOption)value;
         }
 
-        internal SharpDX.Direct3D12.BlendStateDescription ID3D12BlendState => blendState;
+        internal SharpDX.Direct3D12.BlendStateDescription ID3D12BlendState
+        {
+            get
+            {
+                blendState.RenderTarget[0] = rtvBlend;
+                return blendState;
+            }
+        }
     }
 }
