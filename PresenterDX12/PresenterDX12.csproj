@@ -66,6 +66,7 @@
     <Compile Include="Common\InputAssemblerStage.cs" />
     <Compile Include="Common\OutputMergerStage.cs" />
     <Compile Include="Common\PixelShaderStage.cs" />
+    <Compile Include="Common\RasterizerState.cs" />
     <Compile Include="Common\Surface.cs" />
     <Compile Include="Common\VertexShaderStage.cs" />
     <Compile Include="Private\Helper\WICHelper.cs" />

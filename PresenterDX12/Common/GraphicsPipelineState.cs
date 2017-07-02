@@ -16,14 +16,15 @@ namespace Presenter
 
         private DepthStencilState depthStencilState;
         private BlendState blendState;
+        private RasterizerState rasterizerState;
 
         private SharpDX.Direct3D12.GraphicsPipelineStateDescription graphicsDesc;
         private SharpDX.Direct3D12.PipelineState pipelineState;
 
         public GraphicsPipelineState(VertexShader vertexshader,
             PixelShader pixelshader, InputLayout inputlayout,
-            ResourceLayout resourcelayout = null, DepthStencilState depthstencilstate = null,
-            BlendState blendstate = null)
+            ResourceLayout resourcelayout, RasterizerState rasterizerstate,
+            DepthStencilState depthstencilstate, BlendState blendstate)
         {
             vertexShader = vertexshader;
             pixelShader = pixelshader;
@@ -32,6 +33,7 @@ namespace Presenter
 
             resourceLayout = resourcelayout is null ? new ResourceLayout() : resourcelayout;
 
+            rasterizerState = rasterizerstate is null ? new RasterizerState() : rasterizerstate;
             depthStencilState = depthstencilstate is null ? new DepthStencilState(false, false) : depthstencilstate;
             blendState = blendstate is null ? new BlendState(false) : blendstate;
 
@@ -41,7 +43,7 @@ namespace Presenter
                 RootSignature = resourceLayout.ID3D12RootSignature,
                 VertexShader = vertexShader.ByteCode,
                 PixelShader = pixelShader.ByteCode,
-                RasterizerState = SharpDX.Direct3D12.RasterizerStateDescription.Default(),
+                RasterizerState = rasterizerState.ID3D12RasterizerState,
                 BlendState = blendState.ID3D12BlendState,
                 DepthStencilFormat = Surface.DepthStencilFormat,
                 DepthStencilState = depthStencilState.ID3D12DepthStencilState,
