@@ -76,7 +76,7 @@ namespace Presenter
 
             Engine.ID3D12CommandQueue.ExecuteCommandList(ID3D12GraphicsCommandList);
 
-            surface.IDXGISwapChain.Present(0, 0);
+            surface.IDXGISwapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
 
             Engine.Wait();
 

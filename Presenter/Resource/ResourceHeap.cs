@@ -6,20 +6,16 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class ResourceHeap : IResourceHeap
+    public class ResourceHeap
     {
         private List<Resource> resouceList = new List<Resource>();
 
         private int maxCount;
-
+        
         public ResourceHeap(int count)
         {
             maxCount = count;
         }
-
-        public int Count => resouceList.Count;
-
-        public int MaxCount => maxCount;
 
         public void AddResource<T>(ConstantBuffer<T> resource) where T : struct
         {
@@ -30,6 +26,10 @@ namespace Presenter
         {
             resouceList.Add(resource);
         }
+
+        public int Count => resouceList.Count;
+
+        public int MaxCount => maxCount;
 
         internal List<Resource> Elements => resouceList;
     }

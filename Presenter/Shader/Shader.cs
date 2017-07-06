@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public abstract class Shader : IShader
+    public abstract class Shader
     {
         protected SharpDX.D3DCompiler.ShaderBytecode bytecode;
 

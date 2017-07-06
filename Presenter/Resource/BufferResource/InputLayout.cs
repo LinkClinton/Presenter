@@ -9,27 +9,12 @@ namespace Presenter
 {
 
 
-    public partial class BufferLayout : IBufferLayout
+    public partial class InputLayout 
     {
-        [StructLayout(LayoutKind.Sequential)]
-        public class Element
-        {
-            public ElementSize Size;
-            public string Tag;
-
-            public Element(string tag, ElementSize size)
-            {
-                Tag = tag;
-                Size = size;
-            }
-        }
-
-        private SharpDX.Direct3D11.InputLayout layout;
         private SharpDX.Direct3D11.InputElement[] layoutDesc;
 
-        public BufferLayout(Element[] elements)
+        public InputLayout(Element[] elements)
         {
-
             layoutDesc = new SharpDX.Direct3D11.InputElement[elements.Length];
 
             int bit_off = 0;
@@ -72,14 +57,7 @@ namespace Presenter
 
         }
 
-        internal SharpDX.Direct3D11.InputLayout ID3D11InputLayout
-        {
-            get => layout;
-            set => layout = value;
-        }
 
         internal SharpDX.Direct3D11.InputElement[] Elements => layoutDesc;
-
-        ~BufferLayout() => SharpDX.Utilities.Dispose(ref layout);
     }
 }

@@ -36,57 +36,49 @@ namespace Presenter
         { 
             set
             {
-#if DEBUG
-                if (Manager.GraphicsPipelineState.ResourceLayout is null)
-                    throw new NotImplementedException("Resource Layout is not set");
-#endif
-                ResourceLayout.Element element = Manager.GraphicsPipelineState.ResourceLayout.Elements[index];
+                ResourceLayout.Element element = GraphicsPipeline.State.ResourceLayout.Elements[index];
 
                 switch (value)
                 {
                     case Buffer buffer:
                         ReportError(index, ResourceType.ConstantBufferView, element.Type);
 
-                        Manager.ID3D11DeviceContext.VertexShader.SetConstantBuffer(element.Register, buffer.ID3D11Buffer);
-                        Manager.ID3D11DeviceContext.PixelShader.SetConstantBuffer(element.Register, buffer.ID3D11Buffer);
+                        Engine.ID3D11DeviceContext.VertexShader.SetConstantBuffer(element.Register, buffer.ID3D11Buffer);
+                        Engine.ID3D11DeviceContext.PixelShader.SetConstantBuffer(element.Register, buffer.ID3D11Buffer);
                         break;
-                    case ShaderResource shaderresource:
+                    case ShaderResource shaderResource:
                         ReportError(index, ResourceType.ShaderResourceView, element.Type);
 
-                        Manager.ID3D11DeviceContext.VertexShader.SetShaderResource(element.Register, shaderresource.ID3D11ShaderResourceView);
-                        Manager.ID3D11DeviceContext.PixelShader.SetShaderResource(element.Register, shaderresource.ID3D11ShaderResourceView);
+                        Engine.ID3D11DeviceContext.VertexShader.SetShaderResource(element.Register, shaderResource.ID3D11ShaderResourceView);
+                        Engine.ID3D11DeviceContext.PixelShader.SetShaderResource(element.Register, shaderResource.ID3D11ShaderResourceView);
                         break;
-                    case ResourceHeap heap:
-                        ReportError(index, ResourceType.ResourceHeap, element.Type);
+                    case ResourceTable resourceTable:
 
-                        int bufferCount = 0;
-                        int resourceCount = 0;
-                        int register = 0;
-                        
-                        foreach (var item in heap.Elements)
+                        switch (element.Type)
                         {
-                            switch (item)
-                            {
-                                case Buffer buffer:
-                                    ReportError(++bufferCount, element.ConstantBufferView.Count, ResourceType.ConstantBufferView);
+                            case ResourceType.ConstantBufferTable:
+                                SharpDX.Direct3D11.Buffer[] buffers = new SharpDX.Direct3D11.Buffer[element.Count];
 
-                                    register = element.ConstantBufferView.Start + bufferCount - 1;
+                                for (int i = 0; i < element.Count; i++)
+                                    buffers[i] = (resourceTable.WhcihHeap.Elements[i + resourceTable.Start] as Buffer).ID3D11Buffer;
 
-                                    Manager.ID3D11DeviceContext.VertexShader.SetConstantBuffer(register, buffer.ID3D11Buffer);
-                                    Manager.ID3D11DeviceContext.PixelShader.SetConstantBuffer(register, buffer.ID3D11Buffer);
-                                    break;
-                                case ShaderResource shaderresource:
-                                    ReportError(++resourceCount, element.ShaderResourceView.Count, ResourceType.ShaderResourceView);
+                                Engine.ID3D11DeviceContext.VertexShader.SetConstantBuffers(element.Register, buffers);
+                                Engine.ID3D11DeviceContext.PixelShader.SetConstantBuffers(element.Register, buffers);
+                                break;
+                            case ResourceType.ShaderResourceTable:
+                                SharpDX.Direct3D11.ShaderResourceView[] shaderResources = new SharpDX.Direct3D11.ShaderResourceView[element.Count];
 
-                                    register = element.ShaderResourceView.Start + resourceCount - 1;
+                                for (int i = 0; i < element.Count; i++)
+                                    shaderResources[i] = (resourceTable.WhcihHeap.Elements[i + resourceTable.Start] as ShaderResource).ID3D11ShaderResourceView;
 
-                                    Manager.ID3D11DeviceContext.VertexShader.SetShaderResource(register, shaderresource.ID3D11ShaderResourceView);
-                                    Manager.ID3D11DeviceContext.PixelShader.SetShaderResource(register, shaderresource.ID3D11ShaderResourceView);
-                                    break;
-                                default:
-                                    break;
-                            }
+                                Engine.ID3D11DeviceContext.VertexShader.SetShaderResources(element.Register, shaderResources);
+                                Engine.ID3D11DeviceContext.PixelShader.SetShaderResources(element.Register, shaderResources);
+                                break;
+                            default:
+                                ReportError(index, ResourceType.Unknown, element.Type);
+                                break;
                         }
+
                         break;
                     default:
                         break;
@@ -100,10 +92,15 @@ namespace Presenter
         }
     }
 
-    public partial class ResourceLayout
+    public static partial class GraphicsPipeline
     {
         private static ResourceInputIndexer resouceInput = new ResourceInputIndexer();
 
         public static ResourceInputIndexer InputSlot => resouceInput;
+
+        public static void SetHeaps(ResourceHeap[] heaps)
+        {
+            
+        }
     }
 }

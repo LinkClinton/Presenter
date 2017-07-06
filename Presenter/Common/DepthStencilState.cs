@@ -6,53 +6,33 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class DepthStencilState : IDepthStencilState
+    public class DepthStencilState
     {
         private SharpDX.Direct3D11.DepthStencilStateDescription depthStencilDesc
             = SharpDX.Direct3D11.DepthStencilStateDescription.Default();
-
-        private SharpDX.Direct3D11.DepthStencilState depthStencilState;
-
-        private void Update()
-        {
-            SharpDX.Utilities.Dispose(ref depthStencilState);
-
-            depthStencilState = new SharpDX.Direct3D11.DepthStencilState(Manager.ID3D11Device,
-                depthStencilDesc);
-        }
 
         public DepthStencilState(bool depthEnabled = false,
             bool stencilEnabled = false)
         {
             depthStencilDesc.IsDepthEnabled = depthEnabled;
             depthStencilDesc.IsStencilEnabled = stencilEnabled;
-
-            Update();
         }
 
         public bool IsDepthEnabled
         {
             get => depthStencilDesc.IsDepthEnabled;
-            set
-            {
-                depthStencilDesc.IsDepthEnabled = value;
-                Update();
-            }
+            set => depthStencilDesc.IsDepthEnabled = value;
         }
 
         public bool IsStencilEnabled
         {
             get => depthStencilDesc.IsStencilEnabled;
-            set
-            {
-                depthStencilDesc.IsStencilEnabled = value;
-                Update();
-            }
+            set => depthStencilDesc.IsStencilEnabled = value;
         }
 
-        ~DepthStencilState() => SharpDX.Utilities.Dispose(ref depthStencilState);
-
-        internal SharpDX.Direct3D11.DepthStencilState ID3D11DepthStencilState
-            => depthStencilState;
+        internal SharpDX.Direct3D11.DepthStencilStateDescription ID3D11DepthStencilStateDescription
+        {
+            get => depthStencilDesc;
+        }
     }
 }

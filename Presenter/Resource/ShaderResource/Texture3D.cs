@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Texture3D : ShaderResource, ITexture3D
+    public class Texture3D : ShaderResource
     {
         private int tWidth;
         private int tHeight;
@@ -27,7 +27,7 @@ namespace Presenter
             rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
             depthPitch = rowPitch * tHeight;
 
-            resource = new SharpDX.Direct3D11.Texture3D(Manager.ID3D11Device,
+            resource = new SharpDX.Direct3D11.Texture3D(Engine.ID3D11Device,
                 new SharpDX.Direct3D11.Texture3DDescription()
                 {
                     BindFlags = SharpDX.Direct3D11.BindFlags.ShaderResource,
@@ -41,7 +41,7 @@ namespace Presenter
                     Usage = SharpDX.Direct3D11.ResourceUsage.Default
                 });
 
-            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Manager.ID3D11Device,
+            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Engine.ID3D11Device,
                 resource);
 
             size = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth * tHeight * tDepth;
@@ -49,17 +49,17 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
-            Manager.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch, depthPitch);
+            Engine.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch, depthPitch);
         }
 
         public override void Update<T>(T[] data)
         {
-            Manager.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch, depthPitch);
+            Engine.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch, depthPitch);
         }
 
         public override void Update(IntPtr data)
         {
-            Manager.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, depthPitch);
+            Engine.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, depthPitch);
         }
 
         public int Width => tWidth;

@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IPixelShader : IShader
+    public enum BlendOperation
     {
-
+        Add = 1,
+        Subtract = 2,
+        ReverseSubtract = 3,
+        Minimum = 4,
+        Maximum = 5
     }
 }

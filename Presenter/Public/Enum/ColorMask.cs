@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IIndexBuffer : IBuffer
+    [Flags]
+    public enum ColorMask
     {
+        Red = 1,
+        Green = 2,
+        Blue = 4,
+        Alpha = 8,
+        All = 15
     }
 }

@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    interface IConstantBuffer : IBuffer
+    public enum TextureAddressMode
     {
-
+        Wrap = 1,
+        Mirror = 2,
+        Clamp = 3,
+        Border = 4,
+        MirrorOnce = 5
     }
 }

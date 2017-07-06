@@ -8,11 +8,11 @@ using System.Runtime.InteropServices;
 
 namespace Presenter
 {
-    public class ConstantBuffer<T> : Buffer, IConstantBuffer where T : struct
+    public class ConstantBuffer<T> : Buffer where T : struct
     {
         public ConstantBuffer(int dataCount = 1)
         {
-            resource = new SharpDX.Direct3D11.Buffer(Manager.ID3D11Device,
+            resource = new SharpDX.Direct3D11.Buffer(Engine.ID3D11Device,
                 size = dataCount * SharpDX.Utilities.SizeOf<T>(), SharpDX.Direct3D11.ResourceUsage.Default,
                 SharpDX.Direct3D11.BindFlags.ConstantBuffer, SharpDX.Direct3D11.CpuAccessFlags.None,
                 SharpDX.Direct3D11.ResourceOptionFlags.None, 0);
@@ -22,7 +22,7 @@ namespace Presenter
 
         public ConstantBuffer(T data)
         {
-            resource = new SharpDX.Direct3D11.Buffer(Manager.ID3D11Device,
+            resource = new SharpDX.Direct3D11.Buffer(Engine.ID3D11Device,
                 size = Marshal.SizeOf<T>(), SharpDX.Direct3D11.ResourceUsage.Default,
                 SharpDX.Direct3D11.BindFlags.ConstantBuffer, SharpDX.Direct3D11.CpuAccessFlags.None,
                 SharpDX.Direct3D11.ResourceOptionFlags.None, 0);
@@ -34,7 +34,7 @@ namespace Presenter
 
         public ConstantBuffer(T[] data)
         {
-            resource = new SharpDX.Direct3D11.Buffer(Manager.ID3D11Device,
+            resource = new SharpDX.Direct3D11.Buffer(Engine.ID3D11Device,
                 size = Marshal.SizeOf<T>() * data.Length, SharpDX.Direct3D11.ResourceUsage.Default,
                 SharpDX.Direct3D11.BindFlags.ConstantBuffer, SharpDX.Direct3D11.CpuAccessFlags.None,
                 SharpDX.Direct3D11.ResourceOptionFlags.None, 0);
@@ -43,6 +43,7 @@ namespace Presenter
 
             count = data.Length;
         }
+
     }
 
 

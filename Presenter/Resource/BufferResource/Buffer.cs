@@ -6,31 +6,44 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public abstract class Buffer : Resource, IBuffer
+    public abstract class Buffer : Resource
     {
         protected int count;
 
         public int Count => count;
 
+        public override void Update<T>(ref T data)
+        {
+            Engine.ID3D11DeviceContext.UpdateSubresource(ref data, resource);
+        }
+
+        public override void Update<T>(T[] data)
+        {
+            Engine.ID3D11DeviceContext.UpdateSubresource(data, resource);
+        }
+
+        public override void Update(IntPtr data)
+        {
+            Engine.ID3D11DeviceContext.UpdateSubresource(resource, 0, null,
+                data, size, size);
+        }
+
         internal SharpDX.Direct3D11.Buffer ID3D11Buffer => resource as SharpDX.Direct3D11.Buffer;
     }
 
-    public static partial class Manager
+    public static partial class GraphicsPipeline
     {
-        public static void DrawObject(int vertexCount, int startLocation = 0,
-             PrimitiveType type = PrimitiveType.TriangleList)
+        public static void PutObject(int vertexCount, int startLocation = 0)
         {
-            ID3D11DeviceContext.InputAssembler.PrimitiveTopology = (SharpDX.Direct3D.PrimitiveTopology)type;
-
-            ID3D11DeviceContext.Draw(vertexCount, startLocation);
+            Engine.ID3D11DeviceContext.DrawInstanced(vertexCount, 1, startLocation, 0);
         }
 
-        public static void DrawObjectIndexed(int indexCount, int startLocation = 0,
-            int baseVertexLocation = 0, PrimitiveType type = PrimitiveType.TriangleList)
+        public static void PutObjectIndexed(int indexCount, int startLocation = 0,
+            int baseVertexLocation = 0)
         {
-            ID3D11DeviceContext.InputAssembler.PrimitiveTopology = (SharpDX.Direct3D.PrimitiveTopology)type;
-
-            ID3D11DeviceContext.DrawIndexed(indexCount, startLocation, baseVertexLocation);
+            Engine.ID3D11DeviceContext.DrawIndexedInstanced(indexCount, 1, startLocation, baseVertexLocation, 0);
         }
     }
+
+
 }

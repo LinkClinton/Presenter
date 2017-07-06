@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Texture2D : ShaderResource, ITexture2D
+    public class Texture2D : ShaderResource
     {
         private int tWidth;
         private int tHeight;
@@ -23,7 +23,7 @@ namespace Presenter
 
             rowPitch = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
 
-            resource = new SharpDX.Direct3D11.Texture2D(Manager.ID3D11Device,
+            resource = new SharpDX.Direct3D11.Texture2D(Engine.ID3D11Device,
                 new SharpDX.Direct3D11.Texture2DDescription()
                 {
                     ArraySize = 1,
@@ -38,7 +38,7 @@ namespace Presenter
                     Usage = SharpDX.Direct3D11.ResourceUsage.Default
                 });
 
-            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Manager.ID3D11Device,
+            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Engine.ID3D11Device,
                 resource);
 
             size = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth * tHeight;
@@ -46,32 +46,32 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
-            Manager.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch);
+            Engine.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch);
         }
 
         public override void Update<T>(T[] data)
         {
-            Manager.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch);
+            Engine.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch);
         }
 
         public override void Update(IntPtr data)
         {
-            Manager.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, size);
+            Engine.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, size);
         }
 
         public static Texture2D FromFile(string filename, int miplevels = 1)
         {
-            using (var decoder = new SharpDX.WIC.BitmapDecoder(Manager.ImagingFactory,
+            using (var decoder = new SharpDX.WIC.BitmapDecoder(Engine.ImagingFactory,
             filename, SharpDX.IO.NativeFileAccess.Read, SharpDX.WIC.DecodeOptions.CacheOnLoad))
             {
 
-                using (var converter = new SharpDX.WIC.FormatConverter(Manager.ImagingFactory))
+                using (var converter = new SharpDX.WIC.FormatConverter(Engine.ImagingFactory))
                 {
 
                     using (var frame = decoder.GetFrame(0))
                     {
 
-                        converter.Initialize(frame, frame.PixelFormat,
+                        converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppRGBA,
                              SharpDX.WIC.BitmapDitherType.None, null, 0, SharpDX.WIC.BitmapPaletteType.MedianCut);
 
                         int width = converter.Size.Width;

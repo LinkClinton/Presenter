@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class VertexShader : Shader, IVertexShader
+    public partial class VertexShader : Shader
     {
         private SharpDX.Direct3D11.VertexShader shader;
 
@@ -17,7 +17,7 @@ namespace Presenter
 
             if (isCompiled is true)
             {
-                shader = new SharpDX.Direct3D11.VertexShader(Manager.ID3D11Device, bytecode);
+                shader = new SharpDX.Direct3D11.VertexShader(Engine.ID3D11Device, bytecode);
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace Presenter
 #endif
             if (result.HasErrors is true || result.Message != null) throw new Exception(result.Message);
 
-            shader = new SharpDX.Direct3D11.VertexShader(Manager.ID3D11Device, bytecode = result.Bytecode);
+            shader = new SharpDX.Direct3D11.VertexShader(Engine.ID3D11Device, bytecode = result.Bytecode);
         }
 
         public VertexShader(byte[] shaderCode, string entrypoint, bool isCompiled = false)

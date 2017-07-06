@@ -8,6 +8,7 @@ namespace Presenter
 {
     public enum ResourceType
     {
+        Unknown,
         ConstantBufferView,
         ShaderResourceView,
         ConstantBufferTable,

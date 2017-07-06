@@ -8,8 +8,8 @@ namespace Presenter
 {
     public enum CullMode
     {
-        CullNone = 1,
-        CullFront = 2,
-        CullBack = 3
+        None = 1,
+        Front = 2,
+        Back = 3
     }
 }

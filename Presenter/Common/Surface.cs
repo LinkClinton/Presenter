@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Surface : ISurface
+    public class Surface 
     {
         private SharpDX.DXGI.SwapChain swapchain;
 
@@ -35,11 +35,11 @@ namespace Presenter
             width = rect.right - rect.left;
             height = rect.bottom - rect.top;
 
-            SharpDX.DXGI.Device dxgidevice = Manager.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
+            SharpDX.DXGI.Device dxgidevice = Engine.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
             SharpDX.DXGI.Adapter dxgiadapte = dxgidevice.GetParent<SharpDX.DXGI.Adapter>();
             SharpDX.DXGI.Factory dxgifactory = dxgiadapte.GetParent<SharpDX.DXGI.Factory>();
 
-            swapchain = new SharpDX.DXGI.SwapChain(dxgifactory, Manager.ID3D11Device,
+            swapchain = new SharpDX.DXGI.SwapChain(dxgifactory, Engine.ID3D11Device,
                 new SharpDX.DXGI.SwapChainDescription()
                 {
                     ModeDescription = new SharpDX.DXGI.ModeDescription()
@@ -61,13 +61,13 @@ namespace Presenter
                 });
 
 
-            surfaceRTV = new SharpDX.Direct3D11.RenderTargetView(Manager.ID3D11Device,
+            surfaceRTV = new SharpDX.Direct3D11.RenderTargetView(Engine.ID3D11Device,
                 surfaceBackBuffer = swapchain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0));
 
 
 
-            surfaceDSV = new SharpDX.Direct3D11.DepthStencilView(Manager.ID3D11Device,
-                surfaceDepthBuffer = new SharpDX.Direct3D11.Texture2D(Manager.ID3D11Device, new SharpDX.Direct3D11.Texture2DDescription()
+            surfaceDSV = new SharpDX.Direct3D11.DepthStencilView(Engine.ID3D11Device,
+                surfaceDepthBuffer = new SharpDX.Direct3D11.Texture2D(Engine.ID3D11Device, new SharpDX.Direct3D11.Texture2DDescription()
                 {
                     Width = width,
                     Height = height,
@@ -97,11 +97,11 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref surfaceDSV);
             SharpDX.Utilities.Dispose(ref swapchain);
 
-            SharpDX.DXGI.Device dxgidevice = Manager.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
+            SharpDX.DXGI.Device dxgidevice = Engine.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
             SharpDX.DXGI.Adapter dxgiadapte = dxgidevice.GetParent<SharpDX.DXGI.Adapter>();
             SharpDX.DXGI.Factory dxgifactory = dxgiadapte.GetParent<SharpDX.DXGI.Factory>();
 
-            swapchain = new SharpDX.DXGI.SwapChain(dxgifactory, Manager.ID3D11Device,
+            swapchain = new SharpDX.DXGI.SwapChain(dxgifactory, Engine.ID3D11Device,
                 new SharpDX.DXGI.SwapChainDescription()
                 {
                     ModeDescription = new SharpDX.DXGI.ModeDescription()
@@ -123,11 +123,11 @@ namespace Presenter
                 });
 
 
-            surfaceRTV = new SharpDX.Direct3D11.RenderTargetView(Manager.ID3D11Device,
+            surfaceRTV = new SharpDX.Direct3D11.RenderTargetView(Engine.ID3D11Device,
               surfaceBackBuffer = swapchain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0));
 
-            surfaceDSV = new SharpDX.Direct3D11.DepthStencilView(Manager.ID3D11Device,
-                surfaceDepthBuffer = new SharpDX.Direct3D11.Texture2D(Manager.ID3D11Device, new SharpDX.Direct3D11.Texture2DDescription()
+            surfaceDSV = new SharpDX.Direct3D11.DepthStencilView(Engine.ID3D11Device,
+                surfaceDepthBuffer = new SharpDX.Direct3D11.Texture2D(Engine.ID3D11Device, new SharpDX.Direct3D11.Texture2DDescription()
                 {
                     Width = width,
                     Height = height,
@@ -155,9 +155,12 @@ namespace Presenter
 
         internal IntPtr Handle => surfaceHandle;
 
-       
+        internal static SharpDX.DXGI.Format DepthStencilFormat => SharpDX.DXGI.Format.D24_UNorm_S8_UInt;
+        internal static int BufferCount => 1;
+
 
         public int Width => width;
+
         public int Height => height;
 
         public (float red, float green, float blue, float alpha) BackGround
@@ -176,18 +179,13 @@ namespace Presenter
         }
     }
 
-    public static partial class Manager
+    public static partial class GraphicsPipeline
     {
-        private static Surface surface = null;
+        private static Surface surface;
 
-        public static Surface Surface
+        public static Surface Target
         {
             get => surface;
-            set
-            {
-                surface = value;
-            }
         }
     }
-
 }

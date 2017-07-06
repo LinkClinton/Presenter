@@ -8,10 +8,10 @@ namespace Presenter
 {
     public enum BlendOperation
     {
-        Add = SharpDX.Direct3D12.BlendOperation.Add,
-        Subtract = SharpDX.Direct3D12.BlendOperation.Subtract,
-        ReverseSubtract = SharpDX.Direct3D12.BlendOperation.ReverseSubtract,
-        Minimum = SharpDX.Direct3D12.BlendOperation.Minimum,
-        Maximum = SharpDX.Direct3D12.BlendOperation.Maximum
+        Add = 1,
+        Subtract = 2,
+        ReverseSubtract = 3,
+        Minimum = 4,
+        Maximum = 5
     }
 }

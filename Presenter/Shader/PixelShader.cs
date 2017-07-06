@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public partial class PixelShader : Shader, IPixelShader
+    public partial class PixelShader : Shader
     {
         private SharpDX.Direct3D11.PixelShader shader;
 
@@ -17,7 +17,7 @@ namespace Presenter
 
             if (isCompiled is true)
             {
-                shader = new SharpDX.Direct3D11.PixelShader(Manager.ID3D11Device, bytecode);
+                shader = new SharpDX.Direct3D11.PixelShader(Engine.ID3D11Device, bytecode);
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace Presenter
 #endif
             if (result.Message != null || result.Message != null) throw new Exception(result.Message);
 
-            shader = new SharpDX.Direct3D11.PixelShader(Manager.ID3D11Device, bytecode = result.Bytecode);
+            shader = new SharpDX.Direct3D11.PixelShader(Engine.ID3D11Device, bytecode = result.Bytecode);
         }
 
         public PixelShader(byte[] shaderCode, string entrypoint, bool isCompiled = false)

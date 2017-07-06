@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class Texture1D : ShaderResource, ITexture1D
+    public class Texture1D : ShaderResource
     {
         private int tWidth;
         private int mipLevels;
@@ -17,7 +17,7 @@ namespace Presenter
             pixelFormat = format;
             mipLevels = miplevels;
 
-            resource = new SharpDX.Direct3D11.Texture1D(Manager.ID3D11Device,
+            resource = new SharpDX.Direct3D11.Texture1D(Engine.ID3D11Device,
                 new SharpDX.Direct3D11.Texture1DDescription()
                 {
                     ArraySize = 1,
@@ -30,7 +30,7 @@ namespace Presenter
                     Width = tWidth
                 });
 
-            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Manager.ID3D11Device,
+            resourceview = new SharpDX.Direct3D11.ShaderResourceView(Engine.ID3D11Device,
                 resource);
 
             size = ResourceFormatCounter.CountFormatSize(pixelFormat) * tWidth;
@@ -38,17 +38,18 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
-            base.Update(ref data);
+            Engine.ID3D11DeviceContext.UpdateSubresource(ref data, resource);
         }
 
         public override void Update<T>(T[] data)
         {
-            base.Update(data);
+            Engine.ID3D11DeviceContext.UpdateSubresource(data, resource);
         }
 
         public override void Update(IntPtr data)
         {
-            base.Update(data);
+            Engine.ID3D11DeviceContext.UpdateSubresource(resource, 0, null,
+                data, size, size);
         }
 
         public int Width => tWidth;
