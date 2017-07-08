@@ -61,7 +61,7 @@ namespace Presenter
             ID3D12GraphicsCommandList.SetRenderTargets(RTVHandle, DSVHandle);
 
             ID3D12GraphicsCommandList.ClearRenderTargetView(RTVHandle, new SharpDX.Mathematics.Interop.RawColor4(
-                surface.BackGround.red, surface.BackGround.green, surface.BackGround.blue, surface.BackGround.alpha));
+                surface.BackGround.X, surface.BackGround.Y, surface.BackGround.Z, surface.BackGround.W));
 
             ID3D12GraphicsCommandList.ClearDepthStencilView(DSVHandle,
                 SharpDX.Direct3D12.ClearFlags.FlagsDepth | SharpDX.Direct3D12.ClearFlags.FlagsStencil, 1.0f, 0);

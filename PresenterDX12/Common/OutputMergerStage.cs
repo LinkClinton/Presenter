@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Presenter
 {
@@ -17,10 +18,10 @@ namespace Presenter
 
         public BlendState BlendState => GraphicsPipeline.State.BlendState;
 
-        public (float red,float green,float blue,float alpha) BlendFactor
+        public Vector4 BlendFactor
         {
             set => GraphicsPipeline.ID3D12GraphicsCommandList.BlendFactor = new SharpDX.Mathematics.Interop.RawVector4(
-                value.red, value.green, value.blue, value.alpha);
+                value.X, value.Y, value.Z, value.W);
         }
     }
 

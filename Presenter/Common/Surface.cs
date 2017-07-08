@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Presenter
 {
@@ -21,8 +22,7 @@ namespace Presenter
 
         private IntPtr surfaceHandle;
 
-        private (float red, float green, float blue, float alpha) backGround
-            = (1, 1, 1, 1);
+        private Vector4 backGround = new Vector4(1, 1, 1, 1);
 
         public Surface(IntPtr handle, bool windowed = true)
         {
@@ -163,10 +163,10 @@ namespace Presenter
 
         public int Height => height;
 
-        public (float red, float green, float blue, float alpha) BackGround
+        public Vector4 BackGround
         {
-            get => backGround;
             set => backGround = value;
+            get => backGround;
         }
 
         ~Surface()

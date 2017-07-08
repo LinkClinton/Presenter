@@ -8,12 +8,16 @@ namespace Presenter
 {
     public static partial class GraphicsPipeline
     {
+        private static bool isOpened = false;
+
         static GraphicsPipeline()
         { 
         }
 
         public static void Open(GraphicsPipelineState GraphicsPipelineState, Surface target)
         {
+            isOpened = true;
+
             surface = target;
 
             Reset(GraphicsPipelineState);
@@ -34,8 +38,8 @@ namespace Presenter
                 surface.ID3D11RenderTargetView);
 
             Engine.ID3D11DeviceContext.ClearRenderTargetView(surface.ID3D11RenderTargetView,
-                new SharpDX.Mathematics.Interop.RawColor4(surface.BackGround.red,
-                    surface.BackGround.green, surface.BackGround.blue, surface.BackGround.alpha));
+                new SharpDX.Mathematics.Interop.RawColor4(surface.BackGround.X, surface.BackGround.Y,
+                surface.BackGround.Z, surface.BackGround.W));
 
             Engine.ID3D11DeviceContext.ClearDepthStencilView(surface.ID3D11DepthStencilView,
                  SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);
@@ -52,6 +56,10 @@ namespace Presenter
 
             surface = null;
             graphicsPipelineState = null;
+
+            isOpened = false;
         }
+
+        public static bool IsOpened => isOpened;
     }
 }
