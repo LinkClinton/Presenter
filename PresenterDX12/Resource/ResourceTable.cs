@@ -14,7 +14,7 @@ namespace Presenter
 
         public ResourceTable(ResourceHeap heap, int start)
         {
-            gpuHandle = heap.ID3D12DescriptorHeap.GPUDescriptorHandleForHeapStart + start * heap.Size;
+            gpuHandle = heap.ID3D12DescriptorHeap.GPUDescriptorHandleForHeapStart + start * ResourceHeap.ResourceHeapSize;
             startPos = start;
         }
 

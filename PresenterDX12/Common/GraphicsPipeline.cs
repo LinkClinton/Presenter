@@ -10,6 +10,8 @@ namespace Presenter
     {
         private static SharpDX.Direct3D12.GraphicsCommandList graphicsCommandList;
 
+        private static bool isOpened;
+        
         static GraphicsPipeline()
         {
             ID3D12GraphicsCommandList = Engine.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
@@ -18,66 +20,34 @@ namespace Presenter
             ID3D12GraphicsCommandList.Close();
         }
 
-        public static void Open(GraphicsPipelineState GraphicsPipelineState, Surface target)
+        public static void Open(GraphicsPipelineState GraphicsPipelineState, Surface Target)
         {
-            Engine.ID3D12CommandAllocator.Reset();
-
-            surface = target;
+            target = Target;
 
             graphicsPipelineState = GraphicsPipelineState;
+
+            Engine.ID3D12CommandAllocator.Reset();
 
             ID3D12GraphicsCommandList.Reset(Engine.ID3D12CommandAllocator,
                 graphicsPipelineState.ID3D12GraphicsPipelineState);
 
-            ID3D12GraphicsCommandList.SetGraphicsRootSignature(
-                graphicsPipelineState.ResourceLayout.ID3D12RootSignature);
+            ID3D12GraphicsCommandList.SetGraphicsRootSignature(graphicsPipelineState.ResourceLayout.ID3D12RootSignature);
 
-            ID3D12GraphicsCommandList.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
-            {
-                Height = surface.Height,
-                Width = surface.Width,
-                MaxDepth = 1.0f,
-                MinDepth = 0.0f,
-                X = 0f,
-                Y = 0f
-            });
+            target.ResetViewport();
 
-            ID3D12GraphicsCommandList.SetScissorRectangles(new SharpDX.Mathematics.Interop.RawRectangle()
-            {
-                Left = 0,
-                Right = surface.Width,
-                Top = 0,
-                Bottom = surface.Height
-            });
-
-            ID3D12GraphicsCommandList.ResourceBarrierTransition(surface.RenderTargetView[surface.IDXGISwapChain.CurrentBackBufferIndex],
-                  SharpDX.Direct3D12.ResourceStates.Present, SharpDX.Direct3D12.ResourceStates.RenderTarget);
-
-            var RTVHandle = surface.ID3D12RenderTargetViewHeap.CPUDescriptorHandleForHeapStart;
-            var DSVHandle = surface.ID3D12DepthStencilViewHeap.CPUDescriptorHandleForHeapStart;
-
-            RTVHandle += surface.IDXGISwapChain.CurrentBackBufferIndex * surface.ID3D12RenderTargetViewHeapSize;
-
-            ID3D12GraphicsCommandList.SetRenderTargets(RTVHandle, DSVHandle);
-
-            ID3D12GraphicsCommandList.ClearRenderTargetView(RTVHandle, new SharpDX.Mathematics.Interop.RawColor4(
-                surface.BackGround.X, surface.BackGround.Y, surface.BackGround.Z, surface.BackGround.W));
-
-            ID3D12GraphicsCommandList.ClearDepthStencilView(DSVHandle,
-                SharpDX.Direct3D12.ClearFlags.FlagsDepth | SharpDX.Direct3D12.ClearFlags.FlagsStencil, 1.0f, 0);
+            target.ResetResourceView();
         }
 
         public static void Close()
         {
-            ID3D12GraphicsCommandList.ResourceBarrierTransition(surface.RenderTargetView[surface.IDXGISwapChain.CurrentBackBufferIndex],
-                 SharpDX.Direct3D12.ResourceStates.RenderTarget, SharpDX.Direct3D12.ResourceStates.Present);
-
+            target.ClearState();
+            
             ID3D12GraphicsCommandList.Close();
 
             Engine.ID3D12CommandQueue.ExecuteCommandList(ID3D12GraphicsCommandList);
 
-            surface.IDXGISwapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
-
+            target.Presented();
+            
             Engine.Wait();
 
             InputAssemblerStage.Reset();
@@ -85,9 +55,13 @@ namespace Presenter
             PixelShaderStage.Reset();
             OutputMergerStage.Reset();
 
-            surface = null;
+            target = null;
             graphicsPipelineState = null;
+
+            isOpened = false;
         }
+
+        public static bool IsOpened => isOpened;
 
         internal static SharpDX.Direct3D12.GraphicsCommandList ID3D12GraphicsCommandList
         {

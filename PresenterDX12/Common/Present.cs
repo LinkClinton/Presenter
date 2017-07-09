@@ -7,18 +7,42 @@ using System.Numerics;
 
 namespace Presenter
 {
-    public class Present
+    public class Present : Surface
     {
         private SharpDX.DXGI.SwapChain3 swapChain;
 
-        private Surface[] surface;
-
-        private int width;
-        private int height;
+        private SharpDX.Direct3D12.Resource[] renderTarget;
 
         private IntPtr handle;
 
-        private Vector4 backGround = Vector4.One;
+        internal override void ResetResourceView()
+        {
+            GraphicsPipeline.ID3D12GraphicsCommandList.ResourceBarrierTransition(renderTarget[swapChain.CurrentBackBufferIndex],
+               SharpDX.Direct3D12.ResourceStates.Present, SharpDX.Direct3D12.ResourceStates.RenderTarget);
+
+            var rtvHandle = ID3D12RenderTargetViewHeap.CPUDescriptorHandleForHeapStart +
+                swapChain.CurrentBackBufferIndex * ResourceHeap.RenderTargetHeapSize;
+            var dsvHandle = ID3D12DepthStencilViewHeap.CPUDescriptorHandleForHeapStart;
+
+            GraphicsPipeline.ID3D12GraphicsCommandList.SetRenderTargets(rtvHandle, dsvHandle);
+
+            GraphicsPipeline.ID3D12GraphicsCommandList.ClearRenderTargetView(rtvHandle, new SharpDX.Mathematics.Interop.RawColor4(
+                BackGround.X, BackGround.Y, BackGround.Z, BackGround.W));
+
+            GraphicsPipeline.ID3D12GraphicsCommandList.ClearDepthStencilView(dsvHandle,
+                SharpDX.Direct3D12.ClearFlags.FlagsDepth | SharpDX.Direct3D12.ClearFlags.FlagsStencil, 1.0f, 0);
+        }
+
+        internal override void ClearState()
+        {
+            GraphicsPipeline.ID3D12GraphicsCommandList.ResourceBarrierTransition(renderTarget[swapChain.CurrentBackBufferIndex],
+               SharpDX.Direct3D12.ResourceStates.RenderTarget, SharpDX.Direct3D12.ResourceStates.Present);
+        }
+
+        internal override void Presented()
+        {
+            swapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
+        }
 
         public Present(IntPtr Handle, bool Windowed = true)
         {
@@ -38,7 +62,7 @@ namespace Presenter
                         {
                             Width = width = realRect.right - realRect.left,
                             Height = height = realRect.bottom - realRect.top,
-                            Format = DefaultFormat,
+                            Format = RenderTargetFormat,
                             RefreshRate = new SharpDX.DXGI.Rational(60, 1),
                             Scaling = SharpDX.DXGI.DisplayModeScaling.Unspecified,
                             ScanlineOrdering = SharpDX.DXGI.DisplayModeScanlineOrder.Unspecified
@@ -51,55 +75,33 @@ namespace Presenter
                         IsWindowed = Windowed
                     });
 
-                IDXGISwapChain = tempSwapChain.QueryInterface<SharpDX.DXGI.SwapChain3>();
+                swapChain = tempSwapChain.QueryInterface<SharpDX.DXGI.SwapChain3>();
 
                 SharpDX.Utilities.Dispose(ref tempSwapChain);
             }
 
-            surface = new Surface[BufferCount];
+            renderTarget = new SharpDX.Direct3D12.Resource[BufferCount];
 
             for (int i = 0; i < BufferCount; i++)
             {
-                surface[i] = new Surface(swapChain.GetBackBuffer<SharpDX.Direct3D12.Resource>(i),
-                    width, height);
+                renderTarget[i] = swapChain.GetBackBuffer<SharpDX.Direct3D12.Resource>(i);
             }
-        }
 
-        public void Swap()
-        {
-            IDXGISwapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
-        }
-
-        internal SharpDX.DXGI.SwapChain3 IDXGISwapChain
-        {
-            set => swapChain = value;
-            get => swapChain;
+            CreateDepthStencil();
+            CreateDescriptorHeap(2);
+            CreateResourceView(renderTarget);
         }
 
         internal static int BufferCount => 2;
 
-        internal static SharpDX.DXGI.Format DefaultFormat => SharpDX.DXGI.Format.R8G8B8A8_UNorm;
-
-        public Surface CurrentSurface => surface[IDXGISwapChain.CurrentBackBufferIndex];
-
-        public Vector4 BackGround
-        {
-            get => backGround;
-            set
-            {
-                backGround = value;
-
-                foreach (var item in surface)
-                {
-                    item.BackGround = value;
-                }
-            }
-        }
+        public IntPtr Handle => handle;
 
         ~Present()
         {
+            for (int i = 0; i < renderTarget.Length; i++)
+                SharpDX.Utilities.Dispose(ref renderTarget[i]);
             SharpDX.Utilities.Dispose(ref swapChain);
         }
-
     }
+
 }
