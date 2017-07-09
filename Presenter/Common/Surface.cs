@@ -9,158 +9,121 @@ namespace Presenter
 {
     public class Surface 
     {
-        private SharpDX.DXGI.SwapChain swapchain;
+        private SharpDX.Direct3D11.RenderTargetView renderTargetView;
+        private SharpDX.Direct3D11.DepthStencilView depthStencilView;
 
-        private int width;
-        private int height;
+        protected SharpDX.Direct3D11.Texture2D renderTarget;
+        protected SharpDX.Direct3D11.Texture2D depthStencil;
 
-        private SharpDX.Direct3D11.Texture2D surfaceBackBuffer;
-        private SharpDX.Direct3D11.Texture2D surfaceDepthBuffer;
+        protected int width;
+        protected int height;
 
-        private SharpDX.Direct3D11.RenderTargetView surfaceRTV;
-        private SharpDX.Direct3D11.DepthStencilView surfaceDSV;
+        private Vector4 backGround = Vector4.One;
 
-        private IntPtr surfaceHandle;
-
-        private Vector4 backGround = new Vector4(1, 1, 1, 1);
-
-        public Surface(IntPtr handle, bool windowed = true)
+        protected virtual void CreateResource(ref SharpDX.Direct3D11.Texture2D resource,
+            SharpDX.Direct3D11.BindFlags bindFlags, SharpDX.DXGI.Format format)
         {
-            surfaceHandle = handle;
+            SharpDX.Utilities.Dispose(ref resource);
 
-            APILibrary.Win32.Rect rect = new APILibrary.Win32.Rect();
-
-            APILibrary.Win32.Internal.GetClientRect(handle, ref rect);
-
-            width = rect.right - rect.left;
-            height = rect.bottom - rect.top;
-
-            SharpDX.DXGI.Device dxgidevice = Engine.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
-            SharpDX.DXGI.Adapter dxgiadapte = dxgidevice.GetParent<SharpDX.DXGI.Adapter>();
-            SharpDX.DXGI.Factory dxgifactory = dxgiadapte.GetParent<SharpDX.DXGI.Factory>();
-
-            swapchain = new SharpDX.DXGI.SwapChain(dxgifactory, Engine.ID3D11Device,
-                new SharpDX.DXGI.SwapChainDescription()
+            resource = new SharpDX.Direct3D11.Texture2D(Engine.ID3D11Device,
+                new SharpDX.Direct3D11.Texture2DDescription()
                 {
-                    ModeDescription = new SharpDX.DXGI.ModeDescription()
-                    {
-                        Width = width,
-                        Height = height,
-                        RefreshRate = new SharpDX.DXGI.Rational(60, 1),
-                        Scaling = SharpDX.DXGI.DisplayModeScaling.Unspecified,
-                        ScanlineOrdering = SharpDX.DXGI.DisplayModeScanlineOrder.Unspecified,
-                        Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                    },
-                    BufferCount = 1,
-                    Usage = SharpDX.DXGI.Usage.RenderTargetOutput,
-                    Flags = SharpDX.DXGI.SwapChainFlags.None,
-                    OutputHandle = handle,
-                    SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
-                    SwapEffect = SharpDX.DXGI.SwapEffect.Discard,
-                    IsWindowed = windowed
-                });
-
-
-            surfaceRTV = new SharpDX.Direct3D11.RenderTargetView(Engine.ID3D11Device,
-                surfaceBackBuffer = swapchain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0));
-
-
-
-            surfaceDSV = new SharpDX.Direct3D11.DepthStencilView(Engine.ID3D11Device,
-                surfaceDepthBuffer = new SharpDX.Direct3D11.Texture2D(Engine.ID3D11Device, new SharpDX.Direct3D11.Texture2DDescription()
-                {
-                    Width = width,
+                    ArraySize = 1,
+                    BindFlags = bindFlags,
+                    CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None,
+                    Format = format,
                     Height = height,
                     MipLevels = 1,
-                    ArraySize = 1,
-                    BindFlags = SharpDX.Direct3D11.BindFlags.DepthStencil,
-                    Format = SharpDX.DXGI.Format.D24_UNorm_S8_UInt,
-                    CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None,
+                    OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None,
                     SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                     Usage = SharpDX.Direct3D11.ResourceUsage.Default,
-                    OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None
-                }));
-
-
-            SharpDX.Utilities.Dispose(ref dxgidevice);
-            SharpDX.Utilities.Dispose(ref dxgiadapte);
-            SharpDX.Utilities.Dispose(ref dxgifactory);
+                    Width = width
+                });
         }
 
-        public void Reset(int new_width, int new_height, bool windowed = true)
+        protected virtual void CreateResourceView()
         {
-            width = new_width; height = new_height;
-
-            SharpDX.Utilities.Dispose(ref surfaceBackBuffer);
-            SharpDX.Utilities.Dispose(ref surfaceDepthBuffer);
-            SharpDX.Utilities.Dispose(ref surfaceRTV);
-            SharpDX.Utilities.Dispose(ref surfaceDSV);
-            SharpDX.Utilities.Dispose(ref swapchain);
-
-            SharpDX.DXGI.Device dxgidevice = Engine.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
-            SharpDX.DXGI.Adapter dxgiadapte = dxgidevice.GetParent<SharpDX.DXGI.Adapter>();
-            SharpDX.DXGI.Factory dxgifactory = dxgiadapte.GetParent<SharpDX.DXGI.Factory>();
-
-            swapchain = new SharpDX.DXGI.SwapChain(dxgifactory, Engine.ID3D11Device,
-                new SharpDX.DXGI.SwapChainDescription()
+            renderTargetView = new SharpDX.Direct3D11.RenderTargetView(Engine.ID3D11Device, renderTarget,
+                new SharpDX.Direct3D11.RenderTargetViewDescription()
                 {
-                    ModeDescription = new SharpDX.DXGI.ModeDescription()
+                    Dimension = SharpDX.Direct3D11.RenderTargetViewDimension.Texture2D,
+                    Format = RenderTargetFormat,
+                    Texture2D = new SharpDX.Direct3D11.RenderTargetViewDescription.Texture2DResource()
                     {
-                        Width = width,
-                        Height = height,
-                        RefreshRate = new SharpDX.DXGI.Rational(60, 1),
-                        Scaling = SharpDX.DXGI.DisplayModeScaling.Unspecified,
-                        ScanlineOrdering = SharpDX.DXGI.DisplayModeScanlineOrder.Unspecified,
-                        Format = SharpDX.DXGI.Format.R8G8B8A8_UNorm,
-                    },
-                    BufferCount = 1,
-                    Usage = SharpDX.DXGI.Usage.RenderTargetOutput,
-                    Flags = SharpDX.DXGI.SwapChainFlags.None,
-                    OutputHandle = surfaceHandle,
-                    SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
-                    SwapEffect = SharpDX.DXGI.SwapEffect.Discard,
-                    IsWindowed = windowed
+                        MipSlice = 0
+                    }
                 });
 
-
-            surfaceRTV = new SharpDX.Direct3D11.RenderTargetView(Engine.ID3D11Device,
-              surfaceBackBuffer = swapchain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0));
-
-            surfaceDSV = new SharpDX.Direct3D11.DepthStencilView(Engine.ID3D11Device,
-                surfaceDepthBuffer = new SharpDX.Direct3D11.Texture2D(Engine.ID3D11Device, new SharpDX.Direct3D11.Texture2DDescription()
+            depthStencilView = new SharpDX.Direct3D11.DepthStencilView(Engine.ID3D11Device, depthStencil,
+                new SharpDX.Direct3D11.DepthStencilViewDescription()
                 {
-                    Width = width,
-                    Height = height,
-                    MipLevels = 1,
-                    ArraySize = 1,
-                    BindFlags = SharpDX.Direct3D11.BindFlags.DepthStencil,
-                    Format = SharpDX.DXGI.Format.D24_UNorm_S8_UInt,
-                    CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None,
-                    SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
-                    Usage = SharpDX.Direct3D11.ResourceUsage.Default,
-                    OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None
-                }));
+                    Dimension = SharpDX.Direct3D11.DepthStencilViewDimension.Texture2D,
+                    Format = DepthStencilFormat,
+                    Flags = SharpDX.Direct3D11.DepthStencilViewFlags.None,
+                    Texture2D = new SharpDX.Direct3D11.DepthStencilViewDescription.Texture2DResource()
+                    {
+                        MipSlice = 0
+                    }
+                });
+        }
 
+        internal virtual void ResetViewPort()
+        {
+            Engine.ID3D11DeviceContext.Rasterizer.SetViewport(new SharpDX.Mathematics.Interop.RawViewportF()
+            {
+                Height = height,
+                Width = width,
+                MaxDepth = 1.0f,
+                MinDepth = 0.0f,
+                X = 0f,
+                Y = 0f
+            });
 
-            SharpDX.Utilities.Dispose(ref dxgidevice);
-            SharpDX.Utilities.Dispose(ref dxgiadapte);
-            SharpDX.Utilities.Dispose(ref dxgifactory);
+            Engine.ID3D11DeviceContext.Rasterizer.SetScissorRectangle(0, 0, width, height);
+        }
+
+        internal virtual void ResetResourceView()
+        {
+            Engine.ID3D11DeviceContext.OutputMerger.SetTargets(depthStencilView, renderTargetView);
+
+            Engine.ID3D11DeviceContext.ClearRenderTargetView(renderTargetView,
+                new SharpDX.Mathematics.Interop.RawColor4(backGround.X, backGround.Y, backGround.Z, backGround.W));
+
+            Engine.ID3D11DeviceContext.ClearDepthStencilView(depthStencilView,
+                 SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);
+        }
+
+        internal virtual void ClearState()
+        {
 
         }
 
-        internal SharpDX.DXGI.SwapChain IDXGISwapChain => swapchain;
+        internal virtual void Presented()
+        {
 
-        internal SharpDX.Direct3D11.RenderTargetView ID3D11RenderTargetView => surfaceRTV;
-        internal SharpDX.Direct3D11.DepthStencilView ID3D11DepthStencilView => surfaceDSV;
+        }
 
-        internal IntPtr Handle => surfaceHandle;
+        internal Surface() { }
+        
+        public Surface(int Width, int Height)
+        {
+            width = Width;
+            height = Height;
+
+            CreateResource(ref renderTarget, SharpDX.Direct3D11.BindFlags.RenderTarget |
+                SharpDX.Direct3D11.BindFlags.ShaderResource, RenderTargetFormat);
+            CreateResource(ref depthStencil, SharpDX.Direct3D11.BindFlags.DepthStencil, DepthStencilFormat);
+
+            CreateResourceView();
+        }
+
+        internal SharpDX.Direct3D11.Texture2D RenderTarget => renderTarget;
+        internal SharpDX.Direct3D11.Texture2D DepthStencil => depthStencil;
 
         internal static SharpDX.DXGI.Format DepthStencilFormat => SharpDX.DXGI.Format.D24_UNorm_S8_UInt;
-        internal static int BufferCount => 1;
-
+        internal static SharpDX.DXGI.Format RenderTargetFormat => SharpDX.DXGI.Format.R8G8B8A8_UNorm;
 
         public int Width => width;
-
         public int Height => height;
 
         public Vector4 BackGround
@@ -171,11 +134,10 @@ namespace Presenter
 
         ~Surface()
         {
-            SharpDX.Utilities.Dispose(ref surfaceBackBuffer);
-            SharpDX.Utilities.Dispose(ref surfaceDepthBuffer);
-            SharpDX.Utilities.Dispose(ref surfaceRTV);
-            SharpDX.Utilities.Dispose(ref surfaceDSV);
-            SharpDX.Utilities.Dispose(ref swapchain);
+            SharpDX.Utilities.Dispose(ref renderTarget);
+            SharpDX.Utilities.Dispose(ref depthStencil);
+            SharpDX.Utilities.Dispose(ref renderTargetView);
+            SharpDX.Utilities.Dispose(ref depthStencilView);
         }
     }
 

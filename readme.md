@@ -32,16 +32,15 @@ Present Object to Window.
 
 - Create From Hwnd
     ```C#
-    Surface surface = new Surface(Hwnd, Windowed);
+    Present present = new Present(Hwnd, Windowed);
     ```
+- Create Surface
+  ```C#
+  Surface surface = new Surface(width, height);
+  ```
 - BackGround 
     ```C#
     Surface surface.BackGround = (1, 1, 1, 1);
-    ```
-- Reset  
-    On Windows size changed, you can reset the surface.
-    ```C#
-    Surface surface.Reset(new_width, new_height, windowed = true);
     ```
 
 ### GraphicsPipelineState
@@ -52,7 +51,7 @@ You must set it before you do anything.
 - Create
     ```C#
     GraphicsPipelineState graphicsPipelineState = new GraphicsPipelineState(VertexShader, 
-        PixelShader, BufferLayout);
+        PixelShader, BufferLayout, RasterizerState, DepthStencilState, BlendState);
     ```
 
 ### Buffer
@@ -121,8 +120,8 @@ You must set it before you do anything.
     ResourceLayout.Element[] resouceElements
         = new ResourceLayout.Element[]
         {
-            new ResourceLayout.Element(ResourceLayout.ResourceType.ConstantBufferView, 0),
-            new ResourceLayout.Element(ResourceLayout.ResourceType.ShaderResourceView, 0)
+            new ResourceLayout.Element(ResourceType.ConstantBufferView, 0),
+            new ResourceLayout.Element(ResourceType.ShaderResourceView, 0)
         };
     //for this code, we create ResourceLayout for one ConstantBuffer and one ShaderResource.
     ```
@@ -168,6 +167,6 @@ Look At [**SampleSet**](https://github.com/LinkClinton/SampleSet)
 
 ## Request
 
-- **.NET 4.7**
+- **.NET 4.6.2**
 - [**APILibrary**](https://github.com/LinkClinton/APILibrary)
 - [**SharpDX**](https://github.com/sharpdx/SharpDX)
