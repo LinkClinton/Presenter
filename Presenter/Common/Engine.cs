@@ -14,6 +14,7 @@ namespace Presenter
 
         private static SharpDX.Direct3D11.Device device;
         private static SharpDX.Direct3D11.DeviceContext context;
+        private static SharpDX.Direct3D11.DeviceContext immediateContext;
 
         static Engine()
         {
@@ -23,7 +24,9 @@ namespace Presenter
 #else
             ID3D11Device = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware);
 #endif
-            ID3D11DeviceContext = ID3D11Device.ImmediateContext;
+            ID3D11DeviceContext = new SharpDX.Direct3D11.DeviceContext(ID3D11Device);
+
+            immediateContext = ID3D11Device.ImmediateContext;
 
             ID2D1Factory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded);
 
@@ -53,6 +56,9 @@ namespace Presenter
             private set => context = value;
             get => context;
         }
+
+        internal static SharpDX.Direct3D11.DeviceContext ImmediateContext
+            => immediateContext;
 
 
         public static float DpiX => d2d1Factory.DesktopDpi.Width;

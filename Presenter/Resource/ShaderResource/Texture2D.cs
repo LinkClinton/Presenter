@@ -46,17 +46,17 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
-            Engine.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch);
+            Engine.ImmediateContext.UpdateSubresource(ref data, resource, 0, rowPitch);
         }
 
         public override void Update<T>(T[] data)
         {
-            Engine.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch);
+            Engine.ImmediateContext.UpdateSubresource(data, resource, 0, rowPitch);
         }
 
         public override void Update(IntPtr data)
         {
-            Engine.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, size);
+            Engine.ImmediateContext.UpdateSubresource(resource, 0, null, data, rowPitch, size);
         }
 
         public static Texture2D FromFile(string filename, int miplevels = 1)

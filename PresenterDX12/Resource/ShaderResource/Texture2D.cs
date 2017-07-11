@@ -62,8 +62,10 @@ namespace Presenter
 
         public override void Update(IntPtr data)
         {
+            Engine.ResourceCommandAllocator.Reset();
+
             using (var CommandList = Engine.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-                Engine.ID3D12CommandAllocator, null))
+                Engine.ResourceCommandAllocator, null))
             {
                 CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.NonPixelShaderResource,
                      SharpDX.Direct3D12.ResourceStates.CopyDestination);

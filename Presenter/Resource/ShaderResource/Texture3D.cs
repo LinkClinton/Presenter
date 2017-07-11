@@ -49,17 +49,17 @@ namespace Presenter
 
         public override void Update<T>(ref T data)
         {
-            Engine.ID3D11DeviceContext.UpdateSubresource(ref data, resource, 0, rowPitch, depthPitch);
+            Engine.ImmediateContext.UpdateSubresource(ref data, resource, 0, rowPitch, depthPitch);
         }
 
         public override void Update<T>(T[] data)
         {
-            Engine.ID3D11DeviceContext.UpdateSubresource(data, resource, 0, rowPitch, depthPitch);
+            Engine.ImmediateContext.UpdateSubresource(data, resource, 0, rowPitch, depthPitch);
         }
 
         public override void Update(IntPtr data)
         {
-            Engine.ID3D11DeviceContext.UpdateSubresource(resource, 0, null, data, rowPitch, depthPitch);
+            Engine.ImmediateContext.UpdateSubresource(resource, 0, null, data, rowPitch, depthPitch);
         }
 
         public int Width => tWidth;

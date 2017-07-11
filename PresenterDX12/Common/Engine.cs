@@ -15,6 +15,9 @@ namespace Presenter
         private static SharpDX.Direct3D12.Device device;
         private static SharpDX.Direct3D12.CommandQueue commandQueue;
         private static SharpDX.Direct3D12.CommandAllocator commandAllocator;
+        
+        //Resource
+        private static SharpDX.Direct3D12.CommandAllocator resourceCommandAllocator;
 
         private static SharpDX.Direct3D12.Fence fence;
 
@@ -33,6 +36,8 @@ namespace Presenter
 
             ID3D12CommandAllocator = ID3D12Device.CreateCommandAllocator(SharpDX.Direct3D12.CommandListType.Direct);
 
+            resourceCommandAllocator = ID3D12Device.CreateCommandAllocator(SharpDX.Direct3D12.CommandListType.Direct);
+
             ID3D12Fence = ID3D12Device.CreateFence(1, SharpDX.Direct3D12.FenceFlags.None);
             fenceValue = 1;
 
@@ -43,10 +48,10 @@ namespace Presenter
             ImagingFactory = new SharpDX.WIC.ImagingFactory();
         }
 
-        internal static void Wait()
+        internal static void Wait(SharpDX.Direct3D12.CommandQueue commandQueue)
         {
             long localFence = fenceValue;
-            ID3D12CommandQueue.Signal(ID3D12Fence, localFence);
+            commandQueue.Signal(ID3D12Fence, localFence);
             fenceValue++;
 
             if (ID3D12Fence.CompletedValue < localFence)
@@ -54,6 +59,11 @@ namespace Presenter
                 ID3D12Fence.SetEventOnCompletion(localFence, fenceEvent.SafeWaitHandle.DangerousGetHandle());
                 fenceEvent.WaitOne();
             }
+        }
+
+        internal static void Wait()
+        {
+            Wait(ID3D12CommandQueue);
         }
 
         internal static SharpDX.Direct3D12.Device ID3D12Device
@@ -73,6 +83,9 @@ namespace Presenter
             private set => commandAllocator = value;
             get => commandAllocator;
         }
+
+        internal static SharpDX.Direct3D12.CommandAllocator ResourceCommandAllocator
+            => resourceCommandAllocator;
 
         internal static SharpDX.Direct3D12.Fence ID3D12Fence
         {

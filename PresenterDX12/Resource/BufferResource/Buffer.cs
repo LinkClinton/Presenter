@@ -14,8 +14,10 @@ namespace Presenter
 
         protected void UpdateDefaultBuffer<T>(ref T data) where T : struct
         {
+            Engine.ResourceCommandAllocator.Reset();
+
             using (var CommandList = Engine.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-                Engine.ID3D12CommandAllocator, null))
+                Engine.ResourceCommandAllocator, null))
             {
                 CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.GenericRead,
                      SharpDX.Direct3D12.ResourceStates.CopyDestination);
@@ -47,8 +49,10 @@ namespace Presenter
 
         protected void UpdateDefaultBuffer<T>(T[] data) where T : struct
         {
+            Engine.ResourceCommandAllocator.Reset();
+
             using (var CommandList = Engine.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-              Engine.ID3D12CommandAllocator, null))
+              Engine.ResourceCommandAllocator, null))
             {
                 CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.GenericRead,
                      SharpDX.Direct3D12.ResourceStates.CopyDestination);
@@ -79,8 +83,10 @@ namespace Presenter
 
         protected void UpdateDefaultBuffer(IntPtr data)
         {
+            Engine.ResourceCommandAllocator.Reset();
+
             using (var CommandList = Engine.ID3D12Device.CreateCommandList(SharpDX.Direct3D12.CommandListType.Direct,
-                Engine.ID3D12CommandAllocator, null))
+                Engine.ResourceCommandAllocator, null))
             {
                 CommandList.ResourceBarrierTransition(resource, SharpDX.Direct3D12.ResourceStates.GenericRead,
                      SharpDX.Direct3D12.ResourceStates.CopyDestination);

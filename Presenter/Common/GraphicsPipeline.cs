@@ -31,6 +31,11 @@ namespace Presenter
         {
             surface.ClearState();
 
+            using (var commandList = Engine.ID3D11DeviceContext.FinishCommandList(false))
+            {
+                Engine.ID3D11Device.ImmediateContext.ExecuteCommandList(commandList, false);
+            }
+
             surface.Presented();
             
             InputAssemblerStage.Reset();
