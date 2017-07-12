@@ -33,7 +33,7 @@ namespace Presenter
 
             ID3D12CommandQueue = ID3D12Device.CreateCommandQueue(
                 new SharpDX.Direct3D12.CommandQueueDescription(SharpDX.Direct3D12.CommandListType.Direct));
-
+            
             ID3D12CommandAllocator = ID3D12Device.CreateCommandAllocator(SharpDX.Direct3D12.CommandListType.Direct);
 
             resourceCommandAllocator = ID3D12Device.CreateCommandAllocator(SharpDX.Direct3D12.CommandListType.Direct);
