@@ -49,6 +49,11 @@ namespace Presenter
             isOpened = false;
         }
 
+        public static void WaitFlush()
+        {
+
+        }
+
         public static bool IsOpened => isOpened;
     }
 }

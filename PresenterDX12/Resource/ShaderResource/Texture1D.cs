@@ -90,8 +90,8 @@ namespace Presenter
             }
         }
 
-        public int Width => throw new NotImplementedException();
+        public int Width => tWidth;
 
-        public int MipLevels => throw new NotImplementedException();
+        public int MipLevels => mipLevels;
     }
 }

@@ -48,8 +48,6 @@ namespace Presenter
 
             target.Presented();
             
-            Engine.Wait();
-
             InputAssemblerStage.Reset();
             VertexShaderStage.Reset();
             PixelShaderStage.Reset();
@@ -59,6 +57,11 @@ namespace Presenter
             graphicsPipelineState = null;
 
             isOpened = false;
+        }
+
+        public static void WaitFlush()
+        {
+            Engine.Wait(Engine.ID3D12CommandQueue);
         }
 
         public static bool IsOpened => isOpened;
