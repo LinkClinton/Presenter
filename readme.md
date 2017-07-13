@@ -14,6 +14,8 @@ Present Object to Window.
     
     GraphicsPipeline.Close(); //Close GraphicsPipeline and Present
     //And the GraphicsPipelineState will be clear.
+    
+    GraphicsPipeline.WaitFlush(); //Wait the GPU finish this commands.
     ```
 
 - Change GraphicsPipelineState
