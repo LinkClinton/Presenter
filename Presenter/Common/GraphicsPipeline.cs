@@ -12,38 +12,62 @@ namespace Presenter
 
         static GraphicsPipeline()
         { 
+
         }
 
-        public static void Open(GraphicsPipelineState GraphicsPipelineState, Surface target)
+        public static void Open(GraphicsPipelineState GraphicsPipelineState, Present target)
         {
+#if DEBUG
+            if (IsOpened is true) throw new NotImplementedException("GraphicsPipeline has opened");
+#endif
             isOpened = true;
 
-            surface = target;
+            present = target;
 
             Reset(GraphicsPipelineState);
 
-            surface.ResetViewPort();
+            present.ResetViewPort();
 
-            surface.ResetResourceView();
+            present.ResetResourceView();
+        }
+
+        public static void Open(GraphicsPipelineState GraphicsPipelineState, TextureFace target)
+        {
+#if DEBUG
+            if (IsOpened is true) throw new NotImplementedException("GraphicsPipeline has opened");
+#endif
+
+            isOpened = true;
+
+            textureFace = target;
+
+            Reset(GraphicsPipelineState);
+
+            textureFace.ResetViewPort();
+
+            textureFace.ResetResourceView();
         }
 
         public static void Close()
         {
-            surface.ClearState();
+            present?.ClearState();
+            textureFace?.ClearState();
 
             using (var commandList = Engine.ID3D11DeviceContext.FinishCommandList(false))
             {
                 Engine.ID3D11Device.ImmediateContext.ExecuteCommandList(commandList, false);
             }
 
-            surface.Presented();
-            
+            present?.Presented();
+            textureFace?.Presented();
+
             InputAssemblerStage.Reset();
             VertexShaderStage.Reset();
             PixelShaderStage.Reset();
             OutputMergerStage.Reset();
 
-            surface = null;
+            present = null;
+            textureFace = null;
             graphicsPipelineState = null;
 
             isOpened = false;

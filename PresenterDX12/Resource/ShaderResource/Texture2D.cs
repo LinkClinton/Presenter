@@ -25,7 +25,8 @@ namespace Presenter
             resource = Engine.ID3D12Device.CreateCommittedResource(
               new SharpDX.Direct3D12.HeapProperties(SharpDX.Direct3D12.HeapType.Default),
                SharpDX.Direct3D12.HeapFlags.None, SharpDX.Direct3D12.ResourceDescription.Texture2D(
-                   (SharpDX.DXGI.Format)pixelFormat, width, height, 1, (short)mipLevels),
+                   (SharpDX.DXGI.Format)pixelFormat, width, height, 1, (short)mipLevels,
+                   1, 0, SharpDX.Direct3D12.ResourceFlags.AllowRenderTarget),
                 SharpDX.Direct3D12.ResourceStates.NonPixelShaderResource);
 
             resourceview = new SharpDX.Direct3D12.ShaderResourceViewDescription()
