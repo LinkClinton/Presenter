@@ -45,7 +45,7 @@ namespace Presenter
                 PixelShader = pixelShader.ByteCode,
                 RasterizerState = rasterizerState.ID3D12RasterizerState,
                 BlendState = blendState.ID3D12BlendState,
-                DepthStencilFormat = Surface.DepthStencilFormat,
+                DepthStencilFormat = Present.DepthStencilFormat,
                 DepthStencilState = depthStencilState.ID3D12DepthStencilState,
                 SampleMask = int.MaxValue,
                 PrimitiveTopologyType = SharpDX.Direct3D12.PrimitiveTopologyType.Triangle,

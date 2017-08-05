@@ -69,7 +69,6 @@
     <Compile Include="Common\PixelShaderStage.cs" />
     <Compile Include="Common\Present.cs" />
     <Compile Include="Common\RasterizerState.cs" />
-    <Compile Include="Common\Surface.cs" />
     <Compile Include="Common\VertexShaderStage.cs" />
     <Compile Include="Private\Helper\WICHelper.cs" />
     <Compile Include="Private\Helper\WICIndexer.cs" />
@@ -102,6 +101,7 @@
     <Compile Include="Resource\ShaderResource\Texture1D.cs" />
     <Compile Include="Resource\ShaderResource\Texture2D.cs" />
     <Compile Include="Resource\ShaderResource\Texture3D.cs" />
+    <Compile Include="Resource\ShaderResource\TextureFace.cs" />
     <Compile Include="Shader\PixelShader.cs" />
     <Compile Include="Shader\Shader.cs" />
     <Compile Include="Shader\VertexShader.cs" />
